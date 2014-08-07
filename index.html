@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="CONTENT-LANGUAGE" content="French">
+        <title>DCVP by TaxiMedia</title>
+        <link type="image/x-icon" href="visuels/favicon.ico" rel="icon"/>
+        <link type="image/x-icon" href="visuels/favicon.ico" rel="shortcut icon"/>
+        <link rel="apple-touch-icon" href="visuels/idev.favicon.png"/>
+        <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1"/>
+        <!-- <meta name="viewport" content="width=device-width, height=device-height, user-scalable=yes, initial-scale=1"/> -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+		<link rel="apple-touch-startup-image" href="visuels/startup_image.png" />
+        <!-- iPhone -->
+        <link rel="apple-touch-startup-image" media="(device-width: 320px)" href="visuels/startup_image.png">
+        <!-- iPhone (Retina) -->
+        <link rel="apple-touch-startup-image"
+              media="(device-width: 320px)
+                 and (-webkit-device-pixel-ratio: 2)"
+              href="visuels/startup_image_xl.png">
+        <!-- iPhone 5 -->
+        <link rel="apple-touch-startup-image"
+                media="(device-width: 320px) and (device-height: 568px)
+                and (-webkit-device-pixel-ratio: 2)"
+                href="visuels/startup_image_i5.png">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+        <link type="text/css" rel="stylesheet" href="css/mobile.css" />
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript">
+            $( document ).bind( "mobileinit", function() {
+                // Make your jQuery Mobile framework configuration changes here!
+                $.support.cors = true;
+                $.mobile.allowCrossDomainPages = true;
+				$.mobile.selectmenu.prototype.options.nativeMenu = false;
+				//$.mobile.ajaxEnabled = false;
+            });
+        </script>    
+		<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+        <script src="phonegap.js"></script>
+        <script src="js/plugins/Calendar.js"></script>
+        <script src="barcodescanner.js"></script>
+		<script src="contactNumberPicker.js"></script>
+        <script src="sms.js"></script>
+        <!-- 
+        <script src="childbrowser.js"></script>
+        <script src="PushNotification.js"></script>
+        <script src="GAPlugin.js"></script>
+        <script src="cdv-plugin-fb-connect.js"></script>
+		<script src="facebook-js-sdk.js"></script>
+        <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
+        <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
+        <script type="text/javascript" src="js/demo.js"></script>
+        <script type="text/javascript" src="ui/jquery.ui.map.js"></script>
+        <script type="text/javascript" src="ui/jquery.ui.map.services.js"></script>
+        <script type="text/javascript" src="ui/jquery.ui.map.extensions.js"></script>
+        -->
+        <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
+        <style type="text/css">
+			label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+        </style>
+        <link rel="stylesheet" href="css/add2home.css"/>
+		<script type="text/javascript">
+			var addToHomeConfig = {
+				animationIn: 'bubble',
+				animationOut: 'drop',
+				lifespan:30000,
+				expire:2,
+				touchIcon:true
+				//message:'This is a custom message. Your device is an <strong>%device</strong>. The action icon is `%icon`.'
+			};
+        </script>        
+        <script type="application/javascript" src="js/add2home.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+        
+    </head>
+    <body>
+    <center>
+        <div data-role="page" data-theme="a" id="portal">
+            <div data-theme="a" data-role="header" data-position="fixed">
+				<h1><a href="http://taxibleuservices.com/client/" data-transition="slidefade" style="color:#09F; font-size:18px;">Bienvenue</a></h1>            
+            </div>
+            <div class="ui-content" role="main">
+                <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em;display:block;">
+                    <div data-role="collapsible-set" data-theme="b" data-content-theme="a">
+                        <div data-role="collapsible" data-collapsed="true" id="reg_collaps">
+                            <h1>
+                                 Inscrivez-Vous 
+                            </h1>
+                            <fieldset><legend></legend>
+                            <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="register">
+                                <select name="civil">
+                                    <option selected value="">Civilit&eacute;</option>
+                                    <option>Mme</option>
+                                    <option>Mlle</option>
+                                    <option>Mr</option>
+                                </select>
+                                <input type="text" name="nom" placeholder="Nom" maxlength="60" size="20" class="required"><em></em>
+                                <input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>	
+                                <input type="tel" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="60" size="20" class="required">
+                                <input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
+                                <!-- <input type="tel" name="siret" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="14" size="20" class="required"><em></em> -->
+                                <input type="tel" name="station" placeholder="CP Commune Rattachement" maxlength="60" size="5" class="required"><em></em>
+                                <select name="type" id="type">
+                                    <option selected value="">Type de vehicule</option>
+                                    <option>Berline</option>
+                                    <option>Break 5 places</option>
+                                    <option>Monospace</option>
+                                </select><em></em>
+                                <label for="passengers">Nombre maximum de passagers pris en charge :</label>
+                                <input name="passengers" id="passengers" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
+                                <select name="color" id="color">
+                                    <option selected value="">Couleur du vehicule</option>
+                                    <option>Blanc</option>
+                                    <option>Gris</option>
+                                    <option>Noir</option>
+                                    <option>Marron</option>
+                                    <option>Beige</option>
+                                    <option>Jaune</option>
+                                    <option>Orange</option>
+                                    <option>Rouge</option>
+                                    <option>Bleu</option>
+                                    <option>Vert</option>
+                                </select><em></em>
+                                <!-- 
+                                <select name="group" id="group">
+                                    <option selected value="1">Groupe de taxis</option>
+                                    <option value="4">R&eacute;seau</option>
+                                    <option value="5">Hors r&eacute;seau</option>
+                                </select><em></em>
+                                -->
+                                <input type="hidden" name="group" id="group" value="1"/>
+                                <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+                                    <legend>
+                                        Langues parl&eacute;es
+                                    </legend>
+                                    <input id="checkbox1" name="en" type="checkbox">
+                                    <label for="checkbox1">
+                                        Anglais
+                                    </label>
+                                    <input id="checkbox2" name="sp" type="checkbox">
+                                    <label for="checkbox2">
+                                        Espagnol
+                                    </label>
+                                    <input id="checkbox3" name="it" type="checkbox">
+                                    <label for="checkbox3">
+                                        Italien
+                                    </label>
+                                    <input id="checkbox4" name="ru" type="checkbox">
+                                    <label for="checkbox4">
+                                        Russe
+                                    </label>
+                                    <input id="checkbox5" name="al" type="checkbox">
+                                    <label for="checkbox5">
+                                        Allemand
+                                    </label>
+                                </fieldset>
+                                <!-- 
+                                <div data-role="fieldcontain">
+                                    <select name="lang" id="lang" multiple="multiple">
+                                        <option selected value="">Langues parl&eacute;es</option>
+                                        <option value="en">Anglais</option>
+                                        <option value="sp">Espagnol</option>
+                                        <option value="it">Italien</option>
+                                        <option value="ru">Russe</option>
+                                        <option value="ge">Allemand</option>
+                                    </select>
+                                </div>
+                                -->
+                                <label for="cb">
+                                    Paiement CB : 
+                                </label>
+                                <select name="cb" id="cb" data-theme="a" data-role="flipswitch">
+                                    <option value="0">
+                                        Non
+                                    </option>
+                                    <option value="1">
+                                        Oui
+                                    </option>
+                                </select>
+                                <label for="medic">
+                                    Vehicule conventionn&eacute; : 
+                                </label>
+                                <select name="medic" id="medic" data-theme="a" data-role="flipswitch">
+                                    <option value="0">
+                                        Non
+                                    </option>
+                                    <option value="1">
+                                        Oui
+                                    </option>
+                                </select>
+                                <label for="animal">
+                                    Acceptez-vous les animaux : 
+                                </label>
+                                <select name="animal" id="animal" data-theme="a" data-role="flipswitch">
+                                    <option value="0">
+                                        Non
+                                    </option>
+                                    <option value="1">
+                                        Oui
+                                    </option>
+                                </select>
+                                <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+                                    <legend>
+                                        Je certifie l&rsquo;exactitude des donn&eacute;es fournies et j&rsquo;accepte les 
+                                        <a href="docs/CGV.pdf" target="_blank">CGV</a> : 
+                                    </legend>
+                                    <input id="checkbox1" name="cgv" type="checkbox">
+                                    <label for="checkbox1">
+                                        Je certifie et accepte
+                                    </label><em></em>
+                                </fieldset>
+                                <input type="email" name="email" id="email" placeholder="Adresse email" maxlength="60" size="20" class="required email"><em></em>
+                                <input type="email" name="confirmail" placeholder="Confirmez email SVP" maxlength="60" size="20" class="required email"><em></em>
+                                <input type="hidden" name="dep" value=""/>
+                                <input type="submit" name="submit" id="subReg" value="Envoyer">
+                                <p><b>
+                                    Vous recevrez par email, dans quelques instants, les identifiant et mot de passe qui vous permettront d'acc&egrave;der &agrave; votre compte.
+                                </b></p>
+                            </form>
+                            </fieldset>    
+                    
+                        </div>
+                        <div data-role="collapsible" data-collapsed="false">
+                            <h1>
+                                 Identifiez-Vous 
+                            </h1>
+                            <fieldset><legend></legend>
+                            <form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
+                                <input type="tel" id="tel" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
+                                <input type="password" id="pwd" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
+                                <input type="hidden" name="dep" value=""/>
+                                <input type="submit" id="subLog" value=" Connexion "/>
+                            </form>
+                            </fieldset>
+                        </div>
+                        <div data-role="collapsible">
+                            <h1>
+                                 Mot de passe oubli&eacute;
+                            </h1>
+                            <fieldset><legend></legend>
+                            <form  action="/" method="post" name="forget" id="forget" data-ajax="false" data-transition="slidefade">
+                                <input type="tel" name="login" size="20" maxlength="10" placeholder="Identifiant"/>
+                                <input type="email" name="mail" size="32" maxlength="60" placeholder="L&rsquo;email de votre compte"/>
+                                <input type="tel" name="dep" id="depForgot" placeholder="Departement"/>
+                                <input type="submit" id="subFor" value=" Envoyer "/>
+                           </form>
+                            </fieldset>
+                            <p><b>
+                                Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
+                            </b></p>
+                        </div>
+                    </div>    
+                </div>
+                <!-- HERE COMES ALL ANSWERS CONCERNING BOTH LOGIN AND REGISTERING METHODS -->
+                <div id="returns"></div>
+                <a href="#secureDialog" data-rel="popup" data-position-to="window" data-role="button" class="secure-bt" data-theme="b" data-icon="alert">Bouton d&rsquo;urgence</a>
+                <div data-role="popup" data-theme="a" id="secureDialog" data-dismissible="false" data-overlay-theme="b">
+                    <div data-theme="a" data-role="header">
+                        <h1>
+                            Confirmation
+                        </h1>
+                    </div>
+                    <div class="ui-content" role="main">
+                        <h1>Lancer l&rsquo;appel d&rsquo;urgence ?</h1>
+                        <input type="button" data-theme="b" data-icon="check" onClick="getLocationOnce()" value="CONFIRMER"/>
+                        <a href="#home" data-rel="back" data-icon="delete" data-role="button" data-transition="slideUp" data-theme="a">ANNULER</a>            
+                        <div id="secureResults"></div>
+                    </div>
+                </div>        
+            </div>
+            <div data-theme="a" data-role="footer" id="footer_cont" data-position="fixed">
+				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Mise &agrave; jour des information DCVP en cours.</b></marquee></div>
+                <p class="copyright" style="font-size:xx-small">&copy; 2012 - </p>
+            </div>
+        </div>
+        
+        <div data-role="page" data-theme="a" id="urgency">
+            <div data-theme="a" data-role="header" data-position="fixed">
+				<h1 style="width:100%; padding: 0; margin: 0; color: #F00;">
+                	URGENCE
+                </h1>
+            </div>
+            <div class="ui-content" role="main">
+                <div id="urgent" class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em;">
+                	<h1 style="color: #F00;">Proc&eacute;dure d&rsquo;appel d&rsquo;urgence activ&eacute;e.</h1>
+                    <input type="button" data-theme="c" data-icon="check" onClick="stopSecureCall()" value="ARRETER"/>
+               </div>                    
+                <div id="urgencyResults"></div>
+            </div>
+            <div data-theme="a" data-role="footer" id="footer_cont8" data-position="fixed">
+				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Proc&eacute;dure d&rsquo;appel d&rsquo;urgence activ&eacute;e.</b></marquee></div>
+            </div>
+        </div>
+        
+    </center>
+    </body>
+</html>
