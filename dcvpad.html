@@ -38,7 +38,7 @@
 			$.mobile.loader.prototype.options.theme = "a";
 			$.mobile.loader.prototype.options.html = '<span class="ui-bar ui-overlay-c ui-corner-all"><center><img src="visuels/preload_world.gif"/><br><strong><span style="color:#F00;">Veuillez patienter pendant la recherche de taxi disponible</span><br>Merci de votre confiance !</strong></center></span>';
         });
-    </script>    
+    </script>
     <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script src="phonegap.js"></script>
     <script src="js/plugins/Calendar.js"></script>
@@ -47,7 +47,7 @@
     <script src="sms.js"></script>
     <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
     <script src="https://maps.google.com/maps/api/js?key=AIzaSyCvL4a4-LKLUXJrTwpJ4_UnkmtZSGgrVWg&sensor=false&libraries=places" type="text/javascript"></script>
-	<script type="text/javascript" src="js/jquery.geocomplete.min.js"></script>
+	<!-- <script type="text/javascript" src="js/jquery.geocomplete.min.js"></script> -->
 	<script type="text/javascript" src="ui/min/jquery.ui.map.full.min.js"></script>
     <link type="text/css" rel="stylesheet" href="css/dcvpad.css" />
     <script type="text/javascript">	
@@ -228,16 +228,18 @@
 	});
 	
 	$( '#infos' ).live( 'pagecreate',function(event){
-		/*
-		var options = {
-		  componentRestrictions: {country: 'fr'}
-		};
-		var autocomplete = new google.maps.places.Autocomplete(input, options);
-		*/
+		/*		
 		$("#addressInput").geocomplete({
 		  map: "#map",
 		  location: "Montpellier, France"
 		});
+		*/
+		var input = document.getElementById('addressInput');
+		var options = {
+		  componentRestrictions: {country: 'fr'}
+		};
+		var autocomplete = new google.maps.places.Autocomplete(input, options);
+		
         $("#search-box").hide("fast");
 		$("#next-box").show("medium");
         var ok = setInterval( function () {
