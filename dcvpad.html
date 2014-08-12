@@ -58,6 +58,7 @@
     var locationSelect;
 	var idcourse;
 	var dep = $.localStorage.getItem('dep');
+	var zip = '';
 	var time;
 	var endcourse; // Clears the current timeout
 	var sec;
@@ -89,7 +90,16 @@
 			if (status == google.maps.GeocoderStatus.OK)
 			{
 				if (results[0]) {
-						$('#addressInput').val(results[0].formatted_address);
+					$('#addressInput').val(results[0].formatted_address);
+					for(var i=0; i < results[0].address_components.length; i++)
+					{
+						var component = results[0].address_components[i];
+						if(component.types[0] == "postal_code")
+						{
+							//alert(component.long_name);
+							zip = component.long_name;
+						}
+					}
 				}
 				else {
 						alert('No results found');
@@ -134,6 +144,21 @@
 		$("#search-box").show("medium");
 		dontReg = true;
 	}
+	function checkZip(pageToGo) {
+		//alert(zip);
+		if (isPlaceChanged || (zip != '')) {
+			$.mobile.pageContainer.pagecontainer("change", pageToGo, { transition: "slide", reverse: true} );
+		}
+		else {
+			//alert('No Zip Code Here !!');
+			$( "#setZip" ).popup( "open", { positionTo: "window" } );
+		}
+	}
+	function setZip() {
+		zip = $('#zipDep').val();
+		$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
+	}
+	
 	function getContact()
 	{
 		var successCallbackPick = function(result){
@@ -239,6 +264,39 @@
 		  componentRestrictions: {country: 'fr'}
 		};
 		var autocomplete = new google.maps.places.Autocomplete(input, options);
+		// fired when an autocomplete option is selected or the input is submitted
+		google.maps.event.addListener(autocomplete, 'place_changed', function() {
+			//alert('Fired');
+			isPlaceChanged = true;
+			var place = autocomplete.getPlace();
+			var address = '';
+			var zip_code = '';
+			if (place.address_components) {
+				address = [
+					(place.address_components[0] && place.address_components[0].short_name || ''),
+					(place.address_components[1] && place.address_components[1].short_name || ''),
+					(place.address_components[2] && place.address_components[2].short_name || '')
+				].join(' ');
+				for (var i=0; i<place.address_components.length;i++)
+				{
+					for (var j=0;j<place.address_components[i].types.length;j++)
+					{
+						if (place.address_components[i].types[j] == "postal_code")
+						{
+							zip_code = place.address_components[i].long_name;
+							//alert(zip_code);
+							zip = zip_code;
+							//var dep = zip_code.substring(0, 2);
+							//$.sessionStorage.setItem('dep', dep);
+						}
+					}
+				}
+			}
+		});
+        $("#addressInput").keydown(function () {
+			// Place is tiped into field and not chosen from the api responses
+            isPlaceChanged = false;
+        });
 		
         $("#search-box").hide("fast");
 		$("#next-box").show("medium");
@@ -454,7 +512,7 @@
 		url = '';
 		num_req = idcourse;
 		i = 0; // We need to make any numreq unique on that one !!
-		$.post("https://ssl14.ovh.net/~taxibleu/appserver/app_dcvp_xml.php", { lat: rdvlat, lng: rdvlng, type: typecar, howmany: howMany, cb: cb, group: '1', dep: dep, pass: 'true'}, function(xml){	
+		$.post("https://ssl14.ovh.net/~taxibleu/appserver/app_dcvp_xml.php", { lat: rdvlat, lng: rdvlng, type: typecar, howmany: howMany, cb: cb, group: '1', dep: dep, zip: zip, pass: 'true'}, function(xml){	
 			$(xml).find('marker').each(function(){
 				var name = $(this).attr('name');
 				var address = $(this).attr('address');
@@ -650,8 +708,12 @@
                 <input type="hidden" id="radiusSelect" value="100" />
                 <p>&nbsp;</p>
                 <div id="next-box"><input type="button" id="next" data-theme="a" value="Suivant"/></div>
+                <div id="search-box"><button onClick="checkZip('#map_page')" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-search" id="search">Commander un taxi</button></div>
+                <div id="book-box"><button onClick="checkZip('#book_page')" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="booking">R&eacute;server un taxi</button></div>
+                <!--
                 <div id="search-box"><a href="#map_page" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-search" id="search">Commander un taxi</a></div>
                 <div id="book-box"><a href="#book_page" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="booking">R&eacute;appserver un taxi</a></div>
+                -->
                 <div data-role="popup" data-theme="a" id="rememberMe" data-dismissible="true">
  					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                    <div data-theme="a" data-role="header">
@@ -683,6 +745,21 @@
                     </div>
                     <div class="ui-content" role="main">
                         <div id="ePopResults"></div>
+                    </div>
+                </div>
+                <div data-role="popup" data-theme="a" id="setZip" data-dismissible="true">
+ 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+                   <div data-theme="a" data-role="header">
+                        <p style="font-size:21px;text-align:center;"><b>
+                            CP Commune
+                        </b></p>
+                    </div>
+                    <div class="ui-content" role="main">
+                    	<p>
+                            Veuillez saisir le code postal de la commune o&ugrave; vous vous trouvez :
+                            <input type="tel" id="zipDep" data-clear-btn="true" size="5"/>
+                        </p>
+                        <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="setZip()">Envoyer</button>
                     </div>
                 </div>
             </div>
