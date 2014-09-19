@@ -6,6 +6,7 @@ var civil = $.localStorage.getItem('civil');
 var nom = $.localStorage.getItem('nom');
 var prenom = $.localStorage.getItem('prenom');
 var siret = $.localStorage.getItem('siret');
+var station = $.localStorage.getItem('station');
 var dep = $.localStorage.getItem('dep');
 var group = $.localStorage.getItem('group');
 var mngid = $.localStorage.getItem('mngid');

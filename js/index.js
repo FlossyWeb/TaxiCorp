@@ -9,11 +9,12 @@ var civil = $.localStorage.getItem('civil');
 var nom = $.localStorage.getItem('nom');
 var prenom = $.localStorage.getItem('prenom');
 var dep = $.localStorage.getItem('dep');
+var mngid = $.localStorage.getItem('mngid');
 var actived;
 
 function active()
 {
-	var posting = $.post("https://ssl14.ovh.net/~taxibleu/appclient/active_app.php", { tel: tel, dep: dep}, function(data) {
+	var posting = $.post("https://ssl14.ovh.net/~taxibleu/appclient/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {
 		var actived = data.active;
 		// GET SHIT BACK !!
 		$.localStorage.setItem('civil', data.civil);
@@ -190,6 +191,7 @@ $(document).bind( 'pagecreate', function() {
 			$.localStorage.setItem('taxi', data.taxi);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('siret', data.siret);
+			$.localStorage.setItem('station', data.station);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('dep', data.dep);
 			$.localStorage.setItem('group', data.group);
@@ -253,6 +255,7 @@ $(document).bind( 'pagecreate', function() {
 				$.localStorage.setItem('taxi', data.taxi);
 				$.localStorage.setItem('tel', data.tel);
 				$.localStorage.setItem('siret', data.siret);
+				$.localStorage.setItem('station', data.station);
 				$.localStorage.setItem('email', data.email);
 				$.localStorage.setItem('group', data.group);
 				$.localStorage.setItem('pwd', data.pwd);
