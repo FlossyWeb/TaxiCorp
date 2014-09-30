@@ -580,6 +580,7 @@ if ( app ) {
 
 	// PhoneGap est prêt
 	function onDeviceReady() {
+		document.addEventListener("resume", onResume, false);
 		navigator.splashscreen.hide();
 		if(navigator.network.connection.type == Connection.NONE){
 			$("body").empty().append('<img src="no_network.png" onClick="window.location.reload()" />');
@@ -594,7 +595,9 @@ if ( app ) {
 		checkCmd();
 	}
 }
-
+function onResume() {
+	$.post("https://ssl14.ovh.net/~taxibleu/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
+}
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";
 	var productFormats = "UPC_E UPC_A EAN_8 EAN_13";
