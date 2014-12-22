@@ -643,7 +643,7 @@ function myTaxiDown()
 function Share()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app myTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
+	var message = "Téléchargez l'app myTaxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -660,24 +660,7 @@ function Share()
 function ShareArt()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app artisan taxi DCVP 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp&dep=34";
-	var intent = ""; //leave empty for sending sms using default intent
-	var success = function () {
-		//navigator.notification.alert('Message sent successfully');
-		$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
-		$( "#popSms" ).popup( "open", { positionTo: "window" } );
-	};
-	var error = function (e) {
-		//navigator.notification.alert('Message Failed:' + e); 
-		$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
-		$( "#popSms" ).popup( "open", { positionTo: "window" } );
-	};
-	sms.send(number, message, intent, success, error);
-}
-function SharePad()
-{
-	var number = $('#telShare').val();
-	var message = "Rendez-vous sur le WebService myTaxi 34 Hôtels & Restaurants en suivant ce lien : http://ecra.se/AA";
+	var message = "Téléchargez l'app artisan myTaxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -694,7 +677,7 @@ function SharePad()
 function SharePro()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app myTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro&dep=34  ou rendez-vous sur le WebService en suivant ce lien : http://ecra.se/3jt";
+	var message = "Téléchargez l'app myTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -714,7 +697,7 @@ function contactShare()
 		setTimeout(function(){
 			//navigator.notification.alert(result.name + " " + result.phoneNumber);
 			var number = result.phoneNumber;
-			var message = "Téléchargez l'app myTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
+			var message = "Téléchargez l'app myTaxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
 			var intent = ""; //leave empty for sending sms using default intent
 			var success = function () {
 				//navigator.notification.alert('Message sent successfully');
