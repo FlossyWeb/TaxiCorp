@@ -19,6 +19,7 @@ var cell = $.sessionStorage.setItem('cell', '');
 var cmd = $.sessionStorage.setItem('cmd', 0);
 var query_string = $.sessionStorage.setItem('query_string', '');
 var delay = 10;
+var pollingTime;
 
 // Lecteur audio
 var my_media = null;
@@ -65,14 +66,13 @@ $( '#directions_map' ).live( 'pagebeforeshow',function(event){
 	$("#infos_map").append(infos);			
 	if (rdv != '')
 	{
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/in_app_calls.php", { map: 'true', cmd: cmd, rdv: rdv, com: com, idcourse: idcourse, cell: cell, pass: pass, dep: dep }, function(data){
+		$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { map: 'true', cmd: cmd, rdv: rdv, com: com, idcourse: idcourse, cell: cell, pass: pass, dep: dep }, function(data){
 			$("#infos_map").append(data);
 			$("#infos_map").trigger('create');
-			//alert(data);
+			//navigator.notification.alert(data);
 		});
 	}
 });
-
 $('#directions_map').live('pagecreate', function() {
 	demo.add('directions_map', function() {
 		$('#map_canvas_1').gmap({'center': mobileDemo.center, 'zoom': mobileDemo.zoom, 'disableDefaultUI':true, 'callback': function() {
@@ -95,7 +95,7 @@ $('#directions_map').live('pagecreate', function() {
 							}
 						});
 					} else {
-						alert('Unable to get current position');
+						navigator.notification.alert('Unable to get current position');
 					}
 				},{enableHighAccuracy:true, maximumAge:Infinity});
 			});
@@ -109,25 +109,16 @@ $('#directions_map').live('pagecreate', function() {
 	}).load('directions_map');
 				
 });
-
 $('#directions_map').live('pageshow', function() {
 	demo.add('directions_map', $('#map_canvas_1').gmap('get', 'getCurrentPosition')).load('directions_map');
 });
-
 $('#toolate').live('pagecreate', function() {
 	var idcourse = $.sessionStorage.getItem('idcourse');
 	var late = '<p style="color:#F00; font-size: large;"><b>D&eacute;sol&eacute; mais la course ' + idcourse + ' &agrave; &eacute;t&eacute; prise par un autre taxi.</b></p>';
 	$("#late_cont").empty().append(late);			
 });
-
-$( '#home' ).live( 'pagebeforeshow',function(event){
-	//checkCmd();
-});
-
 $('#delayPop').live( 'pagebeforeshow',function(event) {
-	//$("#hideCall").hide("fast");
 	$("#delayConf").hide("fast");
-	//$('select#delay').val('d&eacute;lai');
 	//$('select#delay').selectmenu('refresh', true);
 });
 $('#delayPop').live( 'pagecreate',function(event) {
@@ -138,46 +129,41 @@ $('#delayPop').live( 'pagecreate',function(event) {
 		});
 		// Getting delay list value
 		delay = document.getElementById('delay').value;
-		//$("#hideCall").show("fast");
 		$("#delayConf").html(str);
 		$("#delayConf").show("fast");
 	}, 1000);
 });
 $( '#planning' ).live( 'pagebeforeshow',function(event){
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: dep }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: dep }, function(data){
 		$.mobile.loading( "show" );
 		$("#plan_cont").empty().append(data);
 		$("#plan_cont").trigger('create');
 	}).done(function() { $.mobile.loading( "hide" ); });
 });
-
 $( '#cmd' ).live( 'pagebeforeshow',function(event){
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){
+	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){
 		$.mobile.loading( "show" );
 		$("#screen_bookings").empty().append(data);
 		$("#screen_bookings").trigger('create');
-		//alert(data);
+		//navigator.notification.alert(data);
 	}).done(function() { $.mobile.loading( "hide" ); });
 });
-
 $( '#history' ).live( 'pagebeforeshow',function(event){
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: dep }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: dep }, function(data){
 		$.mobile.loading( "show" );
 		$("#hist_cont").empty().append(data);
 		$("#hist_cont").trigger('create');
-		//alert(data);
+		//navigator.notification.alert(data);
 	}).done(function() { $.mobile.loading( "hide" ); });
 });
-
 $( '#infos' ).live( 'pagebeforeshow',function(event){
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/in_app_calls.php", { infos: 'true', pass: pass, dep: dep }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { infos: 'true', pass: pass, dep: dep }, function(data){
 		$.mobile.loading( "show" );
 		$("#infos_cont").empty().append(data);
 		$("#infos_cont").trigger('create');
-		//alert(data);
+		//navigator.notification.alert(data);
 	}).done(function() { $.mobile.loading( "hide" ); });
 });
-
 $('#manage').live('pagecreate', function() {
 	var dec_nom = $('#nom').html(nom).text();
 	var dec_prenom = $('#prenom').html(prenom).text();
@@ -191,12 +177,15 @@ $('#manage').live('pagecreate', function() {
 	$('#siret').val(siret);
 	$('#station').val(dec_station);
 	$('#log').val(tel);
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#billing").empty().append(data);
-		//alert(data);
+		//navigator.notification.alert(data);
 	});
 });
-
+function dc() {
+	$.localStorage.setItem('pass', 0);
+	document.location.href="index.html";
+}
 function getLocation()
 {
 	if (navigator.geolocation)
@@ -211,9 +200,8 @@ function getLocation()
 		//navigator.geolocation.getAccurateCurrentPosition(get_coords, showError, {maxWait:30000});
 	}
 	else {
-		alert("Localisation impossible.");
+		navigator.notification.alert("Localisation impossible.");
 	}
-	setTimeout('getLocation()', 30000); // Every thirty seconds you check geolocation...
 }
 function showError(error)
 {
@@ -246,14 +234,15 @@ function get_coords(position)
 	lng = position.coords.longitude;
 	//var x=document.getElementById("results");
 	//x.innerHTML="lat = " + lat + " - lng = " +lng;
-	//alert('taxi: ' + taxi + ' tel: ' + tel + ' pass=' + pass);
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }); 
+	//navigator.notification.alert('taxi: ' + taxi + ' tel: ' + tel + ' pass=' + pass);
+	$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }).done(function(data) {
+		setTimeout('getLocation()', 30000); // Every thirty seconds you check geolocation...
+	}); 
 }
-
 function update()
 {
 	var dispo = $.sessionStorage.getItem('dispo');
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){ 
 		$("#screen_job").empty().append(data);
 		if (data != 0)
 		{
@@ -273,12 +262,12 @@ function update()
 			//document.getElementById("play").pause();
 			//stopAudio();
 		}
+	}).done(function(data) {
+		setTimeout('update()', pollingTime);
 	});
-
-setTimeout('update()', 2000);
 }
 function checkCmd() {
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, ring: pass }, function(data){
+	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station, ring: pass }, function(data){
 		if (data != 0)
 		{
 			$('.orders').addClass('badge');
@@ -292,7 +281,7 @@ function checkCmd() {
 setTimeout('checkCmd()', 300000);
 }
 function refreshCmd() {
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){
+	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station }, function(data){
 		$.mobile.loading( "show" );
 		$("#screen_bookings").empty().append(data);
 		$("#screen_bookings").trigger('create');
@@ -300,7 +289,7 @@ function refreshCmd() {
 }
 function dispo()
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep }, function(data){ 
 		var display = '';
 		if (data.dispo == 1)
 		{
@@ -313,19 +302,14 @@ function dispo()
 		$("#dispo_jobs").empty().append(display);
 		$("#dispo_cmd").empty().append(display);
 		$.sessionStorage.setItem('dispo', data.dispo);
-		//alert(data.dispo);
-	}, "json"); 
-	/*
-	$.post("dispo.php?check=1&p=home", {}, function(data){ $("#dispo").each(function () {
-				$(this).empty().append(data);
-			});
-	}); 
-	*/
-	setTimeout('dispo()', 10000); // Every ten seconds you check dispo for real or oldies...
+		//navigator.notification.alert(data.dispo);
+	}, "json").done(function(data) {
+		setTimeout('dispo()', 60000); // Every minutes you check dispo for real or oldies...
+	});
 }
 function Dispo_On()
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep });
+	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep });
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
@@ -333,7 +317,7 @@ function Dispo_On()
 }
 function Dispo_Off()
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep }); 
+	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep }); 
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
@@ -354,7 +338,7 @@ function Sound_Off()
 }
 function footer()
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/footer_app.php", { dep: dep }, function(data) {
+	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep }, function(data) {
 		for (i=0; i<9; i++) {
 			$('#footer_cont' + i).empty().append(data);
 		}
@@ -368,8 +352,8 @@ function addCalendar(date, rdv, com, idcourse, cell)
 	var title = "Course en commande";
 	var location = rdv;
 	var notes = 'Infos RDV : ' + com + ' - Identifiant de la course : ' + idcourse + ' - Tel client : ' + cell;
-	var success = function(message) { alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
-	var error = function(message) { alert("Erreur: " + message); };
+	var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
+	var error = function(message) { navigator.notification.alert("Erreur: " + message); };
 	// create
 	window.plugins.calendar.createEvent(title,location,notes,startDate,endDate,success,error);
 }
@@ -393,9 +377,9 @@ function planMap(rdv, idcourse, com, cell)
 }
 function justify(when, rdv, comments, destadd, cell)//justify(\''.$when.'\', \''.$rdv.'\', \''.$comments.'\', \''.$destadd.'\', \''.$cell.'\
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/justify.php", { when: when, rdv: rdv, comments: comments, destadd: destadd, cell: cell, dep: dep, pass: pass, email: email }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/justify.php", { when: when, rdv: rdv, comments: comments, destadd: destadd, cell: cell, dep: dep, pass: pass, email: email }, function(data){
 		$.mobile.loading( "show" );
-		alert(data);
+		navigator.notification.alert(data);
 		//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr', { showLocationBar: true });
 	}).done(function() { $.mobile.loading( "hide" ); });
 }
@@ -416,10 +400,10 @@ function directCall()
 	query_string = dataDiary + '&delay=' + delay;
 	$.sessionStorage.setItem('query_string', query_string);
 	var dep = $.localStorage.getItem('dep');
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
 		switch (data.location) {
 			 case '#directions_map':
-				//alert('in direction case');
+				//navigator.notification.alert('in direction case');
 				$.sessionStorage.setItem('rdv', data.rdv);
 				$.sessionStorage.setItem('idcourse', data.idcourse);
 				$.sessionStorage.setItem('com', data.com);
@@ -445,10 +429,10 @@ function diaryCall(query_string)
 {
 	$.mobile.loading( "show" );
 	var dep = $.localStorage.getItem('dep');
-	$.post("https://ssl14.ovh.net/~taxibleu/appserver/bookings_app_dcvp.php?dep="+dep, query_string, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/bookings_app_dcvp.php?dep="+dep, query_string, function(data){ 
 		switch (data.location) {
 			 case '#directions_map':
-				//alert('in direction case');
+				//navigator.notification.alert('in direction case');
 				$.sessionStorage.setItem('rdv', data.rdv);
 				$.sessionStorage.setItem('idcourse', data.idcourse);
 				$.sessionStorage.setItem('com', data.com);
@@ -477,7 +461,6 @@ function diaryCall(query_string)
 		}					
 	}, "json").done(function() { Sound_On();});
 }
-
 // Urgence call => Danger zone
 function getLocationOnce()
 {
@@ -492,7 +475,7 @@ function getLocationOnce()
 		}
 	}
 	else {
-		alert("Localisation impossible.");
+		navigator.notification.alert("Localisation impossible.");
 	}
 }
 function secureCall(position)
@@ -505,7 +488,7 @@ function secureCall(position)
 	var idcourseUrg = myDate.getTime();
 	$.sessionStorage.setItem('idcourseUrg', idcourseUrg);
 	
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure_xml.php", { lat: lat, lng: lng, dep: dep, pass: pass}, function(xml){
+	$.post("https://www.mytaxiserver.com/appclient/secure_xml.php", { lat: lat, lng: lng, dep: dep, pass: pass}, function(xml){
 																							 
 		var i = 0; // We need to make any numreq unique on that one !!
 		$(xml).find('marker').each(function(){
@@ -520,13 +503,13 @@ function secureCall(position)
 			//$('<div id='+name+'></div>').html('<p><b>'+name+' - '+address+' - '+lat+' - '+lng+' - '+timestamp+' - '+distance+'</b></p>').appendTo('#secureResults');
 			//$('#secureResults').append('<p><b>'+name+' - '+address+' - '+lat+' - '+lng+' - '+timestamp+' - '+distance+'</b></p>');
 			
-			$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure.php", { taxi: name, tel: address, rdvpoint: rdvpoint, helptaxi: taxi, helpname: helpname, helptel: tel, idcourse: idcourseUrg, num_req: num_reqUrg, dep: dep, pass: pass}, function(data){
+			$.post("https://www.mytaxiserver.com/appclient/secure.php", { taxi: name, tel: address, rdvpoint: rdvpoint, helptaxi: taxi, helpname: helpname, helptel: tel, idcourse: idcourseUrg, num_req: num_reqUrg, dep: dep, pass: pass}, function(data){
 				//$('#secureResults').append(data);
 			});
 			i++;
 		});
 		check_answer();
-		//alert('Geoloc results :' + lat + ' - ' + lng);
+		//navigator.notification.alert('Geoloc results :' + lat + ' - ' + lng);
 		//$('#results').append('<p><b>'+name+' - '+address+' - '+lat+' - '+lng+' - '+timestamp+' - '+distance+'</b></p>');
 		
 	}, "xml");
@@ -536,7 +519,7 @@ function check_answer()
 	$.mobile.pageContainer.pagecontainer("change", "#urgency", { transition: "slide"} );
 	var idcourseUrg = $.sessionStorage.getItem('idcourseUrg');
 	sec = setInterval( function () {
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/status.php?idcourse=" + idcourseUrg + "&check=1" , { dep: dep}, function(data){ 
+		$.post("https://www.mytaxiserver.com/appclient/status.php?idcourse=" + idcourseUrg + "&check=1" , { dep: dep}, function(data){ 
 			if (data != 0)
 			{
 				$('#urgencyResults').empty().append(data);
@@ -548,13 +531,12 @@ function check_answer()
 function stopSecureCall()
 {
 	var idcourseUrg = $.sessionStorage.getItem('idcourseUrg');
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure.php", { taxi: '', tel: '', rdvpoint: '', helptaxi: taxi, helpname: '', helptel: tel, idcourse: idcourseUrg, dep: dep, pass: pass, stopcall: 'true'}, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/secure.php", { taxi: '', tel: '', rdvpoint: '', helptaxi: taxi, helpname: '', helptel: tel, idcourse: idcourseUrg, dep: dep, pass: pass, stopcall: 'true'}, function(data){
 		$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
 	});
 	//$.sessionStorage.setItem('idcourseUrg', false);
 	clearInterval(sec);
 }
-
 function taximedia()
 {
 	//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr/redir.php', { showLocationBar: true });
@@ -570,7 +552,6 @@ function cgv()
 	//window.plugins.childBrowser.showWebPage('http://taxibleuservices.com/client/docs/CGV.pdf', { showLocationBar: true });
 	window.open('http://taxibleuservices.com/client/docs/CGV.pdf','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
-
 // Checks App or Browser
 app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
 if ( app ) {
@@ -591,12 +572,16 @@ if ( app ) {
 		//Functions to call only at app first load
 		getLocation();
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
-		setTimeout('update()', 2000);
+		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
+			pollingTime = data.polling;
+		}, "json").done(function(data) {
+			setTimeout('update()', 2000);
+		});
 		checkCmd();
 	}
 }
 function onResume() {
-	$.post("https://ssl14.ovh.net/~taxibleu/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
+	$.post("https://www.mytaxiserver.com/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
 }
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";
@@ -621,7 +606,7 @@ var scanSuccess = function (result) {
 		var searchUrl = "https://www.google.fr/#q=" + result.text;
 		setTimeout(function() { window.open(searchUrl,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer'); }, 500);
 		//setTimeout(function() { window.plugins.childBrowser.showWebPage(searchUrl, { showLocationBar: true }); }, 500);
-	} else { alert("Format du scan: " + result.format + 
+	} else { navigator.notification.alert("Format du scan: " + result.format + 
 			  " NON SUPPORTE. Valeur du scan: " + result.text);
 	}
 }
@@ -630,7 +615,7 @@ function goScan ()
 	scanner.scan(
 		scanSuccess, 
 		function (error) {
-			alert("Scan Erreur: " + error);
+			navigator.notification.alert("Scan Erreur: " + error);
 		}
 	);
 }
@@ -638,17 +623,22 @@ function contactPick()
 {
 	var successCallbackPick = function(result){
 		setTimeout(function(){
-			//alert(result.name + " " + result.phoneNumber);
+			//navigator.notification.alert(result.name + " " + result.phoneNumber);
 			var number = result.phoneNumber;
 			$('#telShare').val(number);
 		},500);
 	};
 	var failedCallbackPick = function(result){
 		setTimeout(function(){
-			//alert(result);
+			//navigator.notification.alert(result);
 		},500);
 	}
 	window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
+}
+function myTaxiDown()
+{
+	var url = "http://www.taximedia.fr/stores.php?app=pro";
+	window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function Share()
 {
@@ -656,12 +646,12 @@ function Share()
 	var message = "Téléchargez l'app myTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
-		//alert('Message sent successfully');
+		//navigator.notification.alert('Message sent successfully');
 		$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
 	var error = function (e) {
-		//alert('Message Failed:' + e); 
+		//navigator.notification.alert('Message Failed:' + e); 
 		$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
@@ -673,12 +663,12 @@ function ShareArt()
 	var message = "Téléchargez l'app artisan taxi DCVP 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp&dep=34";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
-		//alert('Message sent successfully');
+		//navigator.notification.alert('Message sent successfully');
 		$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
 	var error = function (e) {
-		//alert('Message Failed:' + e); 
+		//navigator.notification.alert('Message Failed:' + e); 
 		$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
@@ -690,12 +680,12 @@ function SharePad()
 	var message = "Rendez-vous sur le WebService myTaxi 34 Hôtels & Restaurants en suivant ce lien : http://ecra.se/AA";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
-		//alert('Message sent successfully');
+		//navigator.notification.alert('Message sent successfully');
 		$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
 	var error = function (e) {
-		//alert('Message Failed:' + e); 
+		//navigator.notification.alert('Message Failed:' + e); 
 		$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
@@ -707,12 +697,12 @@ function SharePro()
 	var message = "Téléchargez l'app myTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro&dep=34  ou rendez-vous sur le WebService en suivant ce lien : http://ecra.se/3jt";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
-		//alert('Message sent successfully');
+		//navigator.notification.alert('Message sent successfully');
 		$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
 	var error = function (e) {
-		//alert('Message Failed:' + e); 
+		//navigator.notification.alert('Message Failed:' + e); 
 		$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 		$( "#popSms" ).popup( "open", { positionTo: "window" } );
 	};
@@ -722,17 +712,17 @@ function contactShare()
 {
 	var successCallbackPick = function(result){
 		setTimeout(function(){
-			//alert(result.name + " " + result.phoneNumber);
+			//navigator.notification.alert(result.name + " " + result.phoneNumber);
 			var number = result.phoneNumber;
 			var message = "Téléchargez l'app myTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
 			var intent = ""; //leave empty for sending sms using default intent
 			var success = function () {
-				//alert('Message sent successfully');
+				//navigator.notification.alert('Message sent successfully');
 				$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 				$( "#popSms" ).popup( "open", { positionTo: "window" } );
 			};
 			var error = function (e) {
-				//alert('Message Failed:' + e); 
+				//navigator.notification.alert('Message Failed:' + e); 
 				$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 				$( "#popSms" ).popup( "open", { positionTo: "window" } );
 			};
@@ -741,7 +731,7 @@ function contactShare()
 	};
 	var failedCallbackPick = function(result){
 		setTimeout(function(){
-			//alert(result);
+			//navigator.notification.alert(result);
 		},500);
 	}
 	window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
@@ -766,15 +756,13 @@ function stopAudio() {
 		my_media.stop();
 	}
 }
-
 // onSuccess Callback
 function playOnSuccess() {
 	//console.log("playAudio():Audio Success");
 }
-
 // onError Callback 
 function playOnError(error) {
-	//alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
 }
 $('#home').live("swiperight", function() {
 	//$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide", reverse: true} );
@@ -810,8 +798,7 @@ $('#planning .ui-content').live("swipeleft", function() {
 });
 $('#directions_map').live("swiperight", function() {
 	$("#mapPanel_poper").trigger('click');
-});
-			
+});		
 $(document).bind( 'pagecreate', function() {
 	
 	if(!$.localStorage.getItem('pass'))
@@ -822,7 +809,11 @@ $(document).bind( 'pagecreate', function() {
 	$( "body>[data-role='panel']" ).panel().enhanceWithin();
 	if(!app) {
 		getLocation();
-		setTimeout('update()', 2000);
+		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
+			pollingTime = data.polling;
+		}, "json").done(function(data) {
+			setTimeout('update()', 2000);
+		});
 	}
 	if (navigator.userAgent.toLowerCase().match(/android/)) {
 		$("#player").empty().append('<audio id="play" loop="loop" preload="auto" style="display:none" ><source src="/android_asset/www/sounds/ring.mp3" type="audio/mpeg" />Your browser does not support the audio element.</audio>');
@@ -836,7 +827,6 @@ $(document).bind( 'pagecreate', function() {
 	$('#depMod').val(dep);
 	$('#depPwd').val(dep);
 });
-
 $(document).ready(function(){
 
 	$.validator.addMethod(
@@ -921,7 +911,7 @@ $(document).ready(function(){
 			// stop form from submitting normally
 			event.preventDefault();
 			// Subs some data
-			$.post("https://ssl14.ovh.net/~taxibleu/appclient/login_app.php", $("#modmy").serialize(), function(data) {
+			$.post("https://www.mytaxiserver.com/appclient/login_app.php", $("#modmy").serialize(), function(data) {
 				// GET SHIT BACK !!
 				$.localStorage.setItem('civil', data.civil);
 				$.localStorage.setItem('nom', data.nom);
@@ -952,7 +942,7 @@ $(document).ready(function(){
 		// stop form from submitting normally
 		event.preventDefault();
 		// Subs some data
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/login_app.php", $("#change").serialize(), function(data) {
+		$.post("https://www.mytaxiserver.com/appclient/login_app.php", $("#change").serialize(), function(data) {
 			// GET SHIT BACK !!
 			var display = '';
 			if (data.changed)

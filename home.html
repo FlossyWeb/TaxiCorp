@@ -23,10 +23,10 @@
             media="(device-width: 320px) and (device-height: 568px)
             and (-webkit-device-pixel-ratio: 2)"
             href="visuels/startup_image_i5.png">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
     <link type="text/css" rel="stylesheet" href="css/mobile.css" />
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
-	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript">
         $( document ).bind( "mobileinit", function() {
@@ -37,7 +37,7 @@
 			//$.mobile.ajaxEnabled = false;
        });
     </script>    
-    <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="phonegap.js"></script>
 	<script src="js/plugins/Calendar.js"></script>
     <script src="barcodescanner.js"></script>
@@ -48,9 +48,9 @@
     <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
     <script type="text/javascript" src="js/demo.js"></script>
-    <script type="text/javascript" src="ui/jquery.ui.map.js"></script>
+    <script type="text/javascript" src="ui/min/jquery.ui.map.min.js"></script>
     <script type="text/javascript" src="ui/jquery.ui.map.services.js"></script>
-    <script type="text/javascript" src="ui/jquery.ui.map.extensions.js"></script>
+    <script type="text/javascript" src="ui/min/jquery.ui.map.extensions.min.js"></script>
     <script type="text/javascript" src="js/jquery.validate.js"></script>
 	<style type="text/css">
         label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
@@ -71,11 +71,12 @@
               <li><a href="#" onClick="help()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-bullets"><b>Aide utilisateur</b></a></li>
               <li><a href="#" onClick="taximedia()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-eye"><b>TaxiMedia.fr</b></a></li>
               <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-info"><b>Infos myTaxi</b></a></li>
-              <li><a href="dcvpad.html" data-ajax="false" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-action"><b>Envoyer une course</b></a></li>
+              <li><a href="#" onClick="myTaxiDown()" data-ajax="false" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-action"><b>Envoyer une course</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
               <li><a href="#" onClick="contactShare()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Envoyer l&rsquo;app</b></a></li>
             </ul>
-        </div><!-- /panel -->
+			<button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power" onClick="dc()">D&eacute;connexion</button>
+       </div><!-- /panel -->
         <center>
         <div data-role="page" data-theme="a" id="home">
 
@@ -143,7 +144,7 @@
                             TaxiMedia.fr
                         </p>
                     </a>
-					<a href="dcvpad.html" data-ajax="false" style="width:32%;display:inline-block;">
+					<a href="#" onClick="myTaxiDown()" style="width:32%;display:inline-block;">
                     	<p style="font-size: x-small;color:#FFF;">
                             <img src="visuels/Taxi.png" width="90%"/><br>
                             Partager
@@ -423,30 +424,30 @@
                                 </select>
                                 <input type="text" id="nom" name="nom" data-clear-btn="true" placeholder="Nom" maxlength="60" size="20" value="">
                                 <input type="text" id="prenom" name="prenom" data-clear-btn="true" placeholder="Pr&eacute;nom" maxlength="60" size="20" value="">
-                                <input type="tel" id="taxi" name="taxi" data-clear-btn="true" placeholder="Num&eacute;ro de taxi" maxlength="60" size="20" value="">
-                                <input type="tel" id="tel" name="tel" data-clear-btn="true" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="60" size="20" value="">
-                                <input type="tel" id="siret" name="siret" data-clear-btn="true" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="60" size="20" value="">
-                                <input type="tel" id="station" name="station" data-clear-btn="true" placeholder="CP Commune rattachement" maxlength="60" size="20" value="">
+                                <input type="tel" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="6" size="20" class="required">
+                                <input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
+                                <!-- <input type="tel" name="siret" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="14" size="20" class="required"><em></em> -->
+                                <input type="tel" name="station" placeholder="CP Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
                                 <select name="type" id="type">
-                                    <option selected value="">Type de vehicule</option>
-                                    <option>Berline</option>
-                                    <option>Break 5 places</option>
-                                    <option>Monospace</option>
+                                    <option selected value="Berline">Type de vehicule</option>
+                                    <option value="Berline">Berline</option>
+                                    <option value="Break 5 places">Break 5 places</option>
+                                    <option value="Monospace">Monospace</option>
                                 </select><em></em>
                                 <label for="passengers">Nombre maximum de passagers pris en charge :</label>
                                 <input name="passengers" id="passengers" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
                                 <select name="color" id="color">
                                     <option selected value="">Couleur du vehicule</option>
-                                    <option>Blanc</option>
-                                    <option>Gris</option>
-                                    <option>Noir</option>
-                                    <option>Marron</option>
-                                    <option>Beige</option>
-                                    <option>Jaune</option>
-                                    <option>Orange</option>
-                                    <option>Rouge</option>
-                                    <option>Bleu</option>
-                                    <option>Vert</option>
+                                    <option value="Blanc">Blanc</option>
+                                    <option value="Gris">Gris</option>
+                                    <option value="Noir">Noir</option>
+                                    <option value="Marron">Marron</option>
+                                    <option value="Beige">Beige</option>
+                                    <option value="Jaune">Jaune</option>
+                                    <option value="Orange">Orange</option>
+                                    <option value="Rouge">Rouge</option>
+                                    <option value="Bleu">Bleu</option>
+                                    <option value="Vert">Vert</option>
                                 </select><em></em>
                                 <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
                                     <legend>

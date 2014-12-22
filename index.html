@@ -91,37 +91,44 @@
                             <fieldset><legend></legend>
                             <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="register">
                                 <select name="civil">
-                                    <option selected value="">Civilit&eacute;</option>
-                                    <option>Mme</option>
-                                    <option>Mlle</option>
-                                    <option>Mr</option>
+                                    <option selected value="Mr">Civilit&eacute;</option>
+                                    <option value="Mme">Mme</option>
+                                    <option value="Mlle">Mlle</option>
+                                    <option value="Mr">Mr</option>
                                 </select>
                                 <input type="text" name="nom" placeholder="Nom" maxlength="60" size="20" class="required"><em></em>
                                 <input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>	
-                                <input type="tel" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="60" size="20" class="required">
+                                <input type="tel" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="6" size="20" class="required">
                                 <input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
-                                <!-- <input type="tel" name="siret" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="14" size="20" class="required"><em></em> -->
-                                <input type="tel" name="station" placeholder="CP Commune Rattachement" maxlength="60" size="5" class="required"><em></em>
+                                <input type="tel" name="station" placeholder="CP Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
+								<div class="ui-body ui-body-a ui-corner-all">
+									<h3>Infos CB : </h3>
+									<input type="text" name="cbtit" placeholder="Titulaire CB" maxlength="60" size="20" class="required"><em></em>
+									<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
+									<label for="cbexp">Date Expiration :</label>
+									<input type="month" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+									<input type="tel" name="cbnum" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
+								</div>
                                 <select name="type" id="type">
-                                    <option selected value="">Type de vehicule</option>
-                                    <option>Berline</option>
-                                    <option>Break 5 places</option>
-                                    <option>Monospace</option>
+                                    <option selected value="Berline">Type de vehicule</option>
+                                    <option value="Berline">Berline</option>
+                                    <option value="Break 5 places">Break 5 places</option>
+                                    <option value="Monospace">Monospace</option>
                                 </select><em></em>
                                 <label for="passengers">Nombre maximum de passagers pris en charge :</label>
                                 <input name="passengers" id="passengers" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
                                 <select name="color" id="color">
                                     <option selected value="">Couleur du vehicule</option>
-                                    <option>Blanc</option>
-                                    <option>Gris</option>
-                                    <option>Noir</option>
-                                    <option>Marron</option>
-                                    <option>Beige</option>
-                                    <option>Jaune</option>
-                                    <option>Orange</option>
-                                    <option>Rouge</option>
-                                    <option>Bleu</option>
-                                    <option>Vert</option>
+                                    <option value="Blanc">Blanc</option>
+                                    <option value="Gris">Gris</option>
+                                    <option value="Noir">Noir</option>
+                                    <option value="Marron">Marron</option>
+                                    <option value="Beige">Beige</option>
+                                    <option value="Jaune">Jaune</option>
+                                    <option value="Orange">Orange</option>
+                                    <option value="Rouge">Rouge</option>
+                                    <option value="Bleu">Bleu</option>
+                                    <option value="Vert">Vert</option>
                                 </select><em></em>
                                 <!-- 
                                 <select name="group" id="group">
