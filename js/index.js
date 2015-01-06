@@ -267,7 +267,7 @@ $(document).bind( 'pagecreate', function() {
 				//navigator.notification.alert(data.taxi + ' - ' + data.siret + ' - ' + data.email + ' - ' + data.tel + ' - ' + data.subscribed + ' - ' + data.telexist + ' - ' + data.cabexist + ' - ' + data.sirexist);
 				
 				var display = '';
-				if (data.subscribed)
+				if (data.subscribed && data.payzen)
 				{
 					display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
 				}
@@ -278,14 +278,14 @@ $(document).bind( 'pagecreate', function() {
 					{
 						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
 					}
-					if (data.cabexist)
+					if (data.sniffed == 'KO')
 					{
-						display += '<p style="color:red;"><b>Le num&eacute;ro de taxi fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
-					}
-					if (data.sirexist)
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
+					}/*
+					else if (!data.signed)
 					{
-						display += '<p style="color:red;"><b>Le num&eacute;ro SIRET fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
-					}
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
+					}*/
 				}
 				$('#reg_collaps').collapsible( "collapse" );
 				$("#returns").empty().append(display);
@@ -332,7 +332,7 @@ $(document).ready(function(){
 		   required: true,
 		   phone: true
 		 },
-		 cbtit: "required",
+		 brand: "required",
 		 cbnum: {
 		   required: true,
 		   cbnum: true

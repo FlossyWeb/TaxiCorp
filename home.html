@@ -548,6 +548,20 @@
                             </form>
                             </fieldset>
                         </div>
+						<div data-role="collapsible" data-collapsed="true">
+							<h1>Modifier CB : </h1>
+							<select name="brand" id="brand">
+								<option selected value="">Type de Carte</option>
+								<option value="CB">CB</option>
+								<option value="VISA">VISA</option>
+								<option value="MASTERCARD">MASTERCARD</option>
+							</select><em></em>
+							<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
+							<label for="cbexp">Date Expiration : (dernier jour du mois)</label>
+							<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+							<input type="tel" name="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
+							<button onClick="modPay()">Modifier</button>
+						</div>
                         <div data-role="collapsible" data-collapsed="true">
                             <h1>
                                  Facturation pour le mois en cours

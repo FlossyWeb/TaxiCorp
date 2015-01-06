@@ -174,7 +174,7 @@ $('#manage').live('pagecreate', function() {
 	$('#taxi').val(taxi);
 	$('#tel').val(tel);
 	$('#email').val(email);
-	$('#siret').val(siret);
+	//$('#siret').val(siret);
 	$('#station').val(dec_station);
 	$('#log').val(tel);
 	$.post("https://www.mytaxiserver.com/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
@@ -746,6 +746,29 @@ function playOnSuccess() {
 // onError Callback 
 function playOnError(error) {
 	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+}
+function modPay() {
+	var cardNumber = $('#cbnum').val();
+	var exp = $('#cbexp').val();
+	var cardNetwork = $('#brand').val();
+	var cvv = $('#cbval').val();
+	$.post('https://www.mytaxiserver.com/payzen/updateIndent.php', {cardNumber: cardNumber, exp: exp, cardNetwork: cardNetwork, cvv: cvv, civil: civil, nom: nom, prenom: prenom, tel: tel, email: email, cardIdent: siret, station: station}, function(data){
+		var display = '';
+		if (data.sniffed == 'OK')
+		{
+			display = '<p><b>la modification de votre carte bancaire &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+		}
+		/*
+		else if (!data.signed)
+		{
+			display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
+		}*/
+		else {
+			display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
+		}
+		$('#mod_collaps').collapsible( "collapse" );
+		$("#returns").empty().append(display);
+	}, "json");
 }
 $('#home').live("swiperight", function() {
 	//$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide", reverse: true} );
