@@ -14,7 +14,7 @@ var actived;
 
 function active()
 {
-	var posting = $.post("https://ssl14.ovh.net/~taxibleu/appclient/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {
+	var posting = $.post("https://www.mytaxiserver.com/appclient/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {
 		var actived = data.active;
 		// GET SHIT BACK !!
 		$.localStorage.setItem('civil', data.civil);
@@ -36,7 +36,7 @@ function active()
 			document.location.href='home.html';
 		}
 		else if (!data.active) {
-			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;</b></p><a href="mailto:info@taxibleuservices.com"style="width:32%;display:inline-block;"><img src="visuels/Contact_flat.png" width="90%"/></a>';
+			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;</b></p><a href="mailto:commercial@taximedia.fr"style="width:32%;display:inline-block;"><img src="visuels/Contact_flat.png" width="90%"/></a>';
 			$("#returns").empty().append(display);
 			//navigator.notification.alert(actived +' - '+  $.localStorage.getItem('tel'));
 		}
@@ -86,7 +86,7 @@ function secureCall(position)
 	var idcourseUrg = myDate.getTime();
 	$.sessionStorage.setItem('idcourseUrg', idcourseUrg);
 	
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure_xml.php", { lat: lat, lng: lng, dep: dep, pass: 'true'}, function(xml){
+	$.post("https://www.mytaxiserver.com/appclient/secure_xml.php", { lat: lat, lng: lng, dep: dep, pass: 'true'}, function(xml){
 																							 
 		var i = 0; // We need to make any numreq unique on that one !!
 		$(xml).find('marker').each(function(){
@@ -101,7 +101,7 @@ function secureCall(position)
 			//$('<div id='+name+'></div>').html('<p><b>'+name+' - '+address+' - '+lat+' - '+lng+' - '+timestamp+' - '+distance+'</b></p>').appendTo('#secureResults');
 			//$('#secureResults').append('<p><b>'+name+' - '+address+' - '+lat+' - '+lng+' - '+timestamp+' - '+distance+'</b></p>');
 			
-			$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure.php", { taxi: name, tel: address, rdvpoint: rdvpoint, helptaxi: taxi, helpname: helpname, helptel: tel, idcourse: idcourseUrg, num_req: num_reqUrg, dep: dep, pass: 'true'}, function(data){
+			$.post("https://www.mytaxiserver.com/appclient/secure.php", { taxi: name, tel: address, rdvpoint: rdvpoint, helptaxi: taxi, helpname: helpname, helptel: tel, idcourse: idcourseUrg, num_req: num_reqUrg, dep: dep, pass: 'true'}, function(data){
 				//$('#secureResults').append(data);
 			});
 			i++;
@@ -117,7 +117,7 @@ function check_answer()
 	$.mobile.pageContainer.pagecontainer("change", "#urgency", { transition: "slide"} );
 	var idcourseUrg = $.sessionStorage.getItem('idcourseUrg');
 	sec = setInterval( function () {
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/status.php?idcourse=" + idcourseUrg + "&check=1" , { dep: dep}, function(data){ 
+		$.post("https://www.mytaxiserver.com/appclient/status.php?idcourse=" + idcourseUrg + "&check=1" , { dep: dep}, function(data){ 
 			if (data != 0)
 			{
 				//cancel(idcourse);
@@ -132,7 +132,7 @@ function check_answer()
 function stopSecureCall()
 {
 	var idcourseUrg = $.sessionStorage.getItem('idcourseUrg');
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/secure.php", { taxi: '', tel: '', rdvpoint: '', helptaxi: taxi, helpname: '', helptel: tel, idcourse: idcourseUrg, dep: dep, pass: 'true', stopcall: 'true'}, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/secure.php", { taxi: '', tel: '', rdvpoint: '', helptaxi: taxi, helpname: '', helptel: tel, idcourse: idcourseUrg, dep: dep, pass: 'true', stopcall: 'true'}, function(data){
 		$.mobile.pageContainer.pagecontainer("change", "#portal", { transition: "slide"} );
 	});
 	//$.sessionStorage.setItem('idcourseUrg', false);
@@ -141,7 +141,7 @@ function stopSecureCall()
 
 function footer()
 {
-	$.post("https://ssl14.ovh.net/~taxibleu/appclient/footer_app.php", { dep: dep }, function(data) {
+	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep }, function(data) {
 		$("#footer_cont").empty().append(data);
 	});
 }
@@ -183,7 +183,7 @@ $(document).bind( 'pagecreate', function() {
 		// stop form from submitting normally 
 		event.preventDefault();
 		// Subs some data 
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/login_app.php", $("#login").serialize(), function(data) {
+		$.post("https://www.mytaxiserver.com/appclient/login_app.php", $("#login").serialize(), function(data) {
 			// GET SHIT BACK !!
 			$.localStorage.setItem('civil', data.civil);
 			$.localStorage.setItem('nom', data.nom);
@@ -225,7 +225,7 @@ $(document).bind( 'pagecreate', function() {
 		// stop form from submitting normally
 		event.preventDefault();
 		// Subs some data
-		$.post("https://ssl14.ovh.net/~taxibleu/appclient/forget_app.php", $("#forget").serialize(), function(data) {
+		$.post("https://www.mytaxiserver.com/appclient/forget_app.php", $("#forget").serialize(), function(data) {
 			//navigator.notification.alert($("#change").serialize());
 			// GET SHIT BACK !!
 			var display = '';
@@ -247,7 +247,7 @@ $(document).bind( 'pagecreate', function() {
 			event.preventDefault();
 			$.mobile.loading( "show" );
 			// Subs some data
-			$.post("https://ssl14.ovh.net/~taxibleu/appclient/register_app.php", $("#register").serialize(), function(data) {
+			$.post("https://www.mytaxiserver.com/appclient/register_app.php", $("#register").serialize(), function(data) {
 				// GET SHIT BACK !!
 				$.localStorage.setItem('civil', data.civil);
 				$.localStorage.setItem('nom', data.nom);

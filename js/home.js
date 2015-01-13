@@ -544,13 +544,13 @@ function taximedia()
 }
 function help()
 {
-	//window.plugins.childBrowser.showWebPage('http://taxibleuservices.com/client/help.html', { showLocationBar: true });
-	window.open('http://taxibleuservices.com/client/help.html','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/help.html', { showLocationBar: true });
+	window.open('http://taximedia.fr/client/help.html','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function cgv()
 {
-	//window.plugins.childBrowser.showWebPage('http://taxibleuservices.com/client/docs/CGV.pdf', { showLocationBar: true });
-	window.open('http://taxibleuservices.com/client/docs/CGV.pdf','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/docs/CGV.pdf', { showLocationBar: true });
+	window.open('http://taximedia.fr/client/docs/CGV.pdf','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 // Checks App or Browser
 app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
