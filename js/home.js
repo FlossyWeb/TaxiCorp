@@ -82,12 +82,10 @@ $('#directions_map').live('pagecreate', function() {
 				self.refresh();
 				self.getCurrentPosition( function(position, status) {
 					if ( status === 'OK' ) {
-						alert('geocodeOK');
 						var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
 						self.get('map').panTo(latlng);
 						self.search({ 'location': latlng }, function(results, status) {
 							if ( status === 'OK' ) {
-								alert('geocodeOK');
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
 								//document.getElementById('to').value = rdv;
@@ -355,7 +353,8 @@ function addCalendar(date, rdv, com, idcourse, cell)
 	var title = "Course en commande";
 	var location = rdv;
 	var notes = 'Infos RDV : ' + com + ' - Identifiant de la course : ' + idcourse + ' - Tel client : ' + cell;
-	var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
+	//var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
+	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER"); };
 	var error = function(message) { navigator.notification.alert("Erreur: " + message); };
 	// create
 	window.plugins.calendar.createEvent(title,location,notes,startDate,endDate,success,error);
