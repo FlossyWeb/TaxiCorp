@@ -558,8 +558,39 @@
 								<option value="MASTERCARD">MASTERCARD</option>
 							</select><em></em>
 							<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
-							<label for="cbexp">Date Expiration : (dernier jour du mois)</label>
-							<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+									<!--
+									<label for="cbexp">Date Expiration : </label>
+									<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+									-->
+									<p>Expire fin :</p>
+									<select name="cbexpm" id="cbexpm">
+										<option value="" selected>Mois</option>
+										<option value="01">01- Janvier</option>
+										<option value="02">02- F&eacute;vrier</option>
+										<option value="03">03- Mars</option>
+										<option value="04">04- Avril</option>
+										<option value="05">05- Mai</option>
+										<option value="06">06- Juin</option>
+										<option value="07">07- Juillet</option>
+										<option value="08">08- Ao&ucirc;t</option>
+										<option value="09">09- Septembre</option>
+										<option value="10">10- Octobre</option>
+										<option value="11">11- Novembre</option>
+										<option value="12">12- D&eacute;cembre</option>
+									</select><em></em>
+									<select name="cbexpa" id="cbexpa">
+										<option value="" selected>Ann&eacute;e</option>
+										<option value="2015">2015</option>
+										<option value="2016">2016</option>
+										<option value="2017">2017</option>
+										<option value="2018">2018</option>
+										<option value="2019">2019</option>
+										<option value="2020">2020</option>
+										<option value="2021">2021</option>
+										<option value="2022">2022</option>
+										<option value="2023">2023</option>
+										<option value="2024">2024</option>
+									</select><em></em>
 							<input type="tel" name="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
 							<button onClick="modPay()" id="modPay">Modifier</button>
 						</div>

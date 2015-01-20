@@ -283,11 +283,11 @@ $(document).bind( 'pagecreate', function() {
 					if (data.sniffed == 'KO')
 					{
 						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
-					}/*
+					}
 					else if (!data.signed)
 					{
 						display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
-					}*/
+					}
 				}
 				$.mobile.loading( "hide" );
 				$('#reg_collaps').collapsible( "collapse" );
@@ -340,7 +340,8 @@ $(document).ready(function(){
 		   required: true,
 		   cbnum: true
 		 },
-		 cbexp: "required",
+		 cbexpm: "required",
+		 cbexpa: "required",
 		 cbval: "required",
 		 station: {
 		   required: true,
@@ -368,7 +369,8 @@ $(document).ready(function(){
 		 cbnum: {
 		   required: "Ce champs est obligatoire"
 		 },
-		 cbexp: "Ce champs est obligatoire",
+		 cbexpm: "Ce champs est obligatoire",
+		 cbexpa: "Ce champs est obligatoire",
 		 cbval: "Ce champs est obligatoire",
 		 station: {
 		   required: "Ce champs est obligatoire"
@@ -384,12 +386,11 @@ $(document).ready(function(){
 		   equalTo: "Cette adresse n&rsquo;est pas identique &agrave; la pr&eacute;c&eacute;dante."
 		 }
 		}
-		/* Put errors below fields
+		// Put errors below fields
 		,
 		errorPlacement: function(error, element) {
 			error.appendTo( element.parent().next('em') );
 		}
-		*/
 	});
 	$("#forget").validate({
 		rules: {

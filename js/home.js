@@ -751,7 +751,7 @@ function playOnError(error) {
 }
 function modPay() {
 	var cardNumber = $('#cbnum').val();
-	var exp = $('#cbexp').val();
+	var exp = $('#cbexpa').val()+'-'+$('#cbexpm').val();
 	var cardNetwork = $('#brand').val();
 	var cvv = $('#cbval').val();
 	$('#modPay').button('disable');
