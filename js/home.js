@@ -135,7 +135,7 @@ $('#delayPop').live( 'pagecreate',function(event) {
 });
 $( '#planning' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
-	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: dep }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#plan_cont").empty().append(data);
 		$("#plan_cont").trigger('create');
 	}).done(function() { $.mobile.loading( "hide" ); });
@@ -150,7 +150,7 @@ $( '#cmd' ).live( 'pagebeforeshow',function(event){
 });
 $( '#history' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
-	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: dep }, function(data){
+	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#hist_cont").empty().append(data);
 		$("#hist_cont").trigger('create');
 		//navigator.notification.alert(data);
@@ -565,9 +565,6 @@ if ( app ) {
 	function onDeviceReady() {
 		document.addEventListener("resume", onResume, false);
 		navigator.splashscreen.hide();
-		if(navigator.network.connection.type == Connection.NONE){
-			$("body").empty().append('<img src="no_network.png" onClick="window.location.reload()" />');
-		}
 		StatusBar.overlaysWebView(false);
 		// prevent device from sleeping
 		window.plugins.powerManagement.acquire();
@@ -584,6 +581,9 @@ if ( app ) {
 }
 function onResume() {
 	$.post("https://www.mytaxiserver.com/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
+	if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
+		$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
+	}
 }
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";

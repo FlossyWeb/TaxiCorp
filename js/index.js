@@ -154,23 +154,10 @@ if ( app ) {
 
 	// PhoneGap est prêt
 	function onDeviceReady() {
-		if(navigator.network.connection.type == Connection.NONE){
-			$("body").empty().append('<img src="no_network.png" onClick="window.location.reload()" />');
+		if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
+			$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
 		}
 		StatusBar.overlaysWebView(false);
-		/*
-		if($.localStorage.getItem('tel') && $.localStorage.getItem('pwd'))
-		{
-			$('#tel').val($.localStorage.getItem('tel'));
-			$('#pwd').val($.localStorage.getItem('pwd'));
-		}
-		var timing = setTimeout( function () {
-			if($.localStorage.getItem('pass') && $.localStorage.getItem('tel') && $.localStorage.getItem('pwd'))
-			{
-				$("#subLog").trigger('click');
-			}
-		}, 1000);
-		*/
 	}
 }
 
@@ -245,7 +232,6 @@ $(document).bind( 'pagecreate', function() {
 		{	
 			// stop form from submitting normally
 			event.preventDefault();
-			//$('#subReg').attr("disabled", "disabled");
 			$('input[type=submit]#subReg').button('disable');
 			$.mobile.loading( "show" );
 			// Subs some data
@@ -275,7 +261,7 @@ $(document).bind( 'pagecreate', function() {
 				}
 				else {
 					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
-					
+					$('input[type=submit]#subReg').button('enable');		
 					if (data.telexist)
 					{
 						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
@@ -291,7 +277,6 @@ $(document).bind( 'pagecreate', function() {
 				}
 				$.mobile.loading( "hide" );
 				$('#reg_collaps').collapsible( "collapse" );
-				$('input[type=submit]#subReg').button('enable');
 				$("#returns").empty().append(display);
 			});
 		}
