@@ -88,7 +88,8 @@ $('#directions_map').live('pagecreate', function() {
 							if ( status === 'OK' ) {
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
-								//document.getElementById('to').value = rdv;
+								var gmapLink = '<a data-ajax="false" href="http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'" class="ui-btn  ui-btn-b ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
+								$("#infos_map").append(gmapLink);
 								if (rdv != '')
 								{
 									$('#submit').trigger('click');
@@ -811,7 +812,7 @@ $('#planning .ui-content').live("swipeleft", function() {
 $('#directions_map').live("swiperight", function() {
 	$("#mapPanel_poper").trigger('click');
 });		
-$(document).bind( 'pagecreate', function() {
+$(document).on( 'pagecreate', function() {
 	
 	if(!$.localStorage.getItem('pass'))
 	{
@@ -933,7 +934,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('prenom', data.prenom);
 				$.localStorage.setItem('taxi', data.taxi);
 				$.localStorage.setItem('tel', data.tel);
-				$.localStorage.setItem('siret', data.siret);
+				//$.localStorage.setItem('siret', data.siret);
 				$.localStorage.setItem('email', data.email);
 				$.localStorage.setItem('station', data.station);
 				$.localStorage.setItem('dep', data.dep);

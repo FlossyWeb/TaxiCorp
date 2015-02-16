@@ -28,7 +28,7 @@
 		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 		<script type="text/javascript">
-            $( document ).bind( "mobileinit", function() {
+            $( document ).on( "mobileinit", function() {
                 // Make your jQuery Mobile framework configuration changes here!
                 $.support.cors = true;
                 $.mobile.allowCrossDomainPages = true;
@@ -100,7 +100,7 @@
                                 <input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>	
                                 <input type="tel" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="6" size="20" class="required"><em></em>
                                 <input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
-                                <input type="tel" name="station" placeholder="CP Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
+                                <input type="tel" name="station" placeholder="Code Postal Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
 								<div class="ui-body ui-body-a ui-corner-all">
 									<h3>Infos CB : </h3>
 									<select name="brand" id="brand">

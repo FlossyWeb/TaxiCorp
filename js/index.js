@@ -161,7 +161,7 @@ if ( app ) {
 	}
 }
 
-$(document).bind( 'pagecreate', function() {
+$(document).on( 'pagecreate', function() {
 
 	active();
 	footer();
@@ -258,6 +258,30 @@ $(document).bind( 'pagecreate', function() {
 				if (data.subscribed && data.payzen)
 				{
 					display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+					// Automatically logs registered user in...
+					var log = data.tel;
+					var pwd = data.pwd;
+					var dep = data.dep;
+					$.post("https://www.mytaxiserver.com/client/login_app.php", { log: log, pass: pwd, dep: dep}, function(data) {
+						// GET SHIT BACK !!
+						$.localStorage.setItem('civil', data.civil);
+						$.localStorage.setItem('nom', data.nom);
+						$.localStorage.setItem('prenom', data.prenom);
+						$.localStorage.setItem('taxi', data.taxi);
+						$.localStorage.setItem('tel', data.tel);
+						$.localStorage.setItem('siret', data.siret);
+						$.localStorage.setItem('email', data.email);
+						$.localStorage.setItem('station', data.station);
+						$.localStorage.setItem('group', data.group);
+						$.localStorage.setItem('pwd', data.pwd);
+						$.localStorage.setItem('mngid', data.mngid);
+						$.localStorage.setItem('pass', data.pass);
+						if(data.pass)
+						{ // IDENTIFIED SO GETS IN...
+							window.location='home.html';
+							//document.location.href='home.html';
+						}
+					}, "json");
 				}
 				else {
 					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
@@ -309,7 +333,7 @@ $(document).ready(function(){
 	
 	$.validator.addMethod('cp', function (value) {
 		return /^[0-9]{5}$/.test(value);
-	}, 'Le CP fait 5 chiffres sans espace.');
+	}, 'Le Code Postal fait 5 chiffres sans espace.');
 
 	$("#register").validate({
 		rules: {
@@ -344,21 +368,20 @@ $(document).ready(function(){
 		 }
 		},
 		messages: {
-		 nom: "Ce champs est obligatoire",
-		 prenom: "Ce champs est obligatoire",
-		 taxi: "Ce champs est obligatoire",
+		 nom: "Le Nom est obligatoire",
+		 prenom: "Le Pr&eacute;nom est obligatoire",
+		 taxi: "La License de Taxi est obligatoire",
 		 tel: {
-		   required: "Ce champs est obligatoire"
+		   required: "Le T&eacute;l&eacute;phone est obligatoire"
 		 },
-		 cbtit: "Ce champs est obligatoire",
 		 cbnum: {
-		   required: "Ce champs est obligatoire"
+		   required: "Les Num&eacute;ros de CB sont obligatoires"
 		 },
-		 cbexpm: "Ce champs est obligatoire",
-		 cbexpa: "Ce champs est obligatoire",
-		 cbval: "Ce champs est obligatoire",
+		 cbexpm: "Le mois d&rsquo;expiration est obligatoire",
+		 cbexpa: "L&rsquo;Ann&eacute;e d&rsquo;expiration est obligatoire",
+		 cbval: "Le Criptogramme Visuel est obligatoire",
 		 station: {
-		   required: "Ce champs est obligatoire"
+		   required: "Le Code Postal de la commune de stationnement est obligatoire"
 		 },
 		 cgv: "Vous devez acceper les CGV",
 		 email: {
