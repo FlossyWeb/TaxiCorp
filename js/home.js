@@ -89,7 +89,9 @@ $('#directions_map').live('pagecreate', function() {
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
 								var gmapLink = '<a data-ajax="false" href="http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'" class="ui-btn  ui-btn-b ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
-								$("#infos_map").append(gmapLink);
+								setTimeout(function() { 
+									$("#infos_map").append(gmapLink);
+								}, 1000);
 								if (rdv != '')
 								{
 									$('#submit').trigger('click');
