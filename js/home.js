@@ -88,7 +88,7 @@ $('#directions_map').live('pagecreate', function() {
 							if ( status === 'OK' ) {
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
-								var gmapLink = '<a data-ajax="false" href="http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'" class="ui-btn  ui-btn-b ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
+								var gmapLink = '<a href="#" onClick="openSomeUrl(\'http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'&directionsmode=driving\')" class="ui-btn  ui-btn-b ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
 								setTimeout(function() { 
 									$("#infos_map").append(gmapLink);
 								}, 1000);
@@ -542,20 +542,25 @@ function stopSecureCall()
 	//$.sessionStorage.setItem('idcourseUrg', false);
 	clearInterval(sec);
 }
+function openSomeUrl(url)
+{
+	//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr/redir.php', { showLocationBar: true });
+	window.open(url,'_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
+}
 function taximedia()
 {
 	//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr/redir.php', { showLocationBar: true });
-	window.open('http://www.taximedia.fr/redir.php','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('http://www.taximedia.fr/redir.php','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function help()
 {
 	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/help.html', { showLocationBar: true });
-	window.open('http://taximedia.fr/client/help.html','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('http://taximedia.fr/client/help.html','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function cgv()
 {
 	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/docs/CGV.pdf', { showLocationBar: true });
-	window.open('http://taximedia.fr/client/docs/CGV.pdf','_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('http://taximedia.fr/client/docs/CGV.pdf','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 // Checks App or Browser
 app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
