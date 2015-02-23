@@ -70,6 +70,7 @@
         <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
         <style type="text/css">
 			label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+			div.error span { color: red;}
         </style>
         <script type="text/javascript" src="js/jquery.validate.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
@@ -89,6 +90,7 @@
                                  Inscrivez-Vous 
                             </h1>
                             <fieldset><legend></legend>
+							<div class="error"><span></span></div>
                             <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="register">
                                 <select name="civil">
                                     <option selected value="Mr">Civilit&eacute;</option>
@@ -285,7 +287,17 @@
                     </div>    
                 </div>
                 <!-- HERE COMES ALL ANSWERS CONCERNING BOTH LOGIN AND REGISTERING METHODS -->
-                <div id="returns"></div>
+                <div data-role="popup" data-theme="b" id="answer" data-dismissible="true" data-overlay-theme="b">
+					<a href="#portal" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+                    <div data-theme="a" data-role="header">
+                        <h1>
+                            R&eacute;ponse
+                        </h1>
+                    </div>
+                    <div class="ui-content" role="main">
+						<div id="returns"></div>
+                    </div>
+                </div>
                 <a href="#secureDialog" data-rel="popup" data-position-to="window" data-role="button" class="secure-bt" data-theme="b" data-icon="alert">Bouton d&rsquo;urgence</a>
                 <div data-role="popup" data-theme="a" id="secureDialog" data-dismissible="false" data-overlay-theme="b">
                     <div data-theme="a" data-role="header">
@@ -296,7 +308,7 @@
                     <div class="ui-content" role="main">
                         <h1>Lancer l&rsquo;appel d&rsquo;urgence ?</h1>
                         <input type="button" data-theme="b" data-icon="check" onClick="getLocationOnce()" value="CONFIRMER"/>
-                        <a href="#home" data-rel="back" data-icon="delete" data-role="button" data-transition="slideUp" data-theme="a">ANNULER</a>            
+                        <a href="#portal" data-rel="back" data-icon="delete" data-role="button" data-transition="slideUp" data-theme="a">ANNULER</a>            
                         <div id="secureResults"></div>
                     </div>
                 </div>        
@@ -320,7 +332,7 @@
                </div>                    
                 <div id="urgencyResults"></div>
             </div>
-            <div data-theme="a" data-role="footer" id="footer_cont8" data-position="fixed">
+            <div data-theme="a" data-role="footer" id="footer_cont2" data-position="fixed">
 				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Proc&eacute;dure d&rsquo;appel d&rsquo;urgence activ&eacute;e.</b></marquee></div>
             </div>
         </div>

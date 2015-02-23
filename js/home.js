@@ -925,12 +925,9 @@ $(document).ready(function(){
 			error.appendTo( element.parent().next('em') );
 		}
 		*/
-	});
-	$("#modmy").submit(function(event) {
-		if ($("#modmy").valid())
-		{	
-			// stop form from submitting normally
-			event.preventDefault();
+		// Form submission if every thing is ok
+		,
+		submitHandler: function (form) {
 			$('#mod_collaps input[type=submit]').button('disable');
 			$.mobile.loading( "show" );
 			// Subs some data
