@@ -226,86 +226,7 @@ $(document).on( 'pagecreate', function() {
 			$("#returns").empty().append(display);
 		}, "json");
 	});
-	
-	$("#register").submit(function(event) {
-		if ($("#register").valid())
-		{	
-			// stop form from submitting normally
-			event.preventDefault();
-			$('input[type=submit]#subReg').button('disable');
-			$.mobile.loading( "show" );
-			// Subs some data
-			$.post("https://www.mytaxiserver.com/appclient/register_app.php", $("#register").serialize(), function(data) {
-				// GET SHIT BACK !!
-				$.localStorage.setItem('civil', data.civil);
-				$.localStorage.setItem('nom', data.nom);
-				$.localStorage.setItem('prenom', data.prenom);
-				$.localStorage.setItem('taxi', data.taxi);
-				$.localStorage.setItem('tel', data.tel);
-				$.localStorage.setItem('siret', data.siret);
-				$.localStorage.setItem('station', data.station);
-				$.localStorage.setItem('email', data.email);
-				$.localStorage.setItem('group', data.group);
-				$.localStorage.setItem('pwd', data.pwd);
-				$.localStorage.setItem('dep', data.dep);
-				$.sessionStorage.setItem('subscribed', data.subscribed);
-				$.sessionStorage.setItem('telexist', data.telexist);
-				$.sessionStorage.setItem('cabexist', data.cabexist);
-				$.sessionStorage.setItem('sirexist', data.sirexist);
-				//navigator.notification.alert(data.taxi + ' - ' + data.siret + ' - ' + data.email + ' - ' + data.tel + ' - ' + data.subscribed + ' - ' + data.telexist + ' - ' + data.cabexist + ' - ' + data.sirexist);
-			}, "json").done(function(data) {
-				var display = '';
-				if (data.subscribed && data.payzen)
-				{
-					display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
-					// Automatically logs registered user in...
-					var log = data.tel;
-					var pwd = data.pwd;
-					var dep = data.dep;
-					$.post("https://www.mytaxiserver.com/client/login_app.php", { log: log, pass: pwd, dep: dep}, function(data) {
-						// GET SHIT BACK !!
-						$.localStorage.setItem('civil', data.civil);
-						$.localStorage.setItem('nom', data.nom);
-						$.localStorage.setItem('prenom', data.prenom);
-						$.localStorage.setItem('taxi', data.taxi);
-						$.localStorage.setItem('tel', data.tel);
-						$.localStorage.setItem('siret', data.siret);
-						$.localStorage.setItem('email', data.email);
-						$.localStorage.setItem('station', data.station);
-						$.localStorage.setItem('group', data.group);
-						$.localStorage.setItem('pwd', data.pwd);
-						$.localStorage.setItem('mngid', data.mngid);
-						$.localStorage.setItem('pass', data.pass);
-						if(data.pass)
-						{ // IDENTIFIED SO GETS IN...
-							window.location='home.html';
-							//document.location.href='home.html';
-						}
-					}, "json");
-				}
-				else {
-					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
-					$('input[type=submit]#subReg').button('enable');		
-					if (data.telexist)
-					{
-						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
-					}
-					if (data.sniffed == 'KO')
-					{
-						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
-					}
-					else if (!data.signed)
-					{
-						display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
-					}
-				}
-				$.mobile.loading( "hide" );
-				$('#reg_collaps').collapsible( "collapse" );
-				$("#returns").empty().append(display);
-			});
-		}
-	});
-	
+		
 });
 
 $(document).ready(function(){
@@ -399,6 +320,107 @@ $(document).ready(function(){
 		errorPlacement: function(error, element) {
 			error.appendTo( element.parent().next('em') );
 		}
+		// Show errors sum up on top of form
+		,
+		invalidHandler: function(event, validator) {
+			// 'this' refers to the form
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'Erreur: Un champs obligatoires est incorrect. Un message plus pr&eacute;cis figure sous celui-ci.'
+				: 'Erreur: ' + errors + ' champs obligatoires sont incorrects. Un message plus pr&eacute;cis figure sous ceux-ci.';
+				$("div.error span").html(message);
+				$("div.error").show();
+			} else {
+				$("div.error").hide();
+			}
+		}		
+		// Form submission if every thing is ok
+		,
+		submitHandler: function (form) {
+			// setup some local variables
+			var $form = $(this);
+			// let's select and cache all the fields
+			var $inputs = $form.find("input, select, button, textarea");
+			// serialize the data in the form
+			var serializedData = $form.serialize();
+			// let's disable the inputs for the duration of the ajax request
+			$inputs.prop("disabled", true);
+			$.mobile.loading( "show" );
+			// Subs some data
+			$.post("https://www.mytaxiserver.com/appclient/register_app.php", serializedData, function(data) {
+				// GET SHIT BACK !!
+				$.localStorage.setItem('civil', data.civil);
+				$.localStorage.setItem('nom', data.nom);
+				$.localStorage.setItem('prenom', data.prenom);
+				$.localStorage.setItem('taxi', data.taxi);
+				$.localStorage.setItem('tel', data.tel);
+				$.localStorage.setItem('siret', data.siret);
+				$.localStorage.setItem('station', data.station);
+				$.localStorage.setItem('email', data.email);
+				$.localStorage.setItem('group', data.group);
+				$.localStorage.setItem('pwd', data.pwd);
+				$.localStorage.setItem('dep', data.dep);
+				$.sessionStorage.setItem('subscribed', data.subscribed);
+				$.sessionStorage.setItem('telexist', data.telexist);
+				$.sessionStorage.setItem('cabexist', data.cabexist);
+				$.sessionStorage.setItem('sirexist', data.sirexist);
+				//navigator.notification.alert(data.taxi + ' - ' + data.siret + ' - ' + data.email + ' - ' + data.tel + ' - ' + data.subscribed + ' - ' + data.telexist + ' - ' + data.cabexist + ' - ' + data.sirexist);
+			}, "json").done(function(data) {
+				var display = '';
+				if (data.subscribed && data.payzen)
+				{
+					display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+					// Automatically logs registered user in...
+					var log = data.tel;
+					var pwd = data.pwd;
+					var dep = data.dep;
+					$.post("https://www.mytaxiserver.com/client/login_app.php", { log: log, pass: pwd, dep: dep}, function(data) {
+						// GET SHIT BACK !!
+						$.localStorage.setItem('civil', data.civil);
+						$.localStorage.setItem('nom', data.nom);
+						$.localStorage.setItem('prenom', data.prenom);
+						$.localStorage.setItem('taxi', data.taxi);
+						$.localStorage.setItem('tel', data.tel);
+						$.localStorage.setItem('siret', data.siret);
+						$.localStorage.setItem('email', data.email);
+						$.localStorage.setItem('station', data.station);
+						$.localStorage.setItem('group', data.group);
+						$.localStorage.setItem('pwd', data.pwd);
+						$.localStorage.setItem('mngid', data.mngid);
+						$.localStorage.setItem('pass', data.pass);
+						if(data.pass)
+						{ // IDENTIFIED SO GETS IN...
+							window.location='home.html';
+							//document.location.href='home.html';
+						}
+					}, "json");
+				}
+				else {
+					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
+					$('input[type=submit]#subReg').button('enable');		
+					if (data.telexist)
+					{
+						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
+					}
+					if (data.sniffed == 'KO')
+					{
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
+					}
+					else if (!data.signed)
+					{
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
+					}
+				}
+				$("#returns").empty().append(display);
+			}).always(function () {
+				// reenable the inputs
+				$inputs.prop("disabled", false);
+				$.mobile.loading( "hide" );
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles.');
+			});
+		} // submitHandler Ends
 	});
 	$("#forget").validate({
 		rules: {
