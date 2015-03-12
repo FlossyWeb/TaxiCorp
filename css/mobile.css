@@ -26,10 +26,12 @@ input[type=text], input[type=tel], input[type=date], input[type=time], input[typ
 
 :-moz-placeholder { /* Firefox 18- */
    color: #333;
+   opacity:  1;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
    color: #333;
+   opacity:  1;
 }
 
 :-ms-input-placeholder {  

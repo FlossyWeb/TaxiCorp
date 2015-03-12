@@ -21,6 +21,7 @@ function active()
 		$.localStorage.setItem('nom', data.nom);
 		$.localStorage.setItem('prenom', data.prenom);
 		$.localStorage.setItem('taxi', data.taxi);
+		$.localStorage.setItem('cpro', data.cpro);
 		$.localStorage.setItem('tel', data.tel);
 		$.localStorage.setItem('siret', data.siret);
 		$.localStorage.setItem('email', data.email);
@@ -176,6 +177,7 @@ $(document).on( 'pagecreate', function() {
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('prenom', data.prenom);
 			$.localStorage.setItem('taxi', data.taxi);
+			$.localStorage.setItem('cpro', data.cpro);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('siret', data.siret);
 			$.localStorage.setItem('station', data.station);
@@ -243,6 +245,7 @@ $(document).ready(function(){
 		 nom: "required",
 		 prenom: "required",
 		 taxi: "required",
+		 cpro: "required",
 		 tel: {
 		   required: true,
 		   phone: true
@@ -273,7 +276,8 @@ $(document).ready(function(){
 		messages: {
 		 nom: "Le Nom est obligatoire",
 		 prenom: "Le Pr&eacute;nom est obligatoire",
-		 taxi: "La License de Taxi est obligatoire",
+		 taxi: "L&rsquo;ADS (N&deg; de Taxi) est obligatoire",
+		 cpro: "Le N&deg; de Carte Professionelle est obligatoire",
 		 tel: {
 		   required: "Le T&eacute;l&eacute;phone est obligatoire"
 		 },
@@ -329,6 +333,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('nom', data.nom);
 				$.localStorage.setItem('prenom', data.prenom);
 				$.localStorage.setItem('taxi', data.taxi);
+				$.localStorage.setItem('cpro', data.cpro);
 				$.localStorage.setItem('tel', data.tel);
 				$.localStorage.setItem('siret', data.siret);
 				$.localStorage.setItem('station', data.station);
@@ -356,6 +361,7 @@ $(document).ready(function(){
 						$.localStorage.setItem('nom', data.nom);
 						$.localStorage.setItem('prenom', data.prenom);
 						$.localStorage.setItem('taxi', data.taxi);
+						$.localStorage.setItem('cpro', data.cpro);
 						$.localStorage.setItem('tel', data.tel);
 						$.localStorage.setItem('siret', data.siret);
 						$.localStorage.setItem('station', data.station);
@@ -376,7 +382,6 @@ $(document).ready(function(){
 				}
 				else {
 					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
-					$('input[type=submit]#subReg').button('enable');		
 					if (data.telexist)
 					{
 						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
@@ -397,7 +402,7 @@ $(document).ready(function(){
 				$('input[type=submit]#subReg').button('enable');
 				$.mobile.loading( "hide" );
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus, errorThrown);
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown);
 			});
 		} // submitHandler Ends
 	});
