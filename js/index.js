@@ -30,7 +30,7 @@ function active()
 		$.localStorage.setItem('group', data.group);
 	}, "json");
 	posting.done(function( data ) {
-		if($.localStorage.getItem('pass') && data.active)
+		if($.localStorage.getItem('pass')=='true' && data.active)
 		{
 			//navigator.splashscreen.hide();
 			$.mobile.loading( "show" );

@@ -1,5 +1,6 @@
 var taxi = $.localStorage.getItem('taxi');
 var tel = $.localStorage.getItem('tel');
+var pwd = $.localStorage.getItem('pwd');
 var email = $.localStorage.getItem('email');
 var civil = $.localStorage.getItem('civil');
 var nom = $.localStorage.getItem('nom');
@@ -37,6 +38,18 @@ var lat = 0;
 var lng = 0;
 
 var mobileDemo = { 'center': '43.615945,3.876743', 'zoom': 10 };
+
+if($.localStorage.getItem('pass')!='true')
+{
+	document.location.href='index.html';
+}
+$.post("https://www.mytaxiserver.com/appclient/login_app.php", { log: tel, pass: pwd, dep: dep}, function(data) {
+	if (data.badid)
+	{
+		$.localStorage.setItem('pass', 0);
+		document.location.href='index.html';
+	}
+}, "json");
 		
 ////////////////////////////////////////////////////////////
 //$(document).on( 'pagebeforecreate', '#directions_map', function() {
@@ -820,12 +833,6 @@ $('#directions_map').live("swiperight", function() {
 	$("#mapPanel_poper").trigger('click');
 });		
 $(document).on( 'pagecreate', function() {
-	
-	if(!$.localStorage.getItem('pass'))
-	{
-		document.location.href='index.html';
-		//$.mobile.changePage( "test.html", { transition: "slide"} );
-	}
 	$( "body>[data-role='panel']" ).panel().enhanceWithin();
 	if(!app) {
 		getLocation();
