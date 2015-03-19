@@ -775,7 +775,7 @@ function modPay() {
 	var exp = $('#cbexpa').val()+'-'+$('#cbexpm').val();
 	var cardNetwork = $('#brand').val();
 	var cvv = $('#cbval').val();
-	$('#modPay').button('disable');
+	$('#modPay').prop('disabled', true).addClass('ui-disabled');
 	$.mobile.loading( "show" );
 	$.post('https://www.mytaxiserver.com/payzen/updateIndent.php', {cardNumber: cardNumber, exp: exp, cardNetwork: cardNetwork, cvv: cvv, civil: civil, nom: nom, prenom: prenom, tel: tel, email: email, cardIdent: siret, station: station}, function(data){
 	}, "json").done(function(data) { 
@@ -792,10 +792,12 @@ function modPay() {
 		else {
 			display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
 		}
-		$('#mod_collaps').collapsible( "collapse" );
-		$("#returns").empty().append(display);
+		$("#returnsVisa").empty().append(display);
+		$("#returnsBox").popup( "open", { positionTo: "window" } );
+	}).always(function () {
+		//$('#mod_collaps').collapsible( "collapse" );
 		$.mobile.loading( "hide" );
-		$('#modPay').button('enable');
+		$('#modPay').prop('disabled', false).removeClass('ui-disabled');
 	});
 }
 $('#home').live("swiperight", function() {
@@ -962,7 +964,7 @@ $(document).ready(function(){
 					display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
 				}
 				else {
-					display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, l&rsquo;identifiant fourni ne figurant pas dans notre base de donn&eacute;e.</b></p>';
+					display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, aucune modification faite en base de donn&eacute;e.</b></p>';
 				}
 				$.mobile.loading( "hide" );
 				$('#mod_collaps').collapsible( "collapse" );

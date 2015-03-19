@@ -557,7 +557,7 @@
 								<option value="VISA">VISA</option>
 								<option value="MASTERCARD">MASTERCARD</option>
 							</select><em></em>
-							<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
+							<input type="tel" name="cbnum" id="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
 									<!--
 									<label for="cbexp">Date Expiration : </label>
 									<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
@@ -591,7 +591,7 @@
 										<option value="2023">2023</option>
 										<option value="2024">2024</option>
 									</select><em></em>
-							<input type="tel" name="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
+							<input type="tel" name="cbval" id="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
 							<button onClick="modPay()" id="modPay">Modifier</button>
 						</div>
                         <div data-role="collapsible" data-collapsed="true">
@@ -632,7 +632,7 @@
                 </div>
                 <div id="returns"></div>
                 <div data-role="popup" data-theme="b" id="popSms" data-dismissible="true">
- 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+ 					<a href="#manage" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                    <div data-theme="a" data-role="header">
                         <p style="font-size:21px;text-align:center;"><b>
                             Partage SMS
@@ -640,6 +640,17 @@
                     </div>
                     <div class="ui-content" role="main">
                         <div id="smsReturn"></div>
+                    </div>
+                </div>
+                <div data-role="popup" data-theme="b" id="returnsBox" data-dismissible="true">
+ 					<a href="#manage" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+                   <div data-theme="a" data-role="header">
+                        <p style="font-size:21px;text-align:center;"><b>
+                            Modification CB
+                        </b></p>
+                    </div>
+                    <div class="ui-content" role="main">
+                        <div id="returnsVisa"></div>
                     </div>
                 </div>
             </div>
