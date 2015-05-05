@@ -215,6 +215,38 @@ $(document).on( 'pagecreate', function() {
 
 $(document).ready(function(){
 
+	// First thing we hide unnecessary forms
+	var step = $.localStorage.getItem('regStep');
+	var valtel = $.localStorage.getItem('tel');
+	var valdep = $.localStorage.getItem('dep');
+	if (step == '1') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeIn();
+		$('#RegCbStep').fadeOut();
+		$('#telcab').val(valtel);
+		$('#telcb').val(valtel);
+		$('#depcab').val(valdep);
+		$('#depcb').val(valdep);
+	}
+	else if (step == '2') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeIn();
+		$('#telcb').val(valtel);
+		$('#depcb').val(valdep);
+	}
+	else if (step == 'DONE') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeOut();
+		$('#done').append('<p><b>Vous &ecirc;tes d&eacute;j&agrave; enregistr&eacute;, vous pouvez vous connecter ci-dessous.</b></p>');
+	}
+	else {
+		//$('#RegNameStep').fadeIn();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeOut();
+	}
+	
 	$.validator.addMethod(
 		"regex",
 		function(value, element, regexp) {
@@ -240,66 +272,50 @@ $(document).ready(function(){
 		return /^[0-9]{5}$/.test(value);
 	}, 'Le Code Postal fait 5 chiffres sans espace.');
 
-	$("#register").validate({
+	$("#RegNameStep").validate({
 		rules: {
 		 nom: "required",
 		 prenom: "required",
-		 taxi: "required",
-		 cpro: "required",
 		 tel: {
 		   required: true,
 		   phone: true
 		 },
-		 brand: "required",
-		 cbnum: {
-		   required: true,
-		   cbnum: true
-		 },
-		 cbexpm: "required",
-		 cbexpa: "required",
-		 cbval: "required",
 		 station: {
 		   required: true,
 		   cp: true
 		 },
-		 cgv: "required",
 		 email: {
 		   required: true,
 		   email: true
-		 },
+		 }
+		 /*,
 		 confirmail: {
 		   required: true,
 		   email: true,
 		   equalTo: '#email'
 		 }
+		 */
 		},
 		messages: {
 		 nom: "Le Nom est obligatoire",
 		 prenom: "Le Pr&eacute;nom est obligatoire",
-		 taxi: "L&rsquo;ADS (N&deg; de Taxi) est obligatoire",
-		 cpro: "Le N&deg; de Carte Professionelle est obligatoire",
 		 tel: {
 		   required: "Le T&eacute;l&eacute;phone est obligatoire"
 		 },
-		 cbnum: {
-		   required: "Les Num&eacute;ros de CB sont obligatoires"
-		 },
-		 cbexpm: "Le mois d&rsquo;expiration est obligatoire",
-		 cbexpa: "L&rsquo;Ann&eacute;e d&rsquo;expiration est obligatoire",
-		 cbval: "Le Criptogramme Visuel est obligatoire",
 		 station: {
 		   required: "Le Code Postal de la commune de stationnement est obligatoire"
 		 },
-		 cgv: "Vous devez acceper les CGV",
 		 email: {
 		   required: "Nous avons besoin de votre email afin de vous contacter",
 		   email: "Votre email doit &ecirc;tre au format nom@domaine.com"
-		 },
+		 }
+		 /*,
 		 confirmail: {
 		   required: "L&rsquo;email ci dessus n&rsquo;a pas &eacute;t&eacute; confirm&eacute;",
 		   email: "Votre email doit &ecirc;tre au format nom@domaine.com",
 		   equalTo: "Cette adresse n&rsquo;est pas identique &agrave; la pr&eacute;c&eacute;dante."
 		 }
+		 */
 		}
 		// Put errors below fields
 		,
@@ -313,7 +329,7 @@ $(document).ready(function(){
 			var errors = validator.numberOfInvalids();
 			if (errors) {
 				var message = errors == 1
-				? 'Erreur: Un champs obligatoires est incorrect. Un message plus pr&eacute;cis figure sous celui-ci.'
+				? 'Erreur: Un champs obligatoire est incorrect. Un message plus pr&eacute;cis figure sous celui-ci.'
 				: 'Erreur: ' + errors + ' champs obligatoires sont incorrects. Un message plus pr&eacute;cis figure sous ceux-ci.';
 				$("div.error span").html(message);
 				$("div.error").show();
@@ -324,10 +340,170 @@ $(document).ready(function(){
 		// Form submission if every thing is ok
 		,
 		submitHandler: function (form) {
-			$('input[type=submit]#subReg').button('disable');
+			$('input[type=submit]#subNameStep').button('disable');
 			$.mobile.loading( "show" );
 			// Subs some data
-			$.post("https://www.mytaxiserver.com/appclient/register_app.php", $("#register").serialize(), function(data) {
+			$.post("https://www.mytaxiserver.com/appclient/register_app_name.php", $("#RegNameStep").serialize(), function(data) {
+				// GET SHIT BACK !!
+				$.localStorage.setItem('civil', data.civil);
+				$.localStorage.setItem('nom', data.nom);
+				$.localStorage.setItem('prenom', data.prenom);
+				$.localStorage.setItem('tel', data.tel);
+				$.localStorage.setItem('station', data.station);
+				$.localStorage.setItem('dep', data.dep);
+				$.localStorage.setItem('email', data.email);
+				$.localStorage.setItem('group', data.group);
+				$.localStorage.setItem('pwd', data.pwd);
+				$.sessionStorage.setItem('telexist', data.telexist);
+				//navigator.notification.alert(data.taxi + ' - ' + data.siret + ' - ' + data.email + ' - ' + data.tel + ' - ' + data.subscribed + ' - ' + data.telexist + ' - ' + data.cabexist + ' - ' + data.sirexist);
+			}, "json").done(function(data) {
+				var display = '';
+				if (data.subscribed)
+				{
+					$.localStorage.setItem('regStep', '1');
+					$('#telcab').val(data.tel);
+					$('#telcb').val(data.tel);
+					$('#depcab').val(data.dep);
+					$('#depcb').val(data.dep);
+					$('#RegNameStep').fadeOut();
+					$('#RegCabStep').fadeIn();
+					display = '<p style="color:green;"><b>Merci, vous &ecirc;tes pr&ecirc;t &agrave; passer &agrave; l&rsquo;&eacute;tape suivante.</b></p>';
+					$("div.error span").empty(); // If Step is OK we empty error handler to prevent previous errors to show during next steps.
+				}
+				else {
+					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
+					if (data.telexist)
+					{
+						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
+					}
+				}
+				$("#returns").empty().append(display);
+				$( "#answer" ).popup( "open", { positionTo: "window" } );
+			}).always(function () {
+				// reenable the inputs
+				$('input[type=submit]#subNameStep').button('enable');
+				$.mobile.loading( "hide" );
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown);
+			});
+		} // submitHandler Ends
+	});
+	$("#RegCabStep").validate({
+		rules: {
+		 taxi: "required",
+		 cpro: "required"
+		},
+		messages: {
+		 taxi: "L&rsquo;ADS (N&deg; de Taxi) est obligatoire",
+		 cpro: "Le N&deg; de Carte Professionelle est obligatoire"
+		}
+		// Put errors below fields
+		,
+		errorPlacement: function(error, element) {
+			error.appendTo( element.parent().next('em') );
+		}
+		// Show errors sum up on top of form
+		,
+		invalidHandler: function(event, validator) {
+			// 'this' refers to the form
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'Erreur: Un champs obligatoire est incorrect. Un message plus pr&eacute;cis figure sous celui-ci.'
+				: 'Erreur: ' + errors + ' champs obligatoires sont incorrects. Un message plus pr&eacute;cis figure sous ceux-ci.';
+				$("div.error span").html(message);
+				$("div.error").show();
+			} else {
+				$("div.error").hide();
+			}
+		}		
+		// Form submission if every thing is ok
+		,
+		submitHandler: function (form) {
+			$('input[type=submit]#subCabStep').button('disable');
+			$.mobile.loading( "show" );
+			// Subs some data
+			$.post("https://www.mytaxiserver.com/appclient/register_app_cab.php", $("#RegCabStep").serialize(), function(data) {
+				// GET SHIT BACK !!
+				$.localStorage.setItem('taxi', data.taxi);
+				$.localStorage.setItem('cpro', data.cpro);
+				//$.localStorage.setItem('tel', data.tel);
+				//$.localStorage.setItem('dep', data.dep);
+				$.sessionStorage.setItem('subscribed', data.subscribed);
+			}, "json").done(function(data) {
+				var display = '';
+				if (data.subscribed)
+				{
+					$.localStorage.setItem('regStep', '2');
+					$('#telcb').val(data.tel);
+					$('#depcb').val(data.dep);
+					$('#RegCabStep').fadeOut();
+					$('#RegCbStep').fadeIn();
+					display = '<p style="color:green;"><b>Merci, vous &ecirc;tes pr&ecirc;t &agrave; passer &agrave; l&rsquo;&eacute;tape finale.</b></p>';
+					$("div.error span").empty(); // If Step is OK we empty error handler to prevent previous errors to show during next steps.
+				}
+				else {
+					display = '<p style="color:red;"><b>Il y a un probl&egrave;me technique, d&eacute;sol&eacute;.</b></p>';
+				}
+				$("#returns").empty().append(display);
+				$( "#answer" ).popup( "open", { positionTo: "window" } );
+			}).always(function () {
+				// reenable the inputs
+				$('input[type=submit]#subCabStep').button('enable');
+				$.mobile.loading( "hide" );
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown);
+			});
+		} // submitHandler Ends
+	});
+	$("#RegCbStep").validate({
+		rules: {
+		 brand: "required",
+		 cbnum: {
+		   required: true,
+		   cbnum: true
+		 },
+		 cbexpm: "required",
+		 cbexpa: "required",
+		 cbval: "required",
+		 cgv: "required"
+		},
+		messages: {
+		 cbnum: {
+		   required: "Les Num&eacute;ros de CB sont obligatoires"
+		 },
+		 cbexpm: "Le mois d&rsquo;expiration est obligatoire",
+		 cbexpa: "L&rsquo;Ann&eacute;e d&rsquo;expiration est obligatoire",
+		 cbval: "Le Criptogramme Visuel est obligatoire",
+		 cgv: "Vous devez acceper les CGV",
+		}
+		// Put errors below fields
+		,
+		errorPlacement: function(error, element) {
+			error.appendTo( element.parent().next('em') );
+		}
+		// Show errors sum up on top of form
+		,
+		invalidHandler: function(event, validator) {
+			// 'this' refers to the form
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'Erreur: Un champs obligatoire est incorrect. Un message plus pr&eacute;cis figure sous celui-ci.'
+				: 'Erreur: ' + errors + ' champs obligatoires sont incorrects. Un message plus pr&eacute;cis figure sous ceux-ci.';
+				$("div.error span").html(message);
+				$("div.error").show();
+			} else {
+				$("div.error").hide();
+			}
+		}		
+		// Form submission if every thing is ok
+		,
+		submitHandler: function (form) {
+			$('input[type=submit]#subCbStep').button('disable');
+			$.mobile.loading( "show" );
+			// Subs some data
+			$.post("https://www.mytaxiserver.com/appclient/register_app_cb.php", $("#RegCbStep").serialize(), function(data) {
 				// GET SHIT BACK !!
 				$.localStorage.setItem('civil', data.civil);
 				$.localStorage.setItem('nom', data.nom);
@@ -351,6 +527,7 @@ $(document).ready(function(){
 				if (data.subscribed && data.payzen)
 				{
 					display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+					$.localStorage.setItem('regStep', 'DONE');
 					// Automatically logs registered user in...
 					var log = data.tel;
 					var pwd = data.pwd;
@@ -399,7 +576,7 @@ $(document).ready(function(){
 				$( "#answer" ).popup( "open", { positionTo: "window" } );
 			}).always(function () {
 				// reenable the inputs
-				$('input[type=submit]#subReg').button('enable');
+				$('input[type=submit]#subCbStep').button('enable');
 				$.mobile.loading( "hide" );
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown);
