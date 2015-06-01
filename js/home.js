@@ -112,7 +112,7 @@ $('#directions_map').live('pagecreate', function() {
 							}
 						});
 					} else {
-						navigator.notification.alert('Unable to get current position');
+						navigator.notification.alert('Unable to get current position', alertDismissed, 'MonTaxi Erreur', 'OK');
 					}
 				},{enableHighAccuracy:true, maximumAge:Infinity});
 			});
@@ -217,7 +217,7 @@ function getLocation()
 		//navigator.geolocation.getAccurateCurrentPosition(get_coords, showError, {maxWait:30000});
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.");
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
 	}
 }
 function showError(error)
@@ -370,8 +370,8 @@ function addCalendar(date, rdv, com, idcourse, cell)
 	var location = rdv;
 	var notes = 'Infos RDV : ' + com + ' - Identifiant de la course : ' + idcourse + ' - Tel client : ' + cell;
 	//var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
-	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER"); };
-	var error = function(message) { navigator.notification.alert("Erreur: " + message); };
+	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER", alertDismissed, 'MonTaxi', 'OK'); };
+	var error = function(message) { navigator.notification.alert("Erreur: " + message, alertDismissed, 'MonTaxi Erreur', 'OK'); };
 	// create
 	window.plugins.calendar.createEvent(title,location,notes,startDate,endDate,success,error);
 }
@@ -397,7 +397,7 @@ function justify(when, rdv, comments, destadd, cell)//justify(\''.$when.'\', \''
 {
 	$.post("https://www.mytaxiserver.com/appclient/justify.php", { when: when, rdv: rdv, comments: comments, destadd: destadd, cell: cell, dep: dep, pass: pass, email: email }, function(data){
 		$.mobile.loading( "show" );
-		navigator.notification.alert(data);
+		navigator.notification.alert(data, alertDismissed, 'MonTaxi', 'OK');
 		//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr', { showLocationBar: true });
 	}).done(function() { $.mobile.loading( "hide" ); });
 }
@@ -493,7 +493,7 @@ function getLocationOnce()
 		}
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.");
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
 	}
 }
 function secureCall(position)
@@ -575,6 +575,10 @@ function cgv()
 	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/docs/CGV.pdf', { showLocationBar: true });
 	window.open('http://taximedia.fr/client/docs/CGV.pdf','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
+function alertDismissed()
+{
+	// Do Nothing...
+}
 // Checks App or Browser
 app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
 if ( app ) {
@@ -621,8 +625,8 @@ var scanSuccess = function (result) {
 			navigator.notification.alert(
 					result.text,
 					function (){},
-					'Scan Value:',
-					'Done'
+					'Valeur du scan:',
+					'OK'
 				);
 		}
 	} else if (productFormats.match(result.format)) {
@@ -630,7 +634,7 @@ var scanSuccess = function (result) {
 		setTimeout(function() { window.open(searchUrl,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer'); }, 500);
 		//setTimeout(function() { window.plugins.childBrowser.showWebPage(searchUrl, { showLocationBar: true }); }, 500);
 	} else { navigator.notification.alert("Format du scan: " + result.format + 
-			  " NON SUPPORTE. Valeur du scan: " + result.text);
+			  " NON SUPPORTE. Valeur du scan: " + result.text, alertDismissed, 'MonTaxi Erreur', 'OK');
 	}
 }
 function goScan ()
@@ -638,7 +642,7 @@ function goScan ()
 	scanner.scan(
 		scanSuccess, 
 		function (error) {
-			navigator.notification.alert("Scan Erreur: " + error);
+			navigator.notification.alert("Scan Erreur: " + error, alertDismissed, 'MonTaxi Erreur', 'OK');
 		}
 	);
 }
