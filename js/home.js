@@ -30,6 +30,10 @@ var sound = $.sessionStorage.setItem('sound', 'ON');
 // Scanner
 var scanner;
 
+// localNotifications
+var notificationId = 1;
+var badgeNumber = 1;
+
 // Detect wether it is an App or WebApp
 var app;
 		
@@ -271,6 +275,14 @@ function update()
 				playAudio('sounds/ring.mp3');
 				navigator.notification.vibrate(2000);
 			}
+			cordova.plugins.notification.local.schedule({
+				id: 1,
+				title: "MonTaxi Chauffeur",
+				text: "Une course immediate est disponible !",
+				led: "E7B242",
+				badge: badgeNumber,
+				data: { data:data }
+			});
 		}
 		else
 		{
@@ -278,6 +290,9 @@ function update()
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").pause();
 			//stopAudio();
+			cordova.plugins.notification.local.clear(1, function() {
+				//alert("done");
+			});
 		}
 	}).done(function(data) {
 		setTimeout('update()', pollingTime);
@@ -293,6 +308,19 @@ function checkCmd() {
 			$('.ordersjob').empty().append(data);
 			navigator.notification.beep(2);
 			navigator.notification.vibrate(1000);
+			cordova.plugins.notification.local.schedule({
+				id: 2,
+				title: "MonTaxi Chauffeur",
+				text: "Une course en commande est disponible !",
+				led: "E7B242",
+				badge: badgeNumber,
+				data: { data:data }
+			});
+		}
+		else {
+			cordova.plugins.notification.local.clear(2, function() {
+				//alert("done");
+			});
 		}
 	});
 setTimeout('checkCmd()', 300000);
@@ -602,6 +630,9 @@ if ( app ) {
 			setTimeout('update()', 2000);
 		});
 		checkCmd();
+		cordova.plugins.notification.local.clearAll(function() {
+			//alert("All notifications cleared");
+		}, this);
 	}
 }
 function onResume() {
