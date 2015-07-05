@@ -32,7 +32,8 @@ var scanner;
 
 // localNotifications
 var notificationId = 1;
-var badgeNumber = 1;
+var badgeNumber1 = 0;
+var badgeNumber2 = 0;
 
 // Detect wether it is an App or WebApp
 var app;
@@ -158,7 +159,7 @@ $( '#planning' ).live( 'pagebeforeshow',function(event){
 	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#plan_cont").empty().append(data);
 		$("#plan_cont").trigger('create');
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $( '#cmd' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
@@ -166,7 +167,7 @@ $( '#cmd' ).live( 'pagebeforeshow',function(event){
 		$("#screen_bookings").empty().append(data);
 		$("#screen_bookings").trigger('create');
 		//navigator.notification.alert(data);
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $( '#history' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
@@ -174,7 +175,7 @@ $( '#history' ).live( 'pagebeforeshow',function(event){
 		$("#hist_cont").empty().append(data);
 		$("#hist_cont").trigger('create');
 		//navigator.notification.alert(data);
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $( '#infos' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
@@ -182,7 +183,7 @@ $( '#infos' ).live( 'pagebeforeshow',function(event){
 		$("#infos_cont").empty().append(data);
 		$("#infos_cont").trigger('create');
 		//navigator.notification.alert(data);
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $('#manage').live('pagecreate', function() {
 	var dec_nom = $('#nom').html(nom).text();
@@ -256,7 +257,7 @@ function get_coords(position)
 	//var x=document.getElementById("results");
 	//x.innerHTML="lat = " + lat + " - lng = " +lng;
 	//navigator.notification.alert('taxi: ' + taxi + ' tel: ' + tel + ' pass=' + pass);
-	$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }).done(function(data) {
+	$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }).always(function(data) {
 		setTimeout('getLocation()', 30000); // Every thirty seconds you check geolocation...
 	}); 
 }
@@ -275,9 +276,10 @@ function update()
 				playAudio('sounds/ring.mp3');
 				navigator.notification.vibrate(2000);
 			}
+			//var badgeNumber = badgeNumber1+badgeNumber2;
 			cordova.plugins.notification.local.schedule({
 				id: 1,
-				title: "MonTaxi Chauffeur",
+				title: "Notification de course MonTaxi",
 				text: "Une course immediate est disponible !",
 				led: "E7B242",
 				badge: badgeNumber,
@@ -294,7 +296,7 @@ function update()
 				//alert("done");
 			});
 		}
-	}).done(function(data) {
+	}).always(function(data) {
 		setTimeout('update()', pollingTime);
 	});
 }
@@ -308,13 +310,16 @@ function checkCmd() {
 			$('.ordersjob').empty().append(data);
 			navigator.notification.beep(2);
 			navigator.notification.vibrate(1000);
+			//var badgeNumber = badgeNumber1+badgeNumber2;
+			if(parseInt(data)>1) { var showing=data+" courses en commande sont disponibles !";}
+			else { var showing="Une course en commande est disponible !";}
 			cordova.plugins.notification.local.schedule({
 				id: 2,
-				title: "MonTaxi Chauffeur",
-				text: "Une course en commande est disponible !",
+				title: "Notification de course MonTaxi",
+				text: showing,
 				led: "E7B242",
 				badge: badgeNumber,
-				data: { data:data }
+				data: { number:data }
 			});
 		}
 		else {
@@ -322,15 +327,16 @@ function checkCmd() {
 				//alert("done");
 			});
 		}
+	}).always(function(data) {
+		setTimeout('checkCmd()', 300000);
 	});
-setTimeout('checkCmd()', 300000);
 }
 function refreshCmd() {
 	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station }, function(data){
 		$.mobile.loading( "show" );
 		$("#screen_bookings").empty().append(data);
 		$("#screen_bookings").trigger('create');
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 }
 function dispoCheck()
 {
@@ -348,7 +354,7 @@ function dispoCheck()
 		$("#dispo_cmd").empty().append(display);
 		$.sessionStorage.setItem('dispo', data.dispo);
 		//navigator.notification.alert(data.dispo);
-	}, "json").done(function(data) {
+	}, "json").always(function(data) {
 		setTimeout('dispoCheck()', 60000); // Every minutes you check dispo for real or oldies...
 	});
 }
@@ -427,7 +433,7 @@ function justify(when, rdv, comments, destadd, cell)//justify(\''.$when.'\', \''
 		$.mobile.loading( "show" );
 		navigator.notification.alert(data, alertDismissed, 'MonTaxi', 'OK');
 		//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr', { showLocationBar: true });
-	}).done(function() { $.mobile.loading( "hide" ); });
+	}).always(function() { $.mobile.loading( "hide" ); });
 }
 // diaryCall for direct job that open #delay
 function delayCall(query_string)
@@ -468,7 +474,7 @@ function directCall()
 				 
 				 break;
 		}					
-	}, "json").done(function() { Sound_On();});
+	}, "json").always(function() { Sound_On();});
 }
 // Diary call when accepting cmd jobs or refusing jobs
 function diaryCall(query_string)
@@ -505,7 +511,7 @@ function diaryCall(query_string)
 				 
 				 break;
 		}					
-	}, "json").done(function() { Sound_On();});
+	}, "json").always(function() { Sound_On();});
 }
 // Urgence call => Danger zone
 function getLocationOnce()
