@@ -228,26 +228,34 @@ function getLocation()
 function showError(error)
 {
 	var x=document.getElementById("ePopResults");
+	var geoAlert="";
 	switch(error.code) 
 	{
 		case error.PERMISSION_DENIED:
 		  x.innerHTML="<strong>Vous avez refus&eacute; l&rsquo;acc&egrave;s &agrave; la G&eacute;olocalisation.</strong>"
+		  geoAlert="Vous avez refusé l'accès à la G&eacute;olocalisation, vous pouvez modifier cela dans les réglages.";
 		  break;
 		case error.POSITION_UNAVAILABLE:
 		  x.innerHTML="<strong>G&eacute;olocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.</strong>"
+		  geoAlert="Géolocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.";
 		  break;
 		case error.TIMEOUT:
 		  x.innerHTML="<strong>La demande de G&eacute;olocalisation a expir&eacute;(user location request timed out).</strong>"
+		  geoAlert="La demande de Géolocalisation a expir&eacute;(user location request timed out).";
 		  break;
 		case error.UNKNOWN_ERROR:
 		  x.innerHTML="<strong>Erreur inconnue de G&eacute;olocalisation (unknown error occurred).</strong>"
+		  geoAlert="Erreur inconnue de Géolocalisation (unknown error occurred).";
 		  break;
 		default:
-		  x.innerHTML="<strong>Veuillez activer la G&eacute;olocalisation, si ce message revient, un red&eacute;marrage du smartphone peut-&ecirc;tre n&eacute;c&eacute;ssaire.</strong>"
+		  x.innerHTML="<strong>Erreur de G&eacute;olocalisation, red&eacute;marrage du smartphone n&eacute;c&eacute;ssaire.</strong>"
+		  geoAlert="Erreur de Géolocalisation, libre à vous d'activer le service de géolocalisation pour cette app dans les réglages.";
 	}
 	// Fall back to no options and try again for Android to work.
 	navigator.geolocation.getCurrentPosition(get_coords, function(){
-		$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+		if(app) navigator.notification.alert(geoAlert, alertDismissed, 'MonTaxi', 'OK');
+		else alert(geoAlert);
 	});
 }			  
 function get_coords(position) 
@@ -701,8 +709,9 @@ function contactPick()
 }
 function myTaxiDown()
 {
-	var url = "http://www.taximedia.fr/stores.php?app=pro";
-	window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	//var url = "http://www.taximedia.fr/stores.php?app=pro";
+	//window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('montaxipro://', '_system');
 }
 function Share()
 {
@@ -724,7 +733,7 @@ function Share()
 function ShareArt()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app artisan monTaxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
+	var message = "Téléchargez l'app artisan monTaxi Chauffeur en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -741,7 +750,7 @@ function ShareArt()
 function SharePro()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app monTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
+	var message = "Téléchargez l'app monTaxi Business sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
