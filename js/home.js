@@ -633,6 +633,7 @@ if ( app ) {
 		document.addEventListener("resume", onResume, false);
 		navigator.splashscreen.hide();
 		StatusBar.overlaysWebView(false);
+		StatusBar.backgroundColorByHexString("#E7B242");
 		// prevent device from sleeping
 		window.plugins.powerManagement.acquire();
 		//Functions to call only at app first load

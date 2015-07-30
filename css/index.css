@@ -23,6 +23,9 @@ body {
     background: #333;
 	background-color: rgba(60,60,60,0.2);
 }
+.ui-collapsible-heading .ui-btn{
+	font-size: large;
+}
 .header_cont {
     background: #181316 ;
 	background-color: rgba(24,19,22,0.6);
