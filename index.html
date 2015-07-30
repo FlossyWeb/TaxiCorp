@@ -24,8 +24,10 @@
                 media="(device-width: 320px) and (device-height: 568px)
                 and (-webkit-device-pixel-ratio: 2)"
                 href="visuels/startup_image_i5.png">
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <link type="text/css" rel="stylesheet" href="css/mobile.css" />
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+		<link rel="stylesheet" href="css/themes/monTaxiPart.min.css" />
+		<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+        <link type="text/css" rel="stylesheet" href="css/index.css" />
 		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 		<script type="text/javascript">
@@ -79,13 +81,11 @@
     </head>
     <body>
     <center>
-        <div data-role="page" data-theme="a" id="portal">
-            <div data-theme="a" data-role="header" data-position="fixed">
-				<h1><a href="#" style="color:#09F; font-size:18px;">Bienvenue</a></h1>            
-            </div>
+        <div data-role="page" data-theme="c" id="portal">
             <div class="ui-content" role="main">
-                <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em;display:block;">
-                    <div data-role="collapsible-set" data-theme="b" data-content-theme="a">
+                <div style="margin-top:1em; display:block;">
+					<img src="visuels/logo_login.png" width="60%" style="max-width:512px;"/>
+                    <div data-role="collapsible-set" data-theme="c" data-content-theme="c">
                         <div data-role="collapsible" data-collapsed="true" id="reg_collaps">
                             <h1>
                                  Inscrivez-Vous 
@@ -150,7 +150,7 @@
                                 <label for="cb">
                                     Paiement CB : 
                                 </label>
-                                <select name="cb" id="cb" data-theme="a" data-role="flipswitch">
+                                <select name="cb" id="cb" data-theme="c" data-role="flipswitch">
                                     <option value="0">
                                         Non
                                     </option>
@@ -161,7 +161,7 @@
                                 <label for="medic">
                                     Vehicule conventionn&eacute; : 
                                 </label>
-                                <select name="medic" id="medic" data-theme="a" data-role="flipswitch">
+                                <select name="medic" id="medic" data-theme="c" data-role="flipswitch">
                                     <option value="0">
                                         Non
                                     </option>
@@ -172,7 +172,7 @@
                                 <label for="animal">
                                     Acceptez-vous les animaux : 
                                 </label>
-                                <select name="animal" id="animal" data-theme="a" data-role="flipswitch">
+                                <select name="animal" id="animal" data-theme="c" data-role="flipswitch">
                                     <option value="0">
                                         Non
                                     </option>
@@ -279,9 +279,9 @@
                     </div>    
                 </div>
                 <!-- HERE COMES ALL ANSWERS CONCERNING BOTH LOGIN AND REGISTERING METHODS -->
-                <div data-role="popup" data-theme="b" id="answer" data-dismissible="true" data-overlay-theme="b">
+                <div data-role="popup" data-theme="c" id="answer" data-dismissible="true" data-overlay-theme="b">
 					<a href="#portal" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
-                    <div data-theme="a" data-role="header">
+                    <div data-theme="c" data-role="header">
                         <h1>
                             R&eacute;ponse
                         </h1>
@@ -290,29 +290,29 @@
 						<div id="returns"></div>
                     </div>
                 </div>
-                <a href="#secureDialog" data-rel="popup" data-position-to="window" data-role="button" class="secure-bt" data-theme="b" data-icon="alert">Bouton d&rsquo;urgence</a>
-                <div data-role="popup" data-theme="a" id="secureDialog" data-dismissible="false" data-overlay-theme="b">
-                    <div data-theme="a" data-role="header">
+                <a href="#secureDialog" data-rel="popup" data-position-to="window" data-role="button" class="secure-bt" data-theme="c" data-icon="alert">Bouton d&rsquo;urgence</a>
+                <div data-role="popup" data-theme="c" id="secureDialog" data-dismissible="false" data-overlay-theme="b">
+                    <div data-theme="c" data-role="header">
                         <h1>
                             Confirmation
                         </h1>
                     </div>
                     <div class="ui-content" role="main">
                         <h1>Lancer l&rsquo;appel d&rsquo;urgence ?</h1>
-                        <input type="button" data-theme="b" data-icon="check" onClick="getLocationOnce()" value="CONFIRMER"/>
-                        <a href="#portal" data-rel="back" data-icon="delete" data-role="button" data-transition="slideUp" data-theme="a">ANNULER</a>            
+                        <input type="button" data-theme="c" data-icon="check" onClick="getLocationOnce()" value="CONFIRMER"/>
+                        <a href="#portal" data-rel="back" data-icon="delete" data-role="button" data-transition="slideUp" data-theme="c">ANNULER</a>            
                         <div id="secureResults"></div>
                     </div>
                 </div>        
             </div>
-            <div data-theme="a" data-role="footer" id="footer_cont" data-position="fixed">
+            <div data-theme="c" data-role="footer" id="footer_cont" data-position="fixed">
 				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Mise &agrave; jour des information monTaxi en cours.</b></marquee></div>
                 <p class="copyright" style="font-size:xx-small">&copy; 2012 - </p>
             </div>
         </div>
         
-        <div data-role="page" data-theme="a" id="urgency">
-            <div data-theme="a" data-role="header" data-position="fixed">
+        <div data-role="page" data-theme="c" id="urgency">
+            <div data-theme="c" data-role="header" data-position="fixed">
 				<h1 style="width:100%; padding: 0; margin: 0; color: #F00;">
                 	URGENCE
                 </h1>
@@ -324,7 +324,7 @@
                </div>                    
                 <div id="urgencyResults"></div>
             </div>
-            <div data-theme="a" data-role="footer" id="footer_cont2" data-position="fixed">
+            <div data-theme="c" data-role="footer" id="footer_cont2" data-position="fixed">
 				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Proc&eacute;dure d&rsquo;appel d&rsquo;urgence activ&eacute;e.</b></marquee></div>
             </div>
         </div>
