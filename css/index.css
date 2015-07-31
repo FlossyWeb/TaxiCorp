@@ -19,7 +19,7 @@ body {
     background: #333;
 	background-color: rgba(60,60,60,0.6);
 }
-.ui-body-c {
+.ui-collapsible .ui-body-c {
     background: #333;
 	background-color: rgba(60,60,60,0.2);
 }
