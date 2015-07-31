@@ -169,7 +169,7 @@ if ( app ) {
 $(document).on( 'pagecreate', function() {
 
 	active();
-	footer();
+	//footer();
 
 	$("#login").submit(function(event) {
 		// stop form from submitting normally 

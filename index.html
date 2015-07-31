@@ -83,201 +83,199 @@
     <center>
         <div data-role="page" data-theme="c" id="portal">
             <div class="ui-content" role="main">
-                <div style="margin-top:1em; display:block;">
-					<img src="visuels/logo_login.png" width="60%" style="max-width:512px;"/>
-                    <div data-role="collapsible-set" data-theme="c" data-content-theme="c">
-                        <div data-role="collapsible" data-collapsed="true" id="reg_collaps">
-                            <h1>
-                                 Inscrivez-Vous 
-                            </h1>
-                            <fieldset><legend></legend>
-							<div class="error"><span></span></div>
-                            <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegNameStep">
-								<h3 style="color:#333;">&Agrave; propos de vous : </h3>
-								<select name="civil">
-									<option selected value="Mr">Civilit&eacute;</option>
-									<option value="Mme">Mme</option>
-									<option value="Mlle">Mlle</option>
-									<option value="Mr">Mr</option>
-								</select>
-								<input type="text" name="nom" placeholder="Nom" maxlength="60" size="20" class="required"><em></em>
-								<input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>
-								<input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
-								<input type="email" name="email" id="email" placeholder="Adresse email" maxlength="60" size="20" class="required email"><em></em>
-								<!-- <input type="email" name="confirmail" placeholder="Confirmez email SVP" maxlength="60" size="20" class="required email"><em></em> -->
-								<input type="tel" name="station" placeholder="Code Postal Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
-                                <input type="submit" name="submit1" id="subNameStep" value="Continuer">
-							</form>
-                            <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCabStep">
-								<h3 style="color:#333;">Infos Taxi : </h3>
-								<input type="tel" name="taxi" placeholder="ADS (N&deg taxi)" maxlength="6" size="20" class="required"><em></em>
-                                <input type="text" name="cpro" placeholder="N&deg carte professionnelle" maxlength="16" size="20" class="required"><em></em>
-                                <select name="type" id="type">
-                                    <option selected value="Berline">Type de vehicule</option>
-                                    <option value="Berline">Berline</option>
-                                    <option value="Break 5 places">Break 5 places</option>
-                                    <option value="Monospace">Monospace</option>
-                                </select><em></em>
-                                <label for="passengers">Nombre maximum de passagers pris en charge :</label>
-                                <input name="passengers" id="passengers" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
-                                <select name="color" id="color">
-                                    <option selected value="">Couleur du vehicule</option>
-                                    <option value="Blanc">Blanc</option>
-                                    <option value="Gris">Gris</option>
-                                    <option value="Noir">Noir</option>
-                                    <option value="Marron">Marron</option>
-                                    <option value="Beige">Beige</option>
-                                    <option value="Jaune">Jaune</option>
-                                    <option value="Orange">Orange</option>
-                                    <option value="Rouge">Rouge</option>
-                                    <option value="Bleu">Bleu</option>
-                                    <option value="Vert">Vert</option>
-                                </select><em></em>
-                                <input type="hidden" name="group" id="group" value="1"/>
-                                <fieldset data-role="controlgroup">
-                                    <legend>Langues parl&eacute;es</legend>
-                                    <input id="checkbox1" name="en" type="checkbox">
-                                    <label for="checkbox1">Anglais</label>
-                                    <input id="checkbox2" name="sp" type="checkbox">
-                                    <label for="checkbox2">Espagnol</label>
-                                    <input id="checkbox3" name="it" type="checkbox">
-                                    <label for="checkbox3">Italien</label>
-                                    <input id="checkbox4" name="ru" type="checkbox">
-                                    <label for="checkbox4">Russe</label>
-                                    <input id="checkbox5" name="al" type="checkbox">
-                                    <label for="checkbox5">Allemand</label>
-                                </fieldset>
-                                <label for="cb">
-                                    Paiement CB : 
-                                </label>
-                                <select name="cb" id="cb" data-theme="c" data-role="flipswitch">
-                                    <option value="0">
-                                        Non
-                                    </option>
-                                    <option value="1">
-                                        Oui
-                                    </option>
-                                </select>
-                                <label for="medic">
-                                    Vehicule conventionn&eacute; : 
-                                </label>
-                                <select name="medic" id="medic" data-theme="c" data-role="flipswitch">
-                                    <option value="0">
-                                        Non
-                                    </option>
-                                    <option value="1">
-                                        Oui
-                                    </option>
-                                </select>
-                                <label for="animal">
-                                    Acceptez-vous les animaux : 
-                                </label>
-                                <select name="animal" id="animal" data-theme="c" data-role="flipswitch">
-                                    <option value="0">
-                                        Non
-                                    </option>
-                                    <option value="1">
-                                        Oui
-                                    </option>
-                                </select>
- 								<input type="hidden" name="tel" id="telcab" value=""/>
-								<input type="hidden" name="dep" id="depcab" value=""/>
-                                <input type="submit" name="submit2" id="subCabStep" value="Continuer">
-							</form>
-                            <form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCbStep">
-								<h3 style="color:#333;">Infos CB : </h3>
-								<select name="brand" id="brand">
-									<option selected value="CB">Type de Carte</option>
-									<option value="CB">CB</option>
-									<option value="VISA">VISA</option>
-									<option value="MASTERCARD">MASTERCARD</option>
-								</select><em></em>
-								<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
-								<!--
-								<label for="cbexp">Date Expiration : </label>
-								<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
-								-->
-								<p>Expire fin :</p>
-								<select name="cbexpm" id="cbexpm">
-									<option value="" selected>Mois</option>
-									<option value="01">01- Janvier</option>
-									<option value="02">02- F&eacute;vrier</option>
-									<option value="03">03- Mars</option>
-									<option value="04">04- Avril</option>
-									<option value="05">05- Mai</option>
-									<option value="06">06- Juin</option>
-									<option value="07">07- Juillet</option>
-									<option value="08">08- Ao&ucirc;t</option>
-									<option value="09">09- Septembre</option>
-									<option value="10">10- Octobre</option>
-									<option value="11">11- Novembre</option>
-									<option value="12">12- D&eacute;cembre</option>
-								</select><em></em>
-								<select name="cbexpa" id="cbexpa">
-									<option value="" selected>Ann&eacute;e</option>
-									<option value="2015">2015</option>
-									<option value="2016">2016</option>
-									<option value="2017">2017</option>
-									<option value="2018">2018</option>
-									<option value="2019">2019</option>
-									<option value="2020">2020</option>
-									<option value="2021">2021</option>
-									<option value="2022">2022</option>
-									<option value="2023">2023</option>
-									<option value="2024">2024</option>
-								</select><em></em>
-								<input type="tel" name="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
-                                <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-                                    <legend>
-                                        Je certifie l&rsquo;exactitude des donn&eacute;es fournies et j&rsquo;accepte les 
-                                        <a href="docs/CGV.pdf" target="_blank">CGV</a> : 
-                                    </legend>
-                                    <input id="checkboxcgv" name="cgv" type="checkbox">
-                                    <label for="checkboxcgv">
-                                        Je certifie et accepte
-                                    </label><em></em>
-                                </fieldset>
-								<input type="hidden" name="tel" id="telcb" value=""/>
-                                <input type="hidden" name="dep" id="depcb" value=""/>
-                                <input type="submit" name="submit3" id="subCbStep" value="Envoyer">
-                                <p><b>
-                                    Vous recevrez par email, dans quelques instants, les identifiant et mot de passe qui vous permettront d'acc&egrave;der &agrave; votre compte.
-                                </b></p>
-                            </form>
-                            </fieldset>    
-							<div id="done"></div>
-                        </div>
-                        <div data-role="collapsible" data-collapsed="false">
-                            <h1>
-                                 Identifiez-Vous 
-                            </h1>
-                            <fieldset><legend></legend>
-                            <form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
-                                <input type="tel" id="tel" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
-                                <input type="password" id="pwd" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
-                                <input type="tel" name="dep" id="loginDep" value="" placeholder="Departement"/>
-                                <input type="submit" id="subLog" value=" Connexion "/>
-                            </form>
-                            </fieldset>
-                        </div>
-                        <div data-role="collapsible">
-                            <h1>
-                                 Mot de passe oubli&eacute;
-                            </h1>
-                            <fieldset><legend></legend>
-                            <form  action="/" method="post" name="forget" id="forget" data-ajax="false" data-transition="slidefade">
-                                <input type="tel" name="login" size="20" maxlength="10" placeholder="Identifiant"/>
-                                <input type="email" name="mail" size="32" maxlength="60" placeholder="L&rsquo;email de votre compte"/>
-                                <input type="tel" name="dep" id="depForgot" placeholder="Departement"/>
-                                <input type="submit" id="subFor" value=" Envoyer "/>
-                           </form>
-                            </fieldset>
-                            <p><b>
-                                Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
-                            </b></p>
-                        </div>
-                    </div>    
-                </div>
+				<img src="visuels/logo_login.png" width="60%" style="max-width:512px;"/>
+				<div data-role="collapsible-set" data-theme="c" data-content-theme="c">
+					<div data-role="collapsible" data-collapsed="true" id="reg_collaps">
+						<h1>
+							 Inscrivez-Vous 
+						</h1>
+						<fieldset><legend></legend>
+						<div class="error"><span></span></div>
+						<form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegNameStep">
+							<h3 style="color:#333;">&Agrave; propos de vous : </h3>
+							<select name="civil">
+								<option selected value="Mr">Civilit&eacute;</option>
+								<option value="Mme">Mme</option>
+								<option value="Mlle">Mlle</option>
+								<option value="Mr">Mr</option>
+							</select>
+							<input type="text" name="nom" placeholder="Nom" maxlength="60" size="20" class="required"><em></em>
+							<input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>
+							<input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
+							<input type="email" name="email" id="email" placeholder="Adresse email" maxlength="60" size="20" class="required email"><em></em>
+							<!-- <input type="email" name="confirmail" placeholder="Confirmez email SVP" maxlength="60" size="20" class="required email"><em></em> -->
+							<input type="tel" name="station" placeholder="Code Postal Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
+							<input type="submit" name="submit1" id="subNameStep" value="Continuer">
+						</form>
+						<form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCabStep">
+							<h3 style="color:#333;">Infos Taxi : </h3>
+							<input type="tel" name="taxi" placeholder="ADS (N&deg taxi)" maxlength="6" size="20" class="required"><em></em>
+							<input type="text" name="cpro" placeholder="N&deg carte professionnelle" maxlength="16" size="20" class="required"><em></em>
+							<select name="type" id="type">
+								<option selected value="Berline">Type de vehicule</option>
+								<option value="Berline">Berline</option>
+								<option value="Break 5 places">Break 5 places</option>
+								<option value="Monospace">Monospace</option>
+							</select><em></em>
+							<label for="passengers">Nombre maximum de passagers pris en charge :</label>
+							<input name="passengers" id="passengers" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
+							<select name="color" id="color">
+								<option selected value="">Couleur du vehicule</option>
+								<option value="Blanc">Blanc</option>
+								<option value="Gris">Gris</option>
+								<option value="Noir">Noir</option>
+								<option value="Marron">Marron</option>
+								<option value="Beige">Beige</option>
+								<option value="Jaune">Jaune</option>
+								<option value="Orange">Orange</option>
+								<option value="Rouge">Rouge</option>
+								<option value="Bleu">Bleu</option>
+								<option value="Vert">Vert</option>
+							</select><em></em>
+							<input type="hidden" name="group" id="group" value="1"/>
+							<fieldset data-role="controlgroup">
+								<legend>Langues parl&eacute;es</legend>
+								<input id="checkbox1" name="en" type="checkbox">
+								<label for="checkbox1">Anglais</label>
+								<input id="checkbox2" name="sp" type="checkbox">
+								<label for="checkbox2">Espagnol</label>
+								<input id="checkbox3" name="it" type="checkbox">
+								<label for="checkbox3">Italien</label>
+								<input id="checkbox4" name="ru" type="checkbox">
+								<label for="checkbox4">Russe</label>
+								<input id="checkbox5" name="al" type="checkbox">
+								<label for="checkbox5">Allemand</label>
+							</fieldset>
+							<label for="cb">
+								Paiement CB : 
+							</label>
+							<select name="cb" id="cb" data-theme="c" data-role="flipswitch">
+								<option value="0">
+									Non
+								</option>
+								<option value="1">
+									Oui
+								</option>
+							</select>
+							<label for="medic">
+								Vehicule conventionn&eacute; : 
+							</label>
+							<select name="medic" id="medic" data-theme="c" data-role="flipswitch">
+								<option value="0">
+									Non
+								</option>
+								<option value="1">
+									Oui
+								</option>
+							</select>
+							<label for="animal">
+								Acceptez-vous les animaux : 
+							</label>
+							<select name="animal" id="animal" data-theme="c" data-role="flipswitch">
+								<option value="0">
+									Non
+								</option>
+								<option value="1">
+									Oui
+								</option>
+							</select>
+							<input type="hidden" name="tel" id="telcab" value=""/>
+							<input type="hidden" name="dep" id="depcab" value=""/>
+							<input type="submit" name="submit2" id="subCabStep" value="Continuer">
+						</form>
+						<form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCbStep">
+							<h3 style="color:#333;">Infos CB : </h3>
+							<select name="brand" id="brand">
+								<option selected value="CB">Type de Carte</option>
+								<option value="CB">CB</option>
+								<option value="VISA">VISA</option>
+								<option value="MASTERCARD">MASTERCARD</option>
+							</select><em></em>
+							<input type="tel" name="cbnum" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
+							<!--
+							<label for="cbexp">Date Expiration : </label>
+							<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+							-->
+							<p>Expire fin :</p>
+							<select name="cbexpm" id="cbexpm">
+								<option value="" selected>Mois</option>
+								<option value="01">01- Janvier</option>
+								<option value="02">02- F&eacute;vrier</option>
+								<option value="03">03- Mars</option>
+								<option value="04">04- Avril</option>
+								<option value="05">05- Mai</option>
+								<option value="06">06- Juin</option>
+								<option value="07">07- Juillet</option>
+								<option value="08">08- Ao&ucirc;t</option>
+								<option value="09">09- Septembre</option>
+								<option value="10">10- Octobre</option>
+								<option value="11">11- Novembre</option>
+								<option value="12">12- D&eacute;cembre</option>
+							</select><em></em>
+							<select name="cbexpa" id="cbexpa">
+								<option value="" selected>Ann&eacute;e</option>
+								<option value="2015">2015</option>
+								<option value="2016">2016</option>
+								<option value="2017">2017</option>
+								<option value="2018">2018</option>
+								<option value="2019">2019</option>
+								<option value="2020">2020</option>
+								<option value="2021">2021</option>
+								<option value="2022">2022</option>
+								<option value="2023">2023</option>
+								<option value="2024">2024</option>
+							</select><em></em>
+							<input type="tel" name="cbval" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
+							<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+								<legend>
+									Je certifie l&rsquo;exactitude des donn&eacute;es fournies et j&rsquo;accepte les 
+									<a href="docs/CGV.pdf" target="_blank">CGV</a> : 
+								</legend>
+								<input id="checkboxcgv" name="cgv" type="checkbox">
+								<label for="checkboxcgv">
+									Je certifie et accepte
+								</label><em></em>
+							</fieldset>
+							<input type="hidden" name="tel" id="telcb" value=""/>
+							<input type="hidden" name="dep" id="depcb" value=""/>
+							<input type="submit" name="submit3" id="subCbStep" value="Envoyer">
+							<p><b>
+								Vous recevrez par email, dans quelques instants, les identifiant et mot de passe qui vous permettront d'acc&egrave;der &agrave; votre compte.
+							</b></p>
+						</form>
+						</fieldset>    
+						<div id="done"></div>
+					</div>
+					<div data-role="collapsible" data-collapsed="false">
+						<h1>
+							 Identifiez-Vous 
+						</h1>
+						<fieldset><legend></legend>
+						<form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
+							<input type="tel" id="tel" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
+							<input type="password" id="pwd" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
+							<input type="tel" name="dep" id="loginDep" value="" placeholder="Departement"/>
+							<input type="submit" id="subLog" value=" Connexion "/>
+						</form>
+						</fieldset>
+					</div>
+					<div data-role="collapsible">
+						<h1>
+							 Mot de passe oubli&eacute;
+						</h1>
+						<fieldset><legend></legend>
+						<form  action="/" method="post" name="forget" id="forget" data-ajax="false" data-transition="slidefade">
+							<input type="tel" name="login" size="20" maxlength="10" placeholder="Identifiant"/>
+							<input type="email" name="mail" size="32" maxlength="60" placeholder="L&rsquo;email de votre compte"/>
+							<input type="tel" name="dep" id="depForgot" placeholder="Departement"/>
+							<input type="submit" id="subFor" value=" Envoyer "/>
+					   </form>
+						</fieldset>
+						<p><b>
+							Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
+						</b></p>
+					</div>
+				</div>    
                 <!-- HERE COMES ALL ANSWERS CONCERNING BOTH LOGIN AND REGISTERING METHODS -->
                 <div data-role="popup" data-theme="c" id="answer" data-dismissible="true" data-overlay-theme="b">
 					<a href="#portal" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
@@ -305,10 +303,12 @@
                     </div>
                 </div>        
             </div>
+			<!-- 
             <div data-theme="c" data-role="footer" id="footer_cont" data-position="fixed">
 				<div class="ui-bar-a ui-corner-all ui-shadow" style="width:96%;height:19px;"><marquee><b>Mise &agrave; jour des information monTaxi en cours.</b></marquee></div>
                 <p class="copyright" style="font-size:xx-small">&copy; 2012 - </p>
             </div>
+			-->
         </div>
         
         <div data-role="page" data-theme="c" id="urgency">
