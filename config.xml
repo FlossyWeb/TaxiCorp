@@ -45,6 +45,9 @@
 	<gap:plugin name="com.simplec.plugins.powermanagement" version="0.4.0" />
 	<gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" />
 	<gap:plugin name='org.crosswalk.engine' version='1.3.0' source='pgb' />
+	<gap:plugin name="nl.x-services.plugins.launchmyapp">
+		<param name="URL_SCHEME" value="montaxidriver" />
+	</gap:plugin>
 
     <icon src="icon.png" />
 	<icon src="icons/ios/icon-57.png" gap:platform="ios" width="57" height="57" />
