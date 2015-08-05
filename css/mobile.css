@@ -51,22 +51,25 @@ label.error { float: none; color: red; padding-left: .5em; vertical-align: top; 
 input[type=text], input[type=tel], input[type=date], input[type=time] {
 	color: #FFF;
 }
+input[type=text]#from, input[type=text]#to {
+	color: #333;
+}
 ::-webkit-input-placeholder {
-   color: #A6A6A6;
+   color: #FFF;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: #A6A6A6;
+   color: #FFF;
    opacity:  1;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #A6A6A6;
+   color: #FFF;
    opacity:  1;
 }
 
 :-ms-input-placeholder {  
-   color: #A6A6A6;
+   color: #FFF;
 }
 .cleaner {
 	clear: both;
