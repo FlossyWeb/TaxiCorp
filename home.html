@@ -60,7 +60,7 @@
     <script type="text/javascript" src="js/home.js"></script>
     </head>
     <body>
-        <div data-role="panel" id="homepanel" data-position="left" data-display="reveal" data-theme="c">
+        <div data-role="panel" id="homepanel" data-position="right" data-display="reveal" data-theme="c">
             <!-- panel content goes here -->
             <ul data-role="listview" data-inset="true" data-theme="c">
               <li><a href="#home" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
@@ -98,7 +98,6 @@
 				</table>
 			</div>
             <div class="ui-content" role="main" id="home_cont">
-                <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; text-align: left;">
                 <div style="text-align: left;">
                     <div id="dispo">
 						<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>
@@ -108,7 +107,6 @@
                             <img src="visuels/Aucune_course_flat.png" width="100%"/>
                         </a>
                     </div>
-                </div>
                 </div>
                 <img src="visuels/p1.png" width="128"/>
 				<div class="spacer"></div>
@@ -204,48 +202,56 @@
         </div>
         
         <div data-role="page" data-theme="c" id="jobs_taker">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                    <div id="sound" style="display:inline-block;"><button class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-inline" onClick="Sound_Off()"><img src="visuels/sound_on.png" width="24px"></button></div>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<div id="sound" style="display:inline-block;"><button class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-inline" onClick="Sound_Off()"><img src="visuels/sound_on.png" width="24px"></button></div>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
-                <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
-                    <div id="dispo_jobs">                                            
-                    </div>
-                    <div id="warn">
-                    	<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>
-                    </div>
-                </div>
+				<div id="dispo_jobs">                                            
+				</div>
+				<div id="warn">
+					<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>
+				</div>
                 <img src="visuels/p2.png" width="128"/>
                 <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
-                    <h2 style="color:#0F0; font-size:large;">En attente de courses</h2><hr>
+                    <h2 style="color:#f7b134; font-size:x-large;">Courses directes</h2><hr>
                     <div id="screen_job" style="text-align:left;">
+						<br><p><b>En attente de courses...</b></p><br>
                     </div>
-                    
                     <hr>
-					<a href="#history" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                    	<p style="font-size: small;color:#333;">
-                        	<img src="visuels/Historique_flat.png" width="90%"/><br>
-                    		Historique
-                        </p>
-                    </a>
-					<a href="#planning" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                    	<p style="font-size: small;color:#333;">
-                        	<img src="visuels/Planning_flat.png" width="90%"/><br>
-                    		Planning
-                        </p>
-                    </a>
-					<a href="#cmd" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                        <span class="ordersjob"></span>
-                    	<p style="font-size: small;color:#333;">
-                            <img src="visuels/Ordered_flat.png" width="90%"/><br>
-                            Commandes
-                        </p>
-                    </a>
                 </div>
+                <div class="cleaner"></div>
+				<a href="#history" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/historic_icon.png" width="90%"/><br>
+						Historique
+					</p>
+				</a>
+				<a href="#planning" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/planning_icon.png" width="90%"/><br>
+						Planning
+					</p>
+				</a>
+				<a href="#cmd" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<span class="ordersjob"></span>
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/ring_icon.png" width="90%"/><br>
+						Commandes
+					</p>
+				</a>
                 <div class="cleaner"></div>
                 <a href="#secureDialogJobs" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-alert">Bouton d&rsquo;urgence</a>
                 <div data-role="popup" data-theme="c" id="secureDialogJobs" data-dismissible="false" data-overlay-theme="b">
@@ -276,12 +282,22 @@
             </div>
         </div>
         <div data-role="page" id="delayPop" data-transition="pop" data-theme="c">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
             	<p>&nbsp;</p>
                 <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em;">
@@ -308,46 +324,55 @@
             </div>
         </div>
         <div data-role="page" data-theme="c" id="cmd">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                    <button onClick="refreshCmd()" class="ui-btn ui-btn-b ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<button onClick="refreshCmd()" class="ui-btn ui-btn-b ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
-                <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
-                    <div id="dispo_cmd">                                            
-                    </div>
-                    <div id="warn_cmd">
-                    	<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>
-                    </div>
-                </div>
+				<div id="dispo_cmd">                                            
+				</div>
+				<div id="warn_cmd">
+					<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>
+				</div>
                 <img src="visuels/p2.png" width="128"/>
                 <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
-                    <h2 style="color:#0CF; font-size:large;">Courses command&eacute;es</h2><hr>
+                    <h2 style="color:#f7b134; font-size:x-large;">Courses command&eacute;es</h2><hr>
                     <div id="screen_bookings" style="text-align:left;">
+						<br><p><b>Pas de r&eacute;servation pour l&rsquo;instant. En attente...</b></p><br>
                     </div>
                     <hr>
-					<a href="#history" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                    	<p style="font-size: small;color:#333;">
-                        	<img src="visuels/Historique_flat.png" width="90%"/><br>
-                    		Historique
-                        </p>
-                    </a>
-					<a href="#planning" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                    	<p style="font-size: small;color:#333;">
-                        	<img src="visuels/Planning_flat.png" width="90%"/><br>
-                    		Planning
-                        </p>
-                    </a>
-					<a href="#infos" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
-                    	<p style="font-size: small;color:#333;">
-                            <img src="visuels/infos.png" width="90%"/><br>
-                            Infos monTaxi
-                        </p>
-                    </a>
                 </div>
+                <div class="cleaner"></div>
+				<a href="#history" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/historic_icon.png" width="90%"/><br>
+						Historique
+					</p>
+				</a>
+				<a href="#planning" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/planning_icon.png" width="90%"/><br>
+						Planning
+					</p>
+				</a>
+				<a href="#infos" data-transition="slide" style="width:30%;display:inline-block;margin:1%;">
+					<p style="font-size: small;color:#333;">
+						<img src="visuels/info_icon.png" width="90%"/><br>
+						Infos monTaxi
+					</p>
+				</a>
                 <div class="cleaner"></div>
             </div>
             <div data-theme="c" data-role="footer" id="footer_cont3" data-position="fixed">
@@ -356,12 +381,22 @@
             </div>
         </div>
         <div data-role="page" data-theme="c" id="planning">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>        
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
                 <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
                 	<p class="auction"><b>Courses command&eacute;es</b></p>
@@ -378,12 +413,22 @@
             </div>
         </div>
         <div data-role="page" data-theme="c" id="history">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
                 <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
                 	<p class="auction"><b>Historique des courses</b></p>
@@ -400,12 +445,22 @@
             </div>
         </div>
         <div data-role="page" data-theme="c" id="infos">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Menu</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
                 <img src="visuels/Infos_header.png" width="96%"/>
                 <div id="infos_cont"></div>
@@ -416,12 +471,22 @@
             </div>
         </div>
         <div data-role="page" data-theme="c" id="manage">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline"  data-transition="slide"><b>Menu</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
                <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em; text-align: left;">
                     <div data-role="collapsible-set" data-theme="c" data-content-theme="a">
@@ -679,11 +744,29 @@
         </div>
         
 		<div id="directions_map" data-role="page" data-theme="c">
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<!--
 			<div data-role="header">
             	<a href="#home" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-back ui-btn-inline"><h1><b>Accueil</b></h1></a>
                 <a href="#homepanel" id="mapPanel_poper" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><h1><b>Menu</b></h1></a>
 			</div>
             <div class="spacer"></div><div class="spacer"></div><div class="spacer"></div>
+			-->
 			<div class="ui-content" role="main">	
 				<div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1.5em;">
 					<p>
@@ -707,12 +790,22 @@
 		</div>
 
         <div data-role="page" data-theme="c" id="toolate">
-            <div data-theme="c" data-role="header" data-position="fixed">
-				<h1 style="width:100%; padding: 0; margin: 0;">
-                    <a href="#home" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-back ui-btn-inline" data-transition="slide"><b>Retour</b></a>            
-                    <a href="#homepanel" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-home ui-btn-inline" data-transition="slide"><b>Accueil</b></a>
-                </h1>
-            </div>
+			<div data-role="header" data-position="fixed" class="header">
+				<table width="100%" border="0" class="header_cont">
+					<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+					<tbody>
+					<tr><td>
+						<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+					</td><td>
+						<p>&nbsp;</p>
+					</td><td align="center">
+						<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+							<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+						</a>
+					</td></tr>
+					</tbody>
+				</table>
+			</div>
             <div class="ui-content" role="main">
                 <div id="late_cont" class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em;">
                </div>                    

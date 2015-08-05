@@ -113,12 +113,12 @@ input[type=text], input[type=tel], input[type=date], input[type=time] {
 }
 #dispo, #dispo_jobs, #dispo_cmd
 {
-	width: 64%;
+	width: 48%;
 	display: inline-block;
 }
 #warn, #warn_cmd, #warn_home
 {
-	width: 32%;
+	width: 48%;
 	display: inline-block;
 	margin-left: 2%;
 }

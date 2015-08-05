@@ -164,8 +164,11 @@ $( '#planning' ).live( 'pagebeforeshow',function(event){
 $( '#cmd' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
 	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){
-		$("#screen_bookings").empty().append(data);
-		$("#screen_bookings").trigger('create');
+		if (data != 0)
+		{
+			$("#screen_bookings").empty().append(data);
+			$("#screen_bookings").trigger('create');
+		}
 		//navigator.notification.alert(data);
 	}).always(function() { $.mobile.loading( "hide" ); });
 });
@@ -341,9 +344,12 @@ function checkCmd() {
 }
 function refreshCmd() {
 	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station }, function(data){
-		$.mobile.loading( "show" );
-		$("#screen_bookings").empty().append(data);
-		$("#screen_bookings").trigger('create');
+		if (data != 0)
+		{
+			$.mobile.loading( "show" );
+			$("#screen_bookings").empty().append(data);
+			$("#screen_bookings").trigger('create');
+		}
 	}).always(function() { $.mobile.loading( "hide" ); });
 }
 function dispoCheck()
@@ -615,7 +621,7 @@ function help()
 function cgv()
 {
 	//window.plugins.childBrowser.showWebPage('http://taximedia.fr/client/docs/CGV.pdf', { showLocationBar: true });
-	window.open('http://taximedia.fr/client/docs/CGV.pdf','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('http://taximedia.fr/docs/CGV.pdf','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function alertDismissed()
 {
