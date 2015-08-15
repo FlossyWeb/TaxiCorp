@@ -284,18 +284,6 @@ input[type=text]#from, input[type=text]#to {
 	font-size: 24px;
 	color: #333;
 }
-#dispo a {
-	display: block;
-	width: 96%;
-	padding: 2px;
-	margin: 6px;
-	font-weight: bolder;
-	font-size: 16px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	opacity: 0.9;
-	filter: alpha(opacity=90);
-}
 #joblinks {
 	font-weight:bolder;
 	box-shadow: 0 0 6px #000;
