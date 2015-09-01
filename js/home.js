@@ -914,6 +914,7 @@ $(document).on( 'pagecreate', function() {
 	dispoCheck();
 	//Dispo_On(); 
 	footer();
+	checkCmd();
 	dep = $.localStorage.getItem('dep');
 	//alert('taxi: '+taxi+', tel: '+tel+', email: '+email+', dispo: '+dispo+', nom: '+nom+', prenom: '+prenom+', pass: '+pass+', dep: '+dep+', mngid: '+mngid+', group: '+group);
 	$('#depMod').val(dep);
