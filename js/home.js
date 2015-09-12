@@ -21,7 +21,7 @@ var cell = $.sessionStorage.setItem('cell', '');
 var cmd = $.sessionStorage.setItem('cmd', 0);
 var query_string = $.sessionStorage.setItem('query_string', '');
 var delay = 10;
-var pollingTime;
+var pollingTime = 3000; // Default PollingTime in case initial pollingTime request fails
 
 // Lecteur audio
 var my_media = null;
@@ -280,9 +280,9 @@ function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
 	$.post("https://www.mytaxiserver.com/appserver/get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){ 
-		$("#screen_job").empty().append(data);
 		if (data != 0)
 		{
+			$("#screen_job").empty().append(data);
 			$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").play();
@@ -303,6 +303,7 @@ function update()
 		}
 		else
 		{
+			$("#screen_job").empty().append('<br><p><b>En attente de courses...</b></p><br>');
 			$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").pause();
@@ -488,11 +489,20 @@ function directCall()
 				 
 				 break;
 			 default: 
-				$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
+				$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
 				 
 				 break;
 		}					
 	}, "json").always(function() { Sound_On();});
+}
+// Cancels direct jobs...
+function cancelCall(query_string)
+{
+	$.mobile.loading( "show" );
+	dep = $.localStorage.getItem('dep');
+	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
+		$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
+	}, "json");
 }
 // Diary call when accepting cmd jobs or refusing jobs
 function diaryCall(query_string)
@@ -525,11 +535,11 @@ function diaryCall(query_string)
 				 
 				 break;
 			 default: 
-				$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
+				$.mobile.pageContainer.pagecontainer("change", "#cmd", { transition: "slide"} );
 				 
 				 break;
 		}					
-	}, "json").always(function() { Sound_On();});
+	}, "json");
 }
 // Urgence call => Danger zone
 function getLocationOnce()
@@ -651,7 +661,7 @@ if ( app ) {
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
 			pollingTime = data.polling;
-		}, "json").done(function(data) {
+		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
 		});
 		checkCmd();
@@ -901,7 +911,7 @@ $(document).on( 'pagecreate', function() {
 		getLocation();
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
 			pollingTime = data.polling;
-		}, "json").done(function(data) {
+		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
 		});
 	}
