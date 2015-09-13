@@ -691,6 +691,9 @@ function onResume() {
 	if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
 		$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
 	}
+	cordova.plugins.notification.local.clearAll(function() {
+		//alert("All notifications cleared");
+	}, this);
 	Sound_On();
 }
 var scanSuccess = function (result) {
