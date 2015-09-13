@@ -32,6 +32,7 @@ var scanner;
 
 // localNotifications
 var notificationId = 1;
+var badgeNumber = 0;
 var badgeNumber1 = 0;
 var badgeNumber2 = 0;
 
@@ -331,7 +332,7 @@ function checkCmd() {
 			navigator.notification.vibrate(1000);
 			//badgeNumber2=data;
 			badgeNumber2=1;
-			var badgeNumber = badgeNumber1+badgeNumber2;
+			badgeNumber = badgeNumber1+badgeNumber2;
 			if(parseInt(data)>1) { var showing=data+" courses en commande sont disponibles !";}
 			else { var showing="Une course en commande est disponible !";}
 			cordova.plugins.notification.local.schedule({
