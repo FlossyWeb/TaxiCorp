@@ -464,6 +464,9 @@ function delayCall(query_string)
 	Sound_Off();
 	$.sessionStorage.setItem('query_string', query_string);
 	$.mobile.pageContainer.pagecontainer("change", "#delayPop", { transition: "slide"} );
+	cordova.plugins.notification.local.clear(1, function() {
+		//alert("done");
+	});
 }
 function directCall()
 {
@@ -506,7 +509,7 @@ function cancelCall(query_string)
 	dep = $.localStorage.getItem('dep');
 	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
 		$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
-	}, "json");
+	}, "json").always(function() { $.mobile.loading( "hide" ); });
 }
 // Diary call when accepting cmd jobs or refusing jobs
 function diaryCall(query_string)
@@ -660,6 +663,8 @@ if ( app ) {
 		StatusBar.backgroundColorByHexString("#E7B242");
 		// prevent device from sleeping
 		window.plugins.powerManagement.acquire();
+		// Enable background mode
+		cordova.plugins.backgroundMode.enable();
 		//Functions to call only at app first load
 		getLocation();
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
