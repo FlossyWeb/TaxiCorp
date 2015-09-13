@@ -665,6 +665,13 @@ if ( app ) {
 		window.plugins.powerManagement.acquire();
 		// Enable background mode
 		cordova.plugins.backgroundMode.enable();
+		cordova.plugins.backgroundMode.configure({
+			text:'App toujours en fonction, nous vous informons des courses en cours...'
+		});
+		// Called when background mode has been activated
+		cordova.plugins.backgroundMode.onactivate = function () {
+			Sound_Off();
+		}
 		//Functions to call only at app first load
 		getLocation();
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
@@ -684,6 +691,7 @@ function onResume() {
 	if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
 		$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
 	}
+	Sound_On();
 }
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";
