@@ -292,7 +292,8 @@ function update()
 				playAudio('sounds/ring.mp3');
 				navigator.notification.vibrate(2000);
 			}
-			//var badgeNumber = badgeNumber1+badgeNumber2;
+			badgeNumber1=1;
+			badgeNumber = badgeNumber1+badgeNumber2;
 			cordova.plugins.notification.local.schedule({
 				id: 1,
 				title: "Notification de course MonTaxi",
@@ -301,7 +302,6 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			alert('in');
 		}
 		else
 		{
@@ -329,7 +329,9 @@ function checkCmd() {
 			$('.ordersjob').empty().append(data);
 			navigator.notification.beep(2);
 			navigator.notification.vibrate(1000);
-			//var badgeNumber = badgeNumber1+badgeNumber2;
+			//badgeNumber2=data;
+			badgeNumber2=1;
+			var badgeNumber = badgeNumber1+badgeNumber2;
 			if(parseInt(data)>1) { var showing=data+" courses en commande sont disponibles !";}
 			else { var showing="Une course en commande est disponible !";}
 			cordova.plugins.notification.local.schedule({
