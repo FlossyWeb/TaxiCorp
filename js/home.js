@@ -281,7 +281,6 @@ function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
 	$.post("https://www.mytaxiserver.com/appserver/get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){ 
-	alert('called');
 		if (data != 0)
 		{
 			$("#screen_job").empty().append(data);
@@ -314,7 +313,6 @@ function update()
 			cordova.plugins.notification.local.clear(1, function() {
 				//alert("done");
 			});
-			alert('out');
 		}
 	}).always(function(data) {
 		setTimeout('update()', pollingTime);
