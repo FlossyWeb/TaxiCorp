@@ -346,17 +346,22 @@ function checkCmd() {
 			cordova.plugins.notification.local.clear(2, function() {
 				//alert("done");
 			});
+			$('.orders').removeClass('badge');
+			$('.ordersjob').removeClass('badge');
+			$('.orders').empty();
+			$('.ordersjob').empty();
 		}
 	}).always(function(data) {
 		setTimeout('checkCmd()', 300000);
 	});
 }
 function refreshCmd() {
+	$.mobile.loading( "show" );
+	$("#screen_bookings").empty();
 	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station }, function(data){
 		if (data != 0)
 		{
-			$.mobile.loading( "show" );
-			$("#screen_bookings").empty().append(data);
+			$("#screen_bookings").append(data);
 			$("#screen_bookings").trigger('create');
 		}
 	}).always(function() { $.mobile.loading( "hide" ); });
