@@ -674,9 +674,20 @@ if ( app ) {
 		cordova.plugins.backgroundMode.configure({
 			text:'App toujours en fonction, nous vous informons des courses en cours...'
 		});
-		// Called when background mode has been activated
+		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			Sound_Off();
+			cordova.plugins.notification.local.clear(3, function() {});
+		}
+		cordova.plugins.backgroundMode.ondeactivate = function() {
+			cordova.plugins.notification.local.schedule({
+				id: 3,
+				title: "Alerte execution MonTaxi",
+				text: "Votre application MonTaxi va cesser de fonctionner en arrière plan.",
+				led: "E7B242",
+				badge: 0
+			});
+			navigator.notification.alert("Bon retour sur l'application.", alertBackFromBackGround, 'MonTaxi', 'Relancer');
 		}
 		//Functions to call only at app first load
 		getLocation();
@@ -704,6 +715,9 @@ function onResume() {
 }
 function onPause() {
 	Sound_Off();
+}
+function alertBackFromBackGround() {
+	document.location.href='home.html';
 }
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";
