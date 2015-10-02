@@ -702,7 +702,7 @@ if ( app ) {
 		cordova.plugins.notification.local.on("click", function (notification, state) {
 			//alert(notification.id + " was clicked");
 			if(notification.id==3) backFromBackGround();
-		}, this)
+		}, this);
 		//Functions to call only at app first load
 		getLocation();
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
