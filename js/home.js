@@ -687,8 +687,22 @@ if ( app ) {
 				led: "E7B242",
 				badge: 0
 			});
-			navigator.notification.alert("Bon retour sur l'application.", alertBackFromBackGround, 'MonTaxi', 'Relancer');
+			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'MonTaxi', 'Relancer');
 		}
+		var now = new Date().getTime(),
+			_30_sec_from_now = new Date(now + 30*1000);
+		cordova.plugins.notification.local.schedule({
+			id: 3,
+			title: "Alerte execution MonTaxi",
+			text: "Votre application MonTaxi va cesser de fonctionner en arrière plan.",
+			led: "E7B242",
+			at: _30_sec_from_now,
+			badge: 0
+		});
+		cordova.plugins.notification.local.on("click", function (notification, state) {
+			//alert(notification.id + " was clicked");
+			if(notification.id==3) backFromBackGround();
+		}, this)
 		//Functions to call only at app first load
 		getLocation();
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
@@ -716,7 +730,7 @@ function onResume() {
 function onPause() {
 	Sound_Off();
 }
-function alertBackFromBackGround() {
+function backFromBackGround() {
 	document.location.href='home.html';
 }
 var scanSuccess = function (result) {
