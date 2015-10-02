@@ -699,7 +699,7 @@ if ( app ) {
 			});
 		}, 10000);
 		cordova.plugins.notification.local.on("click", function (notification, state) {
-			alert(notification.id + " was clicked");
+			//alert(notification.id + " was clicked");
 			if(notification.id=='3') backFromBackGround();
 		}, this);
 		//Functions to call only at app first load
