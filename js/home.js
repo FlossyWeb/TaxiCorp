@@ -506,6 +506,9 @@ function directCall()
 				 break;
 		}					
 	}, "json").always(function() { Sound_On();});
+	cordova.plugins.notification.local.clear(1, function() {
+		// Cleaning direct job notification
+	});
 }
 // Cancels direct jobs...
 function cancelCall(query_string)
@@ -515,6 +518,9 @@ function cancelCall(query_string)
 	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
 		$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
 	}, "json").always(function() { $.mobile.loading( "hide" ); });
+	cordova.plugins.notification.local.clear(1, function() {
+		// Cleaning direct job notification
+	});
 }
 // Diary call when accepting cmd jobs or refusing jobs
 function diaryCall(query_string)
@@ -552,6 +558,9 @@ function diaryCall(query_string)
 				 break;
 		}					
 	}, "json");
+	cordova.plugins.notification.local.clear(2, function() {
+		// Cleaning cmd notification
+	});
 }
 // Urgence call => Danger zone
 function getLocationOnce()
