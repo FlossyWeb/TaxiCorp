@@ -696,6 +696,7 @@ if ( app ) {
 				led: "E7B242",
 				badge: 0
 			});
+			Dispo_Off();
 			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'MonTaxi', 'Relancer');
 		}
 		cordova.plugins.notification.local.on("click", function (notification, state) {
