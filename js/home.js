@@ -689,6 +689,7 @@ if ( app ) {
 			cordova.plugins.notification.local.clear(3, function() {});
 		}
 		cordova.plugins.backgroundMode.ondeactivate = function() {
+			// Sadly this event is fired anytime the backgroundMode is deactivated including when the app is just pushed back from back to foreground !! Sad but true ;-)
 			cordova.plugins.notification.local.schedule({
 				id: 3,
 				title: "Alerte execution MonTaxi",
@@ -696,7 +697,6 @@ if ( app ) {
 				led: "E7B242",
 				badge: 0
 			});
-			Dispo_Off();
 			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'MonTaxi', 'Relancer');
 		}
 		cordova.plugins.notification.local.on("click", function (notification, state) {
