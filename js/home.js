@@ -21,7 +21,7 @@ var cell = $.sessionStorage.setItem('cell', '');
 var cmd = $.sessionStorage.setItem('cmd', 0);
 var query_string = $.sessionStorage.setItem('query_string', '');
 var delay = 10;
-var pollingTime = 3000; // Default PollingTime in case initial pollingTime request fails
+var pollingTime = 2000;
 
 // Lecteur audio
 var my_media = null;
@@ -42,6 +42,19 @@ var app;
 // getLocation & secureCall
 var lat = 0;
 var lng = 0;
+var previousLat = 0;
+var previousLng = 0;
+
+//opendata vars
+var api_key = "307464f4-81ba-4d22-9b6c-23376ce4cf9e";
+var insee = $.localStorage.getItem('insee');
+var ads = $.localStorage.getItem('ads');
+var cpro = $.localStorage.getItem('cpro');
+var imat = $.localStorage.getItem('imat');
+var taxi_id = $.localStorage.getItem('taxi_id');
+var openStatus;
+var openDataInit=false;
+var geoserver='188.165.50.190';
 
 var mobileDemo = { 'center': '43.615945,3.876743', 'zoom': 10 };
 
@@ -49,13 +62,33 @@ if($.localStorage.getItem('pass')!='true')
 {
 	document.location.href='index.html';
 }
-$.post("https://www.mytaxiserver.com/appclient/login_app.php", { log: tel, pass: pwd, dep: dep}, function(data) {
+$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep}, function(data) {
+	if(data.done) {
+		insee = data.insee;
+		ads = data.ads;
+		cpro = data.cpro;
+		imat = data.imat;
+		//alert(ads+' - '+insee+' - '+cpro+' - '+imat);
+	}
+	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'MonTaxi Erreur', 'OK');
 	if (data.badid)
 	{
 		$.localStorage.setItem('pass', 0);
 		document.location.href='index.html';
 	}
-}, "json");
+}, "json").done(function(data) { 
+	if(data.done) {
+		$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: ads, cpro: cpro, imat: imat}, function(data) {
+			taxi_id = data.taxi_id;
+			$.localStorage.setItem('taxi_id', data.taxi_id);
+			openStatus = data.status;
+			openDataInit=true;
+			//alert(taxi_id+' - '+openStatus+' - '+openDataInit);
+			dispoCheck();
+			//Dispo_On();
+		}, "json");
+	}
+});
 		
 ////////////////////////////////////////////////////////////
 //$(document).on( 'pagebeforecreate', '#directions_map', function() {
@@ -107,7 +140,7 @@ $('#directions_map').live('pagecreate', function() {
 							if ( status === 'OK' ) {
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
-								var gmapLink = '<a href="#" onClick="openSomeUrl(\'http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'&directionsmode=driving\')" class="ui-btn  ui-btn-b ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
+								var gmapLink = '<a href="#" onClick="openSomeUrl(\'http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'&directionsmode=driving\')" class="ui-btn  ui-btn-c ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
 								setTimeout(function() { 
 									$("#infos_map").append(gmapLink);
 								}, 1000);
@@ -218,19 +251,26 @@ function dc() {
 }
 function getLocation()
 {
-	if (navigator.geolocation)
+	//alert('IN getLocation: '+openDataInit);
+	if (openDataInit)
 	{
-		if (navigator.userAgent.toLowerCase().match(/android/)) {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:0});
+		if (navigator.geolocation)
+		{
+			//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
+			if (navigator.userAgent.toLowerCase().match(/android/)) {
+				navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:5000, timeout: 5000});
+			}
+			else {
+				navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, maximumAge:5000, timeout: 5000});
+			}
 		}
 		else {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0});
+			navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
 		}
-		//var watchId = navigator.geolocation.watchPosition(get_coords, showError);
-		//navigator.geolocation.getAccurateCurrentPosition(get_coords, showError, {maxWait:30000});
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
+		// Opendata Not initiated so we wait for it 5 seconds more
+		setTimeout('getLocation()', 5000); // Waiting for openDataInit...
 	}
 }
 function showError(error)
@@ -270,17 +310,45 @@ function get_coords(position)
 {
 	lat = position.coords.latitude;
 	lng = position.coords.longitude;
+	//alert('Located: '+lat+' , '+lng);
+	var stampDot = new Date().getTime() / 1000; // float timestamp in seconds
+	var stamp = parseInt(stampDot); // timestamp in seconds
+	var geoHash = sha1(stamp+"montaxi"+taxi_id+lat+lng+"phone"+"0"+"2"+api_key); //sha1(concat(timestamp, operator, taxi, lat, lon, device, status, version, api_key))
+	var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
+	//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
+	//alert(JSON.stringify(payload));
+	udptransmit.sendMessage(payload);
+	if((lat!=previousLat) && (lng!=previousLng)) {
+		$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }, function(data) {
+			//alert('Sent:'+lat+' , '+lng);
+		});
+	}
+	previousLat = lat;
+	previousLng = lng;
+	setTimeout('getLocation()', 5000); // Every thirty seconds you check geolocation...
+	/*
 	//var x=document.getElementById("results");
 	//x.innerHTML="lat = " + lat + " - lng = " +lng;
 	//navigator.notification.alert('taxi: ' + taxi + ' tel: ' + tel + ' pass=' + pass);
-	$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }).always(function(data) {
-		setTimeout('getLocation()', 30000); // Every thirty seconds you check geolocation...
-	}); 
+	$.post("https://www.mytaxiserver.com/appclient/open_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }).always(function(data) {
+		//setTimeout('getLocation()', 30000); // Every thirty seconds you check geolocation...
+	});
+	*/	
+}
+//
+function UDPTransmissionSuccess(success) {
+	alert('UDPTransmissionSuccess: '+success);
+	//setTimeout('getLocation()', 5000); // Every five seconds you refresh geolocation...
+}
+
+function UDPTransmissionError(error) {
+	alert('UDPTransmissionError: '+error);
+	//setTimeout('getLocation()', 5000); // Every five seconds you refresh geolocation...
 }
 function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
-	$.post("https://www.mytaxiserver.com/appserver/get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/open_get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng }, function(data){ 
 		if (data != 0)
 		{
 			$("#screen_job").empty().append(data);
@@ -368,7 +436,7 @@ function refreshCmd() {
 }
 function dispoCheck()
 {
-	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }, function(data){ 
 		var display = '';
 		if (data.dispo == 1)
 		{
@@ -388,7 +456,7 @@ function dispoCheck()
 }
 function Dispo_On()
 {
-	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep });
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id });
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
@@ -396,7 +464,7 @@ function Dispo_On()
 }
 function Dispo_Off()
 {
-	$.post("https://www.mytaxiserver.com/appclient/dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep }); 
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }); 
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
@@ -473,6 +541,18 @@ function delayCall(query_string)
 		//alert("done");
 	});
 }
+// Cancels direct jobs...
+function cancelCall(query_string)
+{
+	$.mobile.loading( "show" );
+	dep = $.localStorage.getItem('dep');
+	$.post("https://www.mytaxiserver.com/appserver/open_diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
+		$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
+	}, "json").always(function() { $.mobile.loading( "hide" ); });
+	cordova.plugins.notification.local.clear(1, function() {
+		// Cleaning direct job notification
+	});
+}
 function directCall()
 {
 	$.mobile.loading( "show" );
@@ -483,7 +563,7 @@ function directCall()
 	query_string = dataDiary + '&delay=' + delay;
 	$.sessionStorage.setItem('query_string', query_string);
 	dep = $.localStorage.getItem('dep');
-	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/open_diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
 		switch (data.location) {
 			 case '#directions_map':
 				//navigator.notification.alert('in direction case');
@@ -493,6 +573,10 @@ function directCall()
 				$.sessionStorage.setItem('cell', data.cell);
 				$.sessionStorage.setItem('cmd', 0);
 				$.mobile.pageContainer.pagecontainer("change", "#directions_map", { transition: "slide"} );
+				setTimeout( function () {
+					checkCustomerConfirm(dep, query_string);
+				}, 30000);
+				//Dispo_Off();
 				 
 				 break;
 			 case '#toolate':
@@ -501,23 +585,11 @@ function directCall()
 				 
 				 break;
 			 default: 
-				$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
+				$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
 				 
 				 break;
 		}					
 	}, "json").always(function() { Sound_On();});
-	cordova.plugins.notification.local.clear(1, function() {
-		// Cleaning direct job notification
-	});
-}
-// Cancels direct jobs...
-function cancelCall(query_string)
-{
-	$.mobile.loading( "show" );
-	dep = $.localStorage.getItem('dep');
-	$.post("https://www.mytaxiserver.com/appserver/diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
-		$.mobile.pageContainer.pagecontainer("change", "#jobs_taker", { transition: "slide"} );
-	}, "json").always(function() { $.mobile.loading( "hide" ); });
 	cordova.plugins.notification.local.clear(1, function() {
 		// Cleaning direct job notification
 	});
@@ -553,14 +625,51 @@ function diaryCall(query_string)
 				 
 				 break;
 			 default: 
-				$.mobile.pageContainer.pagecontainer("change", "#cmd", { transition: "slide"} );
+				$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
 				 
 				 break;
 		}					
-	}, "json");
+	}, "json").always(function() { Sound_On();});
 	cordova.plugins.notification.local.clear(2, function() {
 		// Cleaning cmd notification
 	});
+}
+function checkCustomerConfirm(d, q)
+{
+	$.post("https://www.mytaxiserver.com/appserver/open_status.php?dep=" + d + "&check=0" , q, function(data){ 
+		if (data != 0)
+		{
+			if(app) navigator.notification.alert(data, alertDismissed, 'MonTaxi', 'OK');
+			else alert(data);
+			$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
+			//return false;
+		}
+		else {
+			Dispo_Off();
+		}
+	});
+}
+function callIncident(irdv, ihail, iop, icell, istatus)
+{ // callIncident(\''.$rdv.'\', \''.$hail_id.'\', \''.$operator.'\', \''.$cell.'\', \''.$status.'\')
+	$.post("https://www.mytaxiserver.com/appserver/open_incident.php" , { rdvpoint: irdv, hail_id: ihail, operator: iop, cell: icell, status: istatus, db: 'true'}, function(data){ 
+		if (data.ok)
+		{
+			var number = icell;
+			var message = "Le taxi "+taxi+" ne pourra venir vous chercher à cause d'un incident.";
+			var intent = ""; //leave empty for sending sms using default intent
+			var success = function () {
+			};
+			var error = function (e) {
+			};
+			sms.send(number, message, intent, success, error);
+			//$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
+			//return false;
+		}
+		else {
+			if(app) navigator.notification.alert("Erreur: L'incident n'a pas été déclaré.", alertDismissed, 'MonTaxi', 'OK');
+			else alert("Erreur: L'incident n'a pas été déclaré.");
+		}
+	}, "json");
 }
 // Urgence call => Danger zone
 function getLocationOnce()
@@ -678,6 +787,23 @@ if ( app ) {
 		StatusBar.backgroundColorByHexString("#E7B242");
 		// prevent device from sleeping
 		window.plugins.powerManagement.acquire();
+		//Functions to call only at app first load
+		scanner = cordova.require("cordova/plugin/BarcodeScanner");
+		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
+			pollingTime = data.polling;
+			// Initialising UDP Connexion once...
+			udptransmit.initialize(data.udpserver, 80);
+			//udptransmit.initialize("51.254.243.15", 80);
+			//udptransmit.initialize("geoloc.dev.api.taxi", 80);
+			//udptransmit.initialize("geoloc.test.api.taxi", 80);
+			//udptransmit.initialize("geoloc.api.taxi", 80);
+			//udptransmit.initialize("46.105.34.86", 80);
+			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
+		}, "json").always(function(data) {
+			setTimeout('update()', 2000);
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			udptransmit.initialize(geoserver, 80);
+		});
 		// Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.configure({
@@ -703,14 +829,11 @@ if ( app ) {
 			//alert(notification.id + " was clicked");
 			if(notification.id=='3') backFromBackGround();
 		}, this);
-		//Functions to call only at app first load
-		getLocation();
-		scanner = cordova.require("cordova/plugin/BarcodeScanner");
-		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
-			pollingTime = data.polling;
-		}, "json").always(function(data) {
-			setTimeout('update()', 2000);
-		});
+		if (typeof window.udptransmit == 'undefined') {
+			alert("udpTransmit is undefined !!");
+		}
+		getLocation(); // Launching getLocation anyway !!
+		//setTimeout('update()', 2000);
 		checkCmd();
 		cordova.plugins.notification.local.clearAll(function() {
 			//alert("All notifications cleared");
@@ -785,11 +908,19 @@ function contactPick()
 	}
 	window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 }
+// UDP init Success/Error Handlers...
+function UDPTransmitterInitializationSuccess(success) {
+	navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'MonTaxi', 'OK');
+	//getLocation();
+}
+
+function UDPTransmitterInitializationError(error) {
+	navigator.notification.alert('UDP INIT ERROR: '+error, alertDismissed, 'MonTaxi Erreur', 'OK');
+}
 function myTaxiDown()
 {
-	//var url = "http://www.taximedia.fr/stores.php?app=pro";
-	//window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
-	window.open('montaxipro://?from=driver', '_system');
+	var url = "http://www.taximedia.fr/stores.php?app=pro";
+	window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 }
 function Share()
 {
@@ -811,7 +942,7 @@ function Share()
 function ShareArt()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app artisan monTaxi Chauffeur en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
+	var message = "Téléchargez l'app artisan monTaxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -828,7 +959,7 @@ function ShareArt()
 function SharePro()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app monTaxi Business sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
+	var message = "Téléchargez l'app monTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -966,6 +1097,7 @@ $(document).on( 'pagecreate', function() {
 	$( "body>[data-role='panel']" ).panel().enhanceWithin();
 	if(!app) {
 		getLocation();
+		//setTimeout('update()', 2000);
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
 			pollingTime = data.polling;
 		}, "json").always(function(data) {
@@ -978,10 +1110,8 @@ $(document).on( 'pagecreate', function() {
 	else {
 		$("#player").empty().append('<audio id="play" loop="loop" preload="auto" style="display:none" ><source src="sounds/ring.mp3" type="audio/mpeg" />Your browser does not support the audio element.</audio>');
 	}
-	dispoCheck();
 	//Dispo_On(); 
 	footer();
-	checkCmd();
 	dep = $.localStorage.getItem('dep');
 	//alert('taxi: '+taxi+', tel: '+tel+', email: '+email+', dispo: '+dispo+', nom: '+nom+', prenom: '+prenom+', pass: '+pass+', dep: '+dep+', mngid: '+mngid+', group: '+group);
 	$('#depMod').val(dep);
