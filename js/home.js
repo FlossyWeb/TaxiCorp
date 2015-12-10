@@ -252,25 +252,18 @@ function dc() {
 function getLocation()
 {
 	//alert('IN getLocation: '+openDataInit);
-	if (openDataInit)
+	if (navigator.geolocation)
 	{
-		if (navigator.geolocation)
-		{
-			//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
-			if (navigator.userAgent.toLowerCase().match(/android/)) {
-				navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:5000, timeout: 5000});
-			}
-			else {
-				navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, maximumAge:5000, timeout: 5000});
-			}
+		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
+		if (navigator.userAgent.toLowerCase().match(/android/)) {
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:5000, timeout: 5000});
 		}
 		else {
-			navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, maximumAge:5000, timeout: 5000});
 		}
 	}
 	else {
-		// Opendata Not initiated so we wait for it 5 seconds more
-		setTimeout('getLocation()', 5000); // Waiting for openDataInit...
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
 	}
 }
 function showError(error)
@@ -317,7 +310,9 @@ function get_coords(position)
 	var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
 	//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
 	//alert(JSON.stringify(payload));
-	udptransmit.sendMessage(payload);
+	if (openDataInit) {
+		udptransmit.sendMessage(payload);
+	}
 	if((lat!=previousLat) && (lng!=previousLng)) {
 		$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }, function(data) {
 			//alert('Sent:'+lat+' , '+lng);
