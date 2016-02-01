@@ -54,20 +54,20 @@ input[type=text], input[type=tel], input[type=date], input[type=time] {
 input[type=text]#from, input[type=text]#to {
 	color: #333;
 }
+.ui-input-text input::-moz-placeholder, .ui-input-search input::-moz-placeholder, textarea.ui-input-text::-moz-placeholder {
+  color: #FFF; /* Overides jqm style for moz */
+}
 ::-webkit-input-placeholder {
    color: #FFF;
 }
-
 :-moz-placeholder { /* Firefox 18- */
    color: #FFF;
    opacity:  1;
 }
-
 ::-moz-placeholder {  /* Firefox 19+ */
    color: #FFF;
    opacity:  1;
 }
-
 :-ms-input-placeholder {  
    color: #FFF;
 }

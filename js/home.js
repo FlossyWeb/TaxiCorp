@@ -12,7 +12,15 @@ var dep = $.localStorage.getItem('dep');
 var group = $.localStorage.getItem('group');
 var mngid = $.localStorage.getItem('mngid');
 var pass = $.localStorage.getItem('pass');
-var idcourse = $.sessionStorage.setItem('idcourse', '');
+var accessHash = $.localStorage.getItem('accessHash');
+var type = $.localStorage.getItem('type');
+var cb = $.localStorage.getItem('cb');
+var medic = $.localStorage.getItem('medic');
+var animal = $.localStorage.getItem('animal');
+var passengers = $.localStorage.getItem('passengers');
+var color = $.localStorage.getItem('color');
+var lang = $.localStorage.getItem('lang');
+var idcourse = $.localStorage.setItem('idcourse', '');
 var idcourseUrg = $.sessionStorage.setItem('idcourseUrg', '');
 var dispo = $.sessionStorage.getItem('dispo');
 var rdv = $.sessionStorage.setItem('rdv', '');
@@ -52,8 +60,13 @@ var ads = $.localStorage.getItem('ads');
 var cpro = $.localStorage.getItem('cpro');
 var imat = $.localStorage.getItem('imat');
 var taxi_id = $.localStorage.getItem('taxi_id');
+var constructor = $.localStorage.getItem('constructor');
+var model = $.localStorage.getItem('model');
+var type_ = $.localStorage.getItem('type_');
+var birthdate = $.localStorage.getItem('birthdate');
 var openStatus;
 var openDataInit=false;
+var openDataGo=false;
 var geoserver='188.165.50.190';
 
 var mobileDemo = { 'center': '43.615945,3.876743', 'zoom': 10 };
@@ -64,11 +77,25 @@ if($.localStorage.getItem('pass')!='true')
 }
 $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep}, function(data) {
 	if(data.done) {
+		//"insee"=>$insee, "ads"=>$ads, "cpro"=>$cpro, "imat"=>$imat, "constructor"=>$constructor, "model"=>$model, "type_"=>$type_, "birthdate"=>$birthdate
 		insee = data.insee;
 		ads = data.ads;
 		cpro = data.cpro;
 		imat = data.imat;
-		//alert(ads+' - '+insee+' - '+cpro+' - '+imat);
+		constructor = data.constructor;
+		model = data.model;
+		type_ = data.type_;
+		birthdate = data.birthdate;
+		accessHash = data.accessHash;
+		$.localStorage.setItem('insee', data.insee);
+		$.localStorage.setItem('ads', data.ads);
+		$.localStorage.setItem('cpro', data.cpro);
+		$.localStorage.setItem('imat', data.imat);
+		$.localStorage.setItem('constructor', data.constructor);
+		$.localStorage.setItem('model', data.model);
+		$.localStorage.setItem('type_', data.type_);
+		$.localStorage.setItem('birthdate', data.birthdate);
+		$.localStorage.setItem('accessHash', data.accessHash);
 	}
 	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'MonTaxi Erreur', 'OK');
 	if (data.badid)
@@ -83,12 +110,46 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 			$.localStorage.setItem('taxi_id', data.taxi_id);
 			openStatus = data.status;
 			openDataInit=true;
-			//alert(taxi_id+' - '+openStatus+' - '+openDataInit);
-			dispoCheck();
+			openDataGo=true;
+			$("#openSwitch").val(1);
+			//dispoCheck();
 			//Dispo_On();
 		}, "json");
 	}
 });
+function reloadVars() {
+	taxi = $.localStorage.getItem('taxi');
+	tel = $.localStorage.getItem('tel');
+	pwd = $.localStorage.getItem('pwd');
+	email = $.localStorage.getItem('email');
+	civil = $.localStorage.getItem('civil');
+	nom = $.localStorage.getItem('nom');
+	prenom = $.localStorage.getItem('prenom');
+	siret = $.localStorage.getItem('siret');
+	cpro = $.localStorage.getItem('cpro');
+	station = $.localStorage.getItem('station');
+	dep = $.localStorage.getItem('dep');
+	group = $.localStorage.getItem('group');
+	mngid = $.localStorage.getItem('mngid');
+	pass = $.localStorage.getItem('pass');
+	accessHash = $.localStorage.getItem('accessHash');
+	type = $.localStorage.getItem('type');
+	cb = $.localStorage.getItem('cb');
+	medic = $.localStorage.getItem('medic');
+	animal = $.localStorage.getItem('animal');
+	passengers = $.localStorage.getItem('passengers');
+	color = $.localStorage.getItem('color');
+	lang = $.localStorage.getItem('lang');
+	insee = $.localStorage.getItem('insee');
+	ads = $.localStorage.getItem('ads');
+	cpro = $.localStorage.getItem('cpro');
+	imat = $.localStorage.getItem('imat');
+	taxi_id = $.localStorage.getItem('taxi_id');
+	constructor = $.localStorage.getItem('constructor');
+	model = $.localStorage.getItem('model');
+	type_ = $.localStorage.getItem('type_');
+	birthdate = $.localStorage.getItem('birthdate');
+}
 		
 ////////////////////////////////////////////////////////////
 //$(document).on( 'pagebeforecreate', '#directions_map', function() {
@@ -223,6 +284,7 @@ $( '#infos' ).live( 'pagebeforeshow',function(event){
 	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $('#manage').live('pagecreate', function() {
+	//Mod Form...
 	var dec_nom = $('#nom').html(nom).text();
 	var dec_prenom = $('#prenom').html(prenom).text();
 	var dec_station = $('#station').html(station).text();
@@ -233,16 +295,62 @@ $('#manage').live('pagecreate', function() {
 	$('#taxi').val(taxi);
 	$('#tel').val(tel);
 	$('#email').val(email);
+	$('#confirmail').val(email);
 	$('#cpro').val(cpro);
 	$('#station').val(dec_station);
 	$('#log').val(tel);
+	if(type!=null) $('#type').val(type);
+	if(cb!=null) $('#cb').val(cb);
+	if(medic!=null) $('#medic').val(medic);
+	if(animal!=null) $('#animal').val(animal);
+	if(passengers!=null) $('#passengers').val(passengers).slider("refresh");;
+	if(color!=null) $('#color').val(color);
+	if(lang!=null) { //array("en", "ge", "sp", "it", "ru", "cn", "ab");
+		var langTab= lang.split(", ");
+		for (i = 0; i < langTab.length; i++) {
+			switch(langTab[i]) {
+				case "en": 
+					$('#checkbox1').prop("checked", true);
+					break;
+				case "sp": 
+					$('#checkbox2').prop("checked", true);
+					break;
+				case "it": 
+					$('#checkbox3').prop("checked", true);
+					break;
+				case "ru": 
+					$('#checkbox4').prop("checked", true);
+					break;
+				case "ge": 
+					$('#checkbox5').prop("checked", true);
+					break;
+				case "cn": 
+					$('#checkbox6').prop("checked", true);
+					break;
+				case "ab": 
+					$('#checkbox7').prop("checked", true);
+					break;
+			}
+		}
+	}
+	//Le.Taxi Form...
+	$.post("https://www.mytaxiserver.com/appserver/open_get_insee.php", { zip: station, pass: pass, accessHash: accessHash }, function(data){
+		$("#inseeBox").empty().append('<label for="insee">Commune de stationnement: </label>'+data).trigger('create');
+		//$("#inseeBox").trigger('create');
+	});
+	$('#insee').val(insee);
+	$('#imat').val(imat);
+	$('#constructor').val(constructor);
+	$('#model').val(model);
+	$('#birthdate').val(birthdate);
+	$('#whoLeTaxi').val(tel);
+	// Billing infos
 	$.post("https://www.mytaxiserver.com/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#billing").empty().append(data);
-		//navigator.notification.alert(data);
 	});
+	// Rating infos
 	$.post("https://www.mytaxiserver.com/appclient/myrates.php", { tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#myRates").empty().append(data);
-		//navigator.notification.alert(data);
 	});
 });
 function dc() {
@@ -310,7 +418,7 @@ function get_coords(position)
 	var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
 	//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
 	//alert(JSON.stringify(payload));
-	if (openDataInit) {
+	if (openDataInit && openDataGo && app) {
 		udptransmit.sendMessage(payload);
 	}
 	if((lat!=previousLat) && (lng!=previousLng)) {
@@ -431,7 +539,7 @@ function refreshCmd() {
 }
 function dispoCheck()
 {
-	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?check=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo}, function(data){ 
 		var display = '';
 		if (data.dispo == 1)
 		{
@@ -451,7 +559,7 @@ function dispoCheck()
 }
 function Dispo_On()
 {
-	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id });
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo });
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
@@ -459,7 +567,7 @@ function Dispo_On()
 }
 function Dispo_Off()
 {
-	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }); 
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }); 
 	$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
@@ -914,8 +1022,9 @@ function UDPTransmitterInitializationError(error) {
 }
 function myTaxiDown()
 {
-	var url = "http://www.taximedia.fr/stores.php?app=pro";
-	window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	//var url = "http://www.taximedia.fr/stores.php?app=pro";
+	//window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+	window.open('montaxipro://?from=driver', '_system');
 }
 function Share()
 {
@@ -1105,12 +1214,23 @@ $(document).on( 'pagecreate', function() {
 	else {
 		$("#player").empty().append('<audio id="play" loop="loop" preload="auto" style="display:none" ><source src="sounds/ring.mp3" type="audio/mpeg" />Your browser does not support the audio element.</audio>');
 	}
-	//Dispo_On(); 
+	//Dispo_On();
+	dispoCheck();
 	footer();
 	dep = $.localStorage.getItem('dep');
 	//alert('taxi: '+taxi+', tel: '+tel+', email: '+email+', dispo: '+dispo+', nom: '+nom+', prenom: '+prenom+', pass: '+pass+', dep: '+dep+', mngid: '+mngid+', group: '+group);
 	$('#depMod').val(dep);
+	$('#depLeTaxi').val(dep);
 	$('#depPwd').val(dep);
+	$('#openSwitch').val(1);
+	$('#openSwitch').change(function(){
+		if ($(this).val()==1) {
+			openDataGo=true;
+		}
+		else {
+			openDataGo=false;
+		}
+	});
 });
 $(document).ready(function(){
 	$.validator.addMethod(
@@ -1210,20 +1330,152 @@ $(document).ready(function(){
 				$.localStorage.setItem('station', data.station);
 				$.localStorage.setItem('dep', data.dep);
 				$.sessionStorage.setItem('pwd', data.pwd);
-				$.sessionStorage.setItem('modmy', data.modmy);				
-			}, "json").done(function(data) {
+				$.sessionStorage.setItem('modmy', data.modmy);
+				$.localStorage.setItem('type', data.type);
+				$.localStorage.setItem('cb', data.cb);
+				$.localStorage.setItem('medic', data.medic);
+				$.localStorage.setItem('animal', data.animal);
+				$.localStorage.setItem('passengers', data.passengers);
+				$.localStorage.setItem('color', data.color);
+				$.localStorage.setItem('lang', data.lang);
+			}, "json").done(function(data) { 
+				reloadVars();
+				$('#login').val(data.tel);
+				$('#civil').val(data.civil);
+				$('#nom').val(data.nom);
+				$('#prenom').val(data.prenom);
+				$('#taxi').val(data.taxi);
+				$('#tel').val(data.tel);
+				$('#cpro').val(data.cpro);
+				$('#email').val(data.email);
+				$('#confirmail').val(data.email);
+				$('#station').val(data.station);
+				$('#type').val(data.type);
+				$('#cb').val(data.cb);
+				$('#medic').val(data.medic);
+				$('#animal').val(data.animal);
+				$('#passengers').val(data.passengers).slider("refresh");;
+				$('#color').val(data.color);
+				var langTab= data.lang.split(", ");
+				for (i = 0; i < langTab.length; i++) {
+					switch(langTab[i]) {
+						case "en": 
+							$('#checkbox1').prop("checked", true);
+							break;
+						case "sp": 
+							$('#checkbox2').prop("checked", true);
+							break;
+						case "it": 
+							$('#checkbox3').prop("checked", true);
+							break;
+						case "ru": 
+							$('#checkbox4').prop("checked", true);
+							break;
+						case "ge": 
+							$('#checkbox5').prop("checked", true);
+							break;
+						case "cn": 
+							$('#checkbox6').prop("checked", true);
+							break;
+						case "ab": 
+							$('#checkbox7').prop("checked", true);
+							break;
+					}
+				}
 				var display = '';
+				var alertMe = '';
 				if (data.modmy)
 				{
 					display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+					alertMe = 'la modification de vos informations personnelles à bien été prise en compte, merci.';
 				}
 				else {
 					display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, aucune modification faite en base de donn&eacute;e.</b></p>';
+					alertMe = "la modification de vos informations personnelles n'a pas été prise en compte, aucune modification faite en base de donnée.";
 				}
 				$.mobile.loading( "hide" );
 				$('#mod_collaps').collapsible( "collapse" );
 				$('#mod_collaps input[type=submit]').button('enable');
 				$("#returns").empty().append(display);
+				navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
+			});
+		}
+	});
+	$("#letaxiForm").validate({
+		rules: {
+		 insee: {
+		   required: true,
+		   cp: true
+		 },
+		 imat: "required",
+		 constructor: "required",
+		 model: "required",
+		 birthdate: "required",
+		},
+		messages: {
+		 insee: {
+		   required: "Ce champs est obligatoire"
+		 },
+		 imat: "Ce champs est obligatoire",
+		 constructor: "Ce champs est obligatoire",
+		 model: "Ce champs est obligatoire",
+		 birthdate: "Le N&deg; de Carte Professionelle est obligatoire",
+		}
+		/* Put errors below fields
+		,
+		errorPlacement: function(error, element) {
+			error.appendTo( element.parent().next('em') );
+		}
+		*/
+		// Form submission if every thing is ok
+		,
+		submitHandler: function (form) {
+			$('#leTaxiCollaps input[type=submit]').button('disable');
+			$.mobile.loading( "show" );
+			// Adding the accessHash var to posting data (so that it does not show in code using an hidden input)
+			var dataLeTaxi = $('#letaxiForm').serializeArray();
+			dataLeTaxi.push({name: 'accessHash', value: accessHash});
+			// Subs some data
+			$.post("https://www.mytaxiserver.com/appserver/open_register.php", dataLeTaxi, function(data) {
+				// GET SHIT BACK !!
+				$.localStorage.setItem('insee', data.insee);
+				$.localStorage.setItem('imat', data.imat);
+				$.localStorage.setItem('constructor', data.constructor);
+				$.localStorage.setItem('model', data.model);
+				$.localStorage.setItem('birthdate', data.birthdate);
+			}, "json").done(function(data) { 
+				reloadVars();
+				$('#insee').val(data.insee);
+				$('#imat').val(data.imat);
+				$('#constructor').val(data.constructor);
+				$('#model').val(data.model);
+				$('#birthdate').val(data.birthdate);
+				var display = '';
+				var alertMe = '';
+				if (data.ok)
+				{
+					display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+					alertMe = 'la modification de vos informations personnelles à bien été prise en compte, merci.';
+					// In case Licence plate or any key has changed we have to re-enroll because taxi_id may have changed then !
+					$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: ads, cpro: cpro, imat: imat}, function(data) {
+						taxi_id = data.taxi_id;
+						$.localStorage.setItem('taxi_id', data.taxi_id);
+						openStatus = data.status;
+						openDataInit=true;
+						$("#openSwitch").val(1);
+						//dispoCheck();
+						//Dispo_On();
+					}, "json");
+				}
+				else {
+					display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, aucune modification faite en base de donn&eacute;e.</b></p>';
+					alertMe = "la modification de vos informations personnelles n'a pas été prise en compte, aucune modification faite en base de donnée.";
+				}
+				$.mobile.loading( "hide" );
+				$('#leTaxiCollaps').collapsible( "collapse" );
+				$('#leTaxiCollaps input[type=submit]').button('enable');
+				$("#returns").empty().append(display);
+				navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
 			});
 		}
 	});
@@ -1234,14 +1486,18 @@ $(document).ready(function(){
 		$.post("https://www.mytaxiserver.com/appclient/login_app.php", $("#change").serialize(), function(data) {
 			// GET SHIT BACK !!
 			var display = '';
+			var alertMe = '';
 			if (data.changed)
 			{
 				display = '<p><b>Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+				alertMe = "Vous recevrez vos nouveaux identifiants dans quelques instants à cet email : " + data.email + ", merci.";
 			}
 			else {
 				display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, l&rsquo;identifiant fourni ne figurant pas dans notre base de donn&eacute;e.</b></p>';
+				alertMe = "la modification de vos identifiants n'à pas été faite, l'identifiant fourni ne figurant pas dans notre base de donnée.";
 			}
 			$("#returns").empty().append(display);
+			navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
 		}, "json");
 	});
 });

@@ -191,6 +191,7 @@ $(document).on( 'pagecreate', function() {
 			$.localStorage.setItem('pwd', data.pwd);
 			$.localStorage.setItem('mngid', data.mngid);
 			$.localStorage.setItem('pass', data.pass);
+			$.localStorage.setItem('accessHash', data.accessHash);
 			$.sessionStorage.setItem('badid', data.badid);
 			$.sessionStorage.setItem('banned', data.banned);
 			//navigator.notification.alert(data.nom + ' - ' + data.prenom + ' - ' + data.taxi);
