@@ -1226,9 +1226,11 @@ $(document).on( 'pagecreate', function() {
 	$('#openSwitch').change(function(){
 		if ($(this).val()==1) {
 			openDataGo=true;
+			Dispo_On();
 		}
 		else {
 			openDataGo=false;
+			$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: true, getout: true }); 
 		}
 	});
 });
