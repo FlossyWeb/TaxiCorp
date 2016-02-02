@@ -111,7 +111,7 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 			openStatus = data.status;
 			openDataInit=true;
 			openDataGo=true;
-			$("#openSwitch").val(1);
+			$("#openSwitch").val(1).flipswitch( "refresh" );
 			//dispoCheck();
 			//Dispo_On();
 		}, "json");
@@ -300,9 +300,9 @@ $('#manage').live('pagecreate', function() {
 	$('#station').val(dec_station);
 	$('#log').val(tel);
 	if(type!=null) $('#type').val(type);
-	if(cb!=null) $('#cb').val(cb);
-	if(medic!=null) $('#medic').val(medic);
-	if(animal!=null) $('#animal').val(animal);
+	if(cb!=null) $('#cb').val(cb).flipswitch( "refresh" );
+	if(medic!=null) $('#medic').val(medic).flipswitch( "refresh" );
+	if(animal!=null) $('#animal').val(animal).flipswitch( "refresh" );
 	if(passengers!=null) $('#passengers').val(passengers).slider("refresh");;
 	if(color!=null) $('#color').val(color);
 	if(lang!=null) { //array("en", "ge", "sp", "it", "ru", "cn", "ab");
@@ -310,25 +310,25 @@ $('#manage').live('pagecreate', function() {
 		for (i = 0; i < langTab.length; i++) {
 			switch(langTab[i]) {
 				case "en": 
-					$('#checkbox1').prop("checked", true);
+					$('#checkbox1').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "sp": 
-					$('#checkbox2').prop("checked", true);
+					$('#checkbox2').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "it": 
-					$('#checkbox3').prop("checked", true);
+					$('#checkbox3').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "ru": 
-					$('#checkbox4').prop("checked", true);
+					$('#checkbox4').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "ge": 
-					$('#checkbox5').prop("checked", true);
+					$('#checkbox5').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "cn": 
-					$('#checkbox6').prop("checked", true);
+					$('#checkbox6').prop("checked", true).checkboxradio( "refresh" );
 					break;
 				case "ab": 
-					$('#checkbox7').prop("checked", true);
+					$('#checkbox7').prop("checked", true).checkboxradio( "refresh" );
 					break;
 			}
 		}
@@ -1222,7 +1222,6 @@ $(document).on( 'pagecreate', function() {
 	$('#depMod').val(dep);
 	$('#depLeTaxi').val(dep);
 	$('#depPwd').val(dep);
-	$('#openSwitch').val(1);
 	$('#openSwitch').change(function(){
 		if ($(this).val()==1) {
 			openDataGo=true;
@@ -1353,34 +1352,34 @@ $(document).ready(function(){
 				$('#confirmail').val(data.email);
 				$('#station').val(data.station);
 				$('#type').val(data.type);
-				$('#cb').val(data.cb);
-				$('#medic').val(data.medic);
-				$('#animal').val(data.animal);
+				$('#cb').val(data.cb).flipswitch( "refresh" );
+				$('#medic').val(data.medic).flipswitch( "refresh" );
+				$('#animal').val(data.animal).flipswitch( "refresh" );
 				$('#passengers').val(data.passengers).slider("refresh");;
 				$('#color').val(data.color);
 				var langTab= data.lang.split(", ");
 				for (i = 0; i < langTab.length; i++) {
 					switch(langTab[i]) {
 						case "en": 
-							$('#checkbox1').prop("checked", true);
+							$('#checkbox1').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "sp": 
-							$('#checkbox2').prop("checked", true);
+							$('#checkbox2').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "it": 
-							$('#checkbox3').prop("checked", true);
+							$('#checkbox3').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "ru": 
-							$('#checkbox4').prop("checked", true);
+							$('#checkbox4').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "ge": 
-							$('#checkbox5').prop("checked", true);
+							$('#checkbox5').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "cn": 
-							$('#checkbox6').prop("checked", true);
+							$('#checkbox6').prop("checked", true).checkboxradio( "refresh" );
 							break;
 						case "ab": 
-							$('#checkbox7').prop("checked", true);
+							$('#checkbox7').prop("checked", true).checkboxradio( "refresh" );
 							break;
 					}
 				}

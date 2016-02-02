@@ -2,8 +2,8 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.taxibleuservices.mytaxicorp"
-        version   = "1.6.0">
-    <name>MonTaxi Chauffeur</name>
+        version   = "1.6.1">
+    <name>Mon Appli Taxi Chauffeur</name>
 
     <description>
         Taxi Officiel Version Artisans.
