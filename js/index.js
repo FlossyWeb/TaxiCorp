@@ -74,7 +74,7 @@ function getLocationOnce()
 		//navigator.geolocation.getAccurateCurrentPosition(get_coords, showError, {maxWait:30000});
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	}
 }
 function secureCall(position)
@@ -389,7 +389,7 @@ $(document).ready(function(){
 				$('input[type=submit]#subNameStep').button('enable');
 				$.mobile.loading( "hide" );
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'MonTaxi Erreur', 'OK');
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 			});
 		} // submitHandler Ends
 	});
@@ -457,7 +457,7 @@ $(document).ready(function(){
 				$('input[type=submit]#subCabStep').button('enable');
 				$.mobile.loading( "hide" );
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'MonTaxi Erreur', 'OK');
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 			});
 		} // submitHandler Ends
 	});
@@ -584,7 +584,7 @@ $(document).ready(function(){
 				$('input[type=submit]#subCbStep').button('enable');
 				$.mobile.loading( "hide" );
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'MonTaxi Erreur', 'OK');
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus+', '+ errorThrown, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 			});
 		} // submitHandler Ends
 	});
@@ -628,7 +628,7 @@ $(document).ready(function(){
 				$("#returns").empty().append(display);
 				$( "#answer" ).popup( "open", { positionTo: "window" } );
 			}, "json").fail(function (jqXHR, textStatus, errorThrown) {
-				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus, errorThrown, alertDismissed, 'MonTaxi Erreur', 'OK');
+				navigator.notification.alert('Erreur inconnue, le serveur ou la connexion internet sont indisponibles. ' + textStatus, errorThrown, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 			});
 		} // submitHandler Ends
 		/* Put errors below fields

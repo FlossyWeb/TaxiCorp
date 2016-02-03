@@ -97,7 +97,7 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 		$.localStorage.setItem('birthdate', data.birthdate);
 		$.localStorage.setItem('accessHash', data.accessHash);
 	}
-	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'MonTaxi Erreur', 'OK');
+	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	if (data.badid)
 	{
 		$.localStorage.setItem('pass', 0);
@@ -212,7 +212,7 @@ $('#directions_map').live('pagecreate', function() {
 							}
 						});
 					} else {
-						navigator.notification.alert('Unable to get current position', alertDismissed, 'MonTaxi Erreur', 'OK');
+						navigator.notification.alert('Unable to get current position', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 					}
 				},{enableHighAccuracy:true, maximumAge:Infinity});
 			});
@@ -371,7 +371,7 @@ function getLocation()
 		}
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	}
 }
 function showError(error)
@@ -403,7 +403,7 @@ function showError(error)
 	// Fall back to no options and try again for Android to work.
 	navigator.geolocation.getCurrentPosition(get_coords, function(){
 		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
-		if(app) navigator.notification.alert(geoAlert, alertDismissed, 'MonTaxi', 'OK');
+		if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 		else alert(geoAlert);
 	});
 }			  
@@ -467,7 +467,7 @@ function update()
 			badgeNumber = badgeNumber1+badgeNumber2;
 			cordova.plugins.notification.local.schedule({
 				id: 1,
-				title: "Notification de course MonTaxi",
+				title: "Notification de course Mon Appli Taxi",
 				text: "Une course immediate est disponible !",
 				led: "E7B242",
 				badge: badgeNumber,
@@ -506,7 +506,7 @@ function checkCmd() {
 			else { var showing="Une course en commande est disponible !";}
 			cordova.plugins.notification.local.schedule({
 				id: 2,
-				title: "Notification de course MonTaxi",
+				title: "Notification de course Mon Appli Taxi",
 				text: showing,
 				led: "E7B242",
 				badge: badgeNumber,
@@ -603,8 +603,8 @@ function addCalendar(date, rdv, com, idcourse, cell)
 	var location = rdv;
 	var notes = 'Infos RDV : ' + com + ' - Identifiant de la course : ' + idcourse + ' - Tel client : ' + cell;
 	//var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
-	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER", alertDismissed, 'MonTaxi', 'OK'); };
-	var error = function(message) { navigator.notification.alert("Erreur: " + message, alertDismissed, 'MonTaxi Erreur', 'OK'); };
+	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER", alertDismissed, 'Mon Appli Taxi', 'OK'); };
+	var error = function(message) { navigator.notification.alert("Erreur: " + message, alertDismissed, 'Mon Appli Taxi Erreur', 'OK'); };
 	// create
 	window.plugins.calendar.createEvent(title,location,notes,startDate,endDate,success,error);
 }
@@ -630,7 +630,7 @@ function justify(when, rdv, comments, destadd, cell)//justify(\''.$when.'\', \''
 {
 	$.post("https://www.mytaxiserver.com/appclient/justify.php", { when: when, rdv: rdv, comments: comments, destadd: destadd, cell: cell, dep: dep, pass: pass, email: email }, function(data){
 		$.mobile.loading( "show" );
-		navigator.notification.alert(data, alertDismissed, 'MonTaxi', 'OK');
+		navigator.notification.alert(data, alertDismissed, 'Mon Appli Taxi', 'OK');
 		//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr', { showLocationBar: true });
 	}).always(function() { $.mobile.loading( "hide" ); });
 }
@@ -742,7 +742,7 @@ function checkCustomerConfirm(d, q)
 	$.post("https://www.mytaxiserver.com/appserver/open_status.php?dep=" + d + "&check=0" , q, function(data){ 
 		if (data != 0)
 		{
-			if(app) navigator.notification.alert(data, alertDismissed, 'MonTaxi', 'OK');
+			if(app) navigator.notification.alert(data, alertDismissed, 'Mon Appli Taxi', 'OK');
 			else alert(data);
 			$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
 			//return false;
@@ -769,7 +769,7 @@ function callIncident(irdv, ihail, iop, icell, istatus)
 			//return false;
 		}
 		else {
-			if(app) navigator.notification.alert("Erreur: L'incident n'a pas été déclaré.", alertDismissed, 'MonTaxi', 'OK');
+			if(app) navigator.notification.alert("Erreur: L'incident n'a pas été déclaré.", alertDismissed, 'Mon Appli Taxi', 'OK');
 			else alert("Erreur: L'incident n'a pas été déclaré.");
 		}
 	}, "json");
@@ -788,7 +788,7 @@ function getLocationOnce()
 		}
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.", alertDismissed, 'MonTaxi Erreur', 'OK');
+		navigator.notification.alert("Localisation impossible.", alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	}
 }
 function secureCall(position)
@@ -921,12 +921,12 @@ if ( app ) {
 			// Sadly this event is fired anytime the backgroundMode is deactivated including when the app is just pushed back from back to foreground !! Sad but true ;-)
 			cordova.plugins.notification.local.schedule({
 				id: 3,
-				title: "Alerte execution MonTaxi",
-				text: "Votre application MonTaxi va cesser de fonctionner en arrière plan.",
+				title: "Alerte execution Mon Appli Taxi",
+				text: "Votre application Mon Appli Taxi va cesser de fonctionner en arrière plan.",
 				led: "E7B242",
 				badge: 0
 			});
-			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'MonTaxi', 'Relancer');
+			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'Mon Appli Taxi', 'Relancer');
 		}
 		cordova.plugins.notification.local.on("click", function (notification, state) {
 			//alert(notification.id + " was clicked");
@@ -983,7 +983,7 @@ var scanSuccess = function (result) {
 		setTimeout(function() { window.open(searchUrl,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer'); }, 500);
 		//setTimeout(function() { window.plugins.childBrowser.showWebPage(searchUrl, { showLocationBar: true }); }, 500);
 	} else { navigator.notification.alert("Format du scan: " + result.format + 
-			  " NON SUPPORTE. Valeur du scan: " + result.text, alertDismissed, 'MonTaxi Erreur', 'OK');
+			  " NON SUPPORTE. Valeur du scan: " + result.text, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	}
 }
 function goScan ()
@@ -991,7 +991,7 @@ function goScan ()
 	scanner.scan(
 		scanSuccess, 
 		function (error) {
-			navigator.notification.alert("Scan Erreur: " + error, alertDismissed, 'MonTaxi Erreur', 'OK');
+			navigator.notification.alert("Scan Erreur: " + error, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 		}
 	);
 }
@@ -1013,12 +1013,12 @@ function contactPick()
 }
 // UDP init Success/Error Handlers...
 function UDPTransmitterInitializationSuccess(success) {
-	navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'MonTaxi', 'OK');
+	navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'Mon Appli Taxi', 'OK');
 	//getLocation();
 }
 
 function UDPTransmitterInitializationError(error) {
-	navigator.notification.alert('UDP INIT ERROR: '+error, alertDismissed, 'MonTaxi Erreur', 'OK');
+	navigator.notification.alert('UDP INIT ERROR: '+error, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 }
 function myTaxiDown()
 {
@@ -1029,7 +1029,7 @@ function myTaxiDown()
 function Share()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app monTaxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
+	var message = "Téléchargez l'app Mon Appli Taxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -1046,7 +1046,7 @@ function Share()
 function ShareArt()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app artisan monTaxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
+	var message = "Téléchargez l'app artisan Mon Appli Taxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -1063,7 +1063,7 @@ function ShareArt()
 function SharePro()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app monTaxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
+	var message = "Téléchargez l'app Mon Appli Taxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -1077,13 +1077,19 @@ function SharePro()
 	};
 	sms.send(number, message, intent, success, error);
 }
+function goToSection(jumpPage, jumpSection)
+{
+	//goToSection('#manage', '#shareCollaps')
+	$.mobile.pageContainer.pagecontainer("change", jumpPage, { transition: "slide"} );
+	$(jumpSection).collapsible( "expand" );
+}
 function contactShare()
 {
 	var successCallbackPick = function(result){
 		setTimeout(function(){
 			//navigator.notification.alert(result.name + " " + result.phoneNumber);
 			var number = result.phoneNumber;
-			var message = "Téléchargez l'app monTaxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
+			var message = "Téléchargez l'app Mon Appli Taxi en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi";
 			var intent = ""; //leave empty for sending sms using default intent
 			var success = function () {
 				//navigator.notification.alert('Message sent successfully');
@@ -1225,6 +1231,11 @@ $(document).on( 'pagecreate', function() {
 	$('#openSwitch').change(function(){
 		if ($(this).val()==1) {
 			openDataGo=true;
+			if(!openDataInit) { // Probably cab is not registered @le.taxi => open register form
+				openDataGo=false;
+				$(this).val(0).flipswitch( "refresh" );
+				goToSection('#manage', '#leTaxiCollaps');
+			}
 			Dispo_On();
 		}
 		else {
@@ -1398,7 +1409,7 @@ $(document).ready(function(){
 				$('#mod_collaps').collapsible( "collapse" );
 				$('#mod_collaps input[type=submit]').button('enable');
 				$("#returns").empty().append(display);
-				navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
+				navigator.notification.alert(alertMe, alertDismissed, 'Mon Appli Taxi', 'OK');
 			});
 		}
 	});
@@ -1476,7 +1487,7 @@ $(document).ready(function(){
 				$('#leTaxiCollaps').collapsible( "collapse" );
 				$('#leTaxiCollaps input[type=submit]').button('enable');
 				$("#returns").empty().append(display);
-				navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
+				navigator.notification.alert(alertMe, alertDismissed, 'Mon Appli Taxi', 'OK');
 			});
 		}
 	});
@@ -1498,7 +1509,7 @@ $(document).ready(function(){
 				alertMe = "la modification de vos identifiants n'à pas été faite, l'identifiant fourni ne figurant pas dans notre base de donnée.";
 			}
 			$("#returns").empty().append(display);
-			navigator.notification.alert(alertMe, alertDismissed, 'MonTaxi', 'OK');
+			navigator.notification.alert(alertMe, alertDismissed, 'Mon Appli Taxi', 'OK');
 		}, "json");
 	});
 });
