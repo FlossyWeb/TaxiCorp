@@ -1024,7 +1024,8 @@ function myTaxiDown()
 {
 	//var url = "http://www.taximedia.fr/stores.php?app=pro";
 	//window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
-	window.open('montaxipro://?from=driver', '_system');
+	window.open('montaxipro://', '_system');
+	//window.open('montaxipro://?from=driver', '_system');
 }
 function Share()
 {
