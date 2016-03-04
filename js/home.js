@@ -460,23 +460,23 @@ function update()
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").play();
 			//navigator.notification.beep(2);
-			alert($.sessionStorage.getItem('sound'));
-			if ($.sessionStorage.getItem('sound') != 'OFF') {
-				playAudio('sounds/ring.mp3');
-				navigator.notification.vibrate(2000);
-			}
-			badgeNumber1=1;
-			badgeNumber = badgeNumber1+badgeNumber2;
-			alert('badgeNumber: '+badgeNumber);
-			cordova.plugins.notification.local.schedule({
-				id: 1,
-				title: "Notification de course Mon Appli Taxi",
-				text: "Une course immediate est disponible !",
-				led: "E7B242",
-				badge: badgeNumber,
-				data: { data:data }
-			});
-			alert('Done !');
+			setTimeout( function () {
+				if ($.sessionStorage.getItem('sound') != 'OFF') {
+					playAudio('sounds/ring.mp3');
+					navigator.notification.vibrate(2000);
+				}
+				badgeNumber1=1;
+				badgeNumber = badgeNumber1+badgeNumber2;
+				alert('badgeNumber: '+badgeNumber);
+				cordova.plugins.notification.local.schedule({
+					id: 1,
+					title: "Notification de course Mon Appli Taxi",
+					text: "Une course immediate est disponible !",
+					led: "E7B242",
+					badge: badgeNumber,
+					data: { data:data }
+				});
+			}, 500);
 		}
 		else
 		{
