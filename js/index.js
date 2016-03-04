@@ -203,7 +203,7 @@ $(document).on( 'pagecreate', function() {
 			}
 			if (data.banned)
 			{
-				display = data.civil + ' ' + data.nom + ' ' + data.prenom + ' Votre compte &agrave; &eacute;t&eacute; d&eacute;sactiv&eacute;.<p style="color:red;"><b>ATTENTION ! Vous devez renvoyer le contrat de service d&ucirc;ment rempli ainsi que votre RIB, afin de r&eacute;activer votre compte.</b></p>';
+				display = data.civil + ' ' + data.nom + ' ' + data.prenom + ' Votre compte &agrave;  soit &eacute;t&eacute; d&eacute;sactiv&eacute;, soit jamais activ&eacute;.<p style="color:red;"><b>ATTENTION ! Vous devez enregistrer une CB valide, afin de (r&eacute;)activer votre compte.</b></p>';
 			}
 			$("#returns").empty().append(display);
 			$( "#answer" ).popup( "open", { positionTo: "window" } );

@@ -56,7 +56,7 @@ var previousLng = 0;
 //opendata vars
 var api_key = "307464f4-81ba-4d22-9b6c-23376ce4cf9e";
 var insee = $.localStorage.getItem('insee');
-var ads = $.localStorage.getItem('ads');
+var ads = $.localStorage.getItem('taxi');
 var cpro = $.localStorage.getItem('cpro');
 var imat = $.localStorage.getItem('imat');
 var taxi_id = $.localStorage.getItem('taxi_id');
@@ -116,6 +116,7 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 			//Dispo_On();
 		}, "json");
 	}
+	reloadVars();
 });
 function reloadVars() {
 	taxi = $.localStorage.getItem('taxi');
@@ -459,12 +460,14 @@ function update()
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").play();
 			//navigator.notification.beep(2);
+			alert($.sessionStorage.getItem('sound'));
 			if ($.sessionStorage.getItem('sound') != 'OFF') {
 				playAudio('sounds/ring.mp3');
 				navigator.notification.vibrate(2000);
 			}
 			badgeNumber1=1;
 			badgeNumber = badgeNumber1+badgeNumber2;
+			alert('badgeNumber: '+badgeNumber);
 			cordova.plugins.notification.local.schedule({
 				id: 1,
 				title: "Notification de course Mon Appli Taxi",
@@ -473,6 +476,7 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
+			alert('Done !');
 		}
 		else
 		{
@@ -1137,7 +1141,7 @@ function playOnSuccess() {
 }
 // onError Callback 
 function playOnError(error) {
-	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+	navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
 }
 function modPay() {
 	var cardNumber = $('#cbnum').val();
@@ -1474,7 +1478,7 @@ $(document).ready(function(){
 						$.localStorage.setItem('taxi_id', data.taxi_id);
 						openStatus = data.status;
 						openDataInit=true;
-						$("#openSwitch").val(1);
+						$("#openSwitch").val(1).flipswitch( "refresh" );
 						//dispoCheck();
 						//Dispo_On();
 					}, "json");
