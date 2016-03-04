@@ -462,20 +462,20 @@ function update()
 			//navigator.notification.beep(2);
 			badgeNumber1=1;
 			badgeNumber = badgeNumber1+badgeNumber2;
+			cordova.plugins.notification.local.schedule({
+				id: 1,
+				title: "Notification de course Mon Appli Taxi",
+				text: "Une course immediate est disponible !",
+				led: "E7B242",
+				badge: badgeNumber,
+				data: { data:data }
+			});
 			setTimeout( function () {
 				if ($.sessionStorage.getItem('sound') != 'OFF') {
 					playAudio('sounds/ring.mp3');
 					navigator.notification.vibrate(1000);
 				}
-				cordova.plugins.notification.local.schedule({
-					id: 1,
-					title: "Notification de course Mon Appli Taxi",
-					text: "Une course immediate est disponible !",
-					led: "E7B242",
-					badge: badgeNumber,
-					data: { data:data }
-				});
-			}, 500);
+			}, 100);
 		}
 		else
 		{
@@ -1140,7 +1140,7 @@ function playOnSuccess() {
 }
 // onError Callback 
 function playOnError(error) {
-	navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
 }
 function modPay() {
 	var cardNumber = $('#cbnum').val();
