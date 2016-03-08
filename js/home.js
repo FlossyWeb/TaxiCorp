@@ -470,6 +470,12 @@ function update()
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").play();
 			//navigator.notification.beep(2);
+			setTimeout( function () {
+				if ($.sessionStorage.getItem('sound') != 'OFF') {
+					playAudio('sounds/ring.mp3');
+					navigator.notification.vibrate(1000);
+				}
+			}, 100);
 			badgeNumber1=1;
 			badgeNumber = badgeNumber1+badgeNumber2;
 			cordova.plugins.notification.local.schedule({
@@ -480,10 +486,6 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			if ($.sessionStorage.getItem('sound') != 'OFF') {
-				playAudio('sounds/ring.mp3');
-				navigator.notification.vibrate(1000);
-			}
 		}
 		else
 		{
