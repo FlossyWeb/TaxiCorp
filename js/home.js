@@ -480,19 +480,9 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			if (navigator.userAgent.toLowerCase().match(/android/)) {
-				setTimeout( function () {
-					if ($.sessionStorage.getItem('sound') != 'OFF') {
-						playAudio('sounds/ring.mp3');
-						navigator.notification.vibrate(1000);
-					}
-				}, 100);
-			}
-			else {
-				if ($.sessionStorage.getItem('sound') != 'OFF') {
-					playAudio('sounds/ring.mp3');
-					navigator.notification.vibrate(1000);
-				}
+			if ($.sessionStorage.getItem('sound') != 'OFF') {
+				playAudio('sounds/ring.mp3');
+				navigator.notification.vibrate(1000);
 			}
 		}
 		else
