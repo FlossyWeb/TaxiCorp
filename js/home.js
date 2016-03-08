@@ -767,7 +767,7 @@ function checkCustomerConfirm(d, q)
 }
 function callIncident(irdv, ihail, iop, icell, istatus)
 { // callIncident(\''.$rdv.'\', \''.$hail_id.'\', \''.$operator.'\', \''.$cell.'\', \''.$status.'\')
-	$.post("https://www.mytaxiserver.com/appserver/open_incident.php" , { rdvpoint: irdv, hail_id: ihail, operator: iop, cell: icell, status: istatus, db: 'true'}, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/open_incident.php" , { rdvpoint: irdv, hail_id: ihail, operator: iop, cell: icell, status: istatus, db: 'true', dep: dep}, function(data){ 
 		if (data.ok)
 		{
 			var number = icell;
@@ -1156,7 +1156,7 @@ function playAudio(src) {
 		my_media = new Media(source, playOnSuccess, playOnError);
 	}
 	// Play audio
-	my_media.play({ numberOfLoops: 1 });
+	my_media.play();
 } 
 // Stop audio
 function stopAudio() {
