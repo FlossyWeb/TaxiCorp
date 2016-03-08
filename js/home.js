@@ -480,12 +480,10 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			setTimeout( function () {
-				if ($.sessionStorage.getItem('sound') != 'OFF') {
-					playAudio('sounds/ring.mp3');
-					navigator.notification.vibrate(1000);
-				}
-			}, 100);
+			if ($.sessionStorage.getItem('sound') != 'OFF') {
+				playAudio('sounds/ring.mp3');
+				navigator.notification.vibrate(1000);
+			}
 		}
 		else
 		{
@@ -1147,18 +1145,12 @@ function contactShare()
 	}
 	window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 }
-function getPhoneGapPath() {
-    return 'file://' + path;
-};
 function playAudio(src) {
 	if (my_media == null) {
 		// Create Media object from src
-		//var path = window.location.pathname;
-		//path = path.substring(0, path.lastIndexOf('/') + 1);
-		//var source = path + src;
-		var source = '';
-		if(device.platform.toLowerCase() === "android") source = "/android_asset/www/" + src;
-		else source = src;
+		var path = window.location.pathname;
+		path = path.substring(0, path.lastIndexOf('/') + 1);
+		var source = path + src;
 		my_media = new Media(source, playOnSuccess, playOnError);
 	}
 	// Play audio
