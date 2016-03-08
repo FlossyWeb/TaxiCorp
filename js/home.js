@@ -1154,6 +1154,7 @@ function playAudio(src) {
 		path = path.substring(0, path.lastIndexOf('/') + 1);
 		var source = path + src;
 		my_media = new Media(source, playOnSuccess, playOnError);
+		my_media.setVolume(1.0);
 	}
 	// Play audio
 	my_media.play();
