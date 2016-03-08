@@ -99,7 +99,9 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 	}
 	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	else { // Not in le.taxi so we pop...
-		$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+		setTimeout(function(){
+			$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+		}, 2000);
 	}
 	if (data.badid)
 	{
@@ -478,12 +480,20 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			setTimeout( function () {
+			if (navigator.userAgent.toLowerCase().match(/android/)) {
+				setTimeout( function () {
+					if ($.sessionStorage.getItem('sound') != 'OFF') {
+						playAudio('sounds/ring.mp3');
+						navigator.notification.vibrate(1000);
+					}
+				}, 100);
+			}
+			else {
 				if ($.sessionStorage.getItem('sound') != 'OFF') {
 					playAudio('sounds/ring.mp3');
 					navigator.notification.vibrate(1000);
 				}
-			}, 100);
+			}
 		}
 		else
 		{
