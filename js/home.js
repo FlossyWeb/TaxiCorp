@@ -1274,7 +1274,11 @@ $(document).on( 'pagecreate', function() {
 			$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: true, getout: true }); 
 		}
 	});
-	if(!openDataInit) $( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+	if(!openDataInit) {
+		setTimeout(function(){
+			$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+		}, 2000);
+	}
 });
 $(document).ready(function(){
 	$.validator.addMethod(
