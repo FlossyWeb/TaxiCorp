@@ -87,7 +87,7 @@
 				<div data-role="collapsible-set" data-theme="c" data-content-theme="c">
 					<div data-role="collapsible" data-collapsed="true" id="reg_collaps">
 						<h1>
-							 Inscrivez-Vous 
+							Inscrivez-Vous 
 						</h1>
 						<fieldset><legend></legend>
 						<div class="error"><span></span></div>
@@ -185,6 +185,7 @@
 						</form>
 						<form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCbStep">
 							<h3 style="color:#333;">Infos CB : </h3>
+                            <a href="#" onClick="bankInfo()" class=""><b>Plus d&rsquo;informations sur le syst&egrave;me de paiement</b></a>
 							<select name="brand" id="brand">
 								<option selected value="CB">Type de Carte</option>
 								<option value="CB">CB</option>
@@ -229,7 +230,7 @@
 							<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
 								<legend>
 									Je certifie l&rsquo;exactitude des donn&eacute;es fournies et j&rsquo;accepte les 
-									<a href="docs/CGV.pdf" target="_blank">CGV</a> : 
+									<a href="http://taximedia.fr/client/docs/CGV.pdf" target="_blank">CGV</a> : 
 								</legend>
 								<input id="checkboxcgv" name="cgv" type="checkbox">
 								<label for="checkboxcgv">
@@ -248,7 +249,7 @@
 					</div>
 					<div data-role="collapsible" data-collapsed="false">
 						<h1>
-							 Identifiez-Vous 
+							Identifiez-Vous 
 						</h1>
 						<fieldset><legend></legend>
 						<form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
@@ -261,7 +262,7 @@
 					</div>
 					<div data-role="collapsible">
 						<h1>
-							 Mot de passe oubli&eacute;
+							Mot de passe oubli&eacute;
 						</h1>
 						<fieldset><legend></legend>
 						<form  action="/" method="post" name="forget" id="forget" data-ajax="false" data-transition="slidefade">
@@ -273,6 +274,20 @@
 						</fieldset>
 						<p><b>
 							Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
+						</b></p>
+					</div>
+					<div data-role="collapsible">
+						<h1>
+							Un probl&egrave;me ?
+						</h1>
+						<p><b>
+							Vous n&rsquo;arrivez pas a vous enregistrer, on vous signale un probl&egrav;me technique, vous pouvez essayer de:
+							<button onClick="openSomeUrl('http://taximedia.fr/client/help.html')" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">Consulter l&rsquo;aide</button>
+							Ou 
+							<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">r&eacute;initialiser l&rsquo;app</button>
+							<br>
+							Si il vous est impossible de vous enregistrer, que vous n&rsquo;arrivez pas &agrave; retrouver votre mot de passe (onglet ci-dessus ou dans vos mails) ou vous n&rsquo;arrivez simplement pas &agrave; acc&egrave;der au service, contactez-nous au:
+							<a href="tel:0491034263" class="ui-btn ui-btn-icon-left ui-icon-phone ui-shadow-icon ui-corner-all">04 91 03 42 63</a>
 						</b></p>
 					</div>
 				</div>    

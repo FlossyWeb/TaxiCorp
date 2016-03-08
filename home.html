@@ -71,9 +71,9 @@
               <li><a href="#history" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-bars"><b>Historique</b></a></li>
               <li><a href="#planning" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-calendar"><b>Planning</b></a></li>
               <li><a href="#manage" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-user"><b>Mon compte</b></a></li>
-              <li><a href="#directions_map" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-location"><b>Carte GPS</b></a></li>
-              <!-- <li><a href="#" onClick="help()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-bullets"><b>Aide utilisateur</b></a></li> -->
-              <li><a href="#" onClick="taximedia()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-eye"><b>TaxiMedia.fr</b></a></li>
+              <!-- <li><a href="#directions_map" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-location"><b>Carte GPS</b></a></li> -->
+              <li><a href="#" onClick="help()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-search"><b>Aide utilisateur</b></a></li>
+              <!-- <li><a href="#" onClick="taximedia()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-eye"><b>TaxiMedia.fr</b></a></li> -->
               <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-info"><b>Infos Mon Appli Taxi</b></a></li>
               <li><a href="montaxipro://?from=driver" onClick="" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-action"><b>Envoyer une course</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
@@ -200,6 +200,19 @@
                     </div>
                     <div class="ui-content" role="main">
                         <div id="ePopResults"></div>
+                    </div>
+                </div>
+                <div data-role="popup" data-theme="c" id="leTaxiPopFirst" data-dismissible="true" data-overlay-theme="b">
+					<a href="#home" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+                    <div data-theme="c" data-role="header">
+                        <h1>
+                            Le.Taxi
+                        </h1>
+                    </div>
+                    <div class="ui-content" role="main">
+                        <p><b>Enr&ocirc;lez-vous d&egrave;s maintenant dans <a href="#" onclick="openSomeUrl('http://le.taxi/')">l'opendata le.taxi</a>.</b></p>
+						<button onClick="goToSection('#manage', '#leTaxiCollaps')" class="ui-btn ui-btn-icon-left ui-icon-check ui-shadow-icon ui-corner-all">S&rsquo;enregistrer</button>
+						<p>Vous pouvez le faire &agrave tout moment dans "mon compte"->"infos le.taxi" ou en activant le bouton le.taxi du menu lat&eacute;ral.</p>
                     </div>
                 </div>
                 <a href="#homepanel" id="homepanel_poper"></a>
@@ -745,8 +758,8 @@
                             <h1>
                                 CGV 
                             </h1>
-                            <a href="#" onClick="cgv()" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-info" data-transition="slide"><b>Consulter les CGV</b></a>
-                            <a href="http://taximedia.fr/client/docs/CGV.pdf" target="_blank" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-action" data-transition="slide"><b>T&eacute;l&eacute;charger les CGV</b></a>
+                            <a href="#" onClick="cgv()" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-info"><b>Consulter les CGV</b></a>
+                            <a href="http://taximedia.fr/client/docs/CGV.pdf" target="_blank" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-action"><b>T&eacute;l&eacute;charger les CGV</b></a>
                         </div>
                         <div data-role="collapsible" data-collapsed="true" id="shareCollaps">
                             <h1>

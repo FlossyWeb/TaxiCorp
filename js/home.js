@@ -355,8 +355,13 @@ $('#manage').live('pagecreate', function() {
 	});
 });
 function dc() {
+	$.mobile.loading( "show" );
+	$.localStorage.clear();
+	$.sessionStorage.clear();
 	$.localStorage.setItem('pass', 0);
-	document.location.href="index.html";
+	setTimeout(function(){
+		document.location.href="index.html";
+	}, 1000);
 }
 function getLocation()
 {
@@ -962,6 +967,29 @@ function onPause() {
 function backFromBackGround() {
 	document.location.href='home.html';
 }
+$.urlParam = function(name, url){
+	// Get parameters from an URL
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
+	//For current URL
+	//var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	if (results==null){
+	   return null;
+	}
+	else{
+	   return results[1] || 0;
+	}
+}
+// Get params from url when called from url the scheme...
+function handleOpenURL(url) {
+	setTimeout(function() {
+		//alert("received url: " + url);
+		toApp = $.urlParam('to', url); // PageToGo
+		if(toApp=='history') {
+			//alert(toApp);
+			$.mobile.pageContainer.pagecontainer("change", "#"+toApp, { transition: "slide"} );
+		}
+	}, 600);
+}
 var scanSuccess = function (result) {
 	var textFormats = "QR_CODE DATA_MATRIX";
 	var productFormats = "UPC_E UPC_A EAN_8 EAN_13";
@@ -1239,13 +1267,14 @@ $(document).on( 'pagecreate', function() {
 				$(this).val(0).flipswitch( "refresh" );
 				goToSection('#manage', '#leTaxiCollaps');
 			}
-			Dispo_On();
+			else Dispo_On();
 		}
 		else {
 			openDataGo=false;
 			$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: true, getout: true }); 
 		}
 	});
+	if(!openDataInit) $( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
 });
 $(document).ready(function(){
 	$.validator.addMethod(
@@ -1458,6 +1487,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('constructor', data.constructor);
 				$.localStorage.setItem('model', data.model);
 				$.localStorage.setItem('birthdate', data.birthdate);
+				$.localStorage.setItem('ads', taxi);
 			}, "json").done(function(data) { 
 				reloadVars();
 				$('#insee').val(data.insee);
@@ -1472,7 +1502,7 @@ $(document).ready(function(){
 					display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
 					alertMe = 'la modification de vos informations personnelles à bien été prise en compte, merci.';
 					// In case Licence plate or any key has changed we have to re-enroll because taxi_id may have changed then !
-					$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: ads, cpro: cpro, imat: imat}, function(data) {
+					$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: taxi, cpro: cpro, imat: imat}, function(data) {
 						taxi_id = data.taxi_id;
 						$.localStorage.setItem('taxi_id', data.taxi_id);
 						openStatus = data.status;

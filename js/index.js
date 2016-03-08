@@ -165,12 +165,63 @@ if ( app ) {
 		StatusBar.backgroundColorByHexString("#E7B242");
 	}
 }
+function bankInfo()
+{
+	//window.plugins.childBrowser.showWebPage('https://goo.gl/CbeKmR', { showLocationBar: true });
+	window.open('https://goo.gl/CbeKmR','_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
+}
+function openSomeUrl(url)
+{
+	//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr/redir.php', { showLocationBar: true });
+	window.open(url,'_blank','location=false,enableViewportScale=yes,closebuttoncaption=Fermer');
+}
+function resetApp()
+{
+	$.mobile.loading( "show" );
+	$.localStorage.clear();
+	$.sessionStorage.clear();
+	setTimeout(function(){
+		document.location.href="index.html";
+	}, 1000);
+}
 
 $(document).on( 'pagecreate', function() {
 
 	active();
 	footer();
 
+	// First thing we hide unnecessary forms
+	var step = $.localStorage.getItem('regStep');
+	var valtel = $.localStorage.getItem('tel');
+	var valdep = $.localStorage.getItem('dep');
+	if (step == '1') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeIn();
+		$('#RegCbStep').fadeOut();
+		$('#telcab').val(valtel);
+		$('#telcb').val(valtel);
+		$('#depcab').val(valdep);
+		$('#depcb').val(valdep);
+	}
+	else if (step == '2') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeIn();
+		$('#telcb').val(valtel);
+		$('#depcb').val(valdep);
+	}
+	else if (step == 'DONE') {
+		$('#RegNameStep').fadeOut();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeOut();
+		$('#done').append('<p><b>Vous &ecirc;tes d&eacute;j&agrave; enregistr&eacute;, vous pouvez vous connecter ci-dessous.</b></p>');
+	}
+	else {
+		//$('#RegNameStep').fadeIn();
+		$('#RegCabStep').fadeOut();
+		$('#RegCbStep').fadeOut();
+	}
+	
 	$("#login").submit(function(event) {
 		// stop form from submitting normally 
 		event.preventDefault();
@@ -220,38 +271,6 @@ $(document).on( 'pagecreate', function() {
 
 $(document).ready(function(){
 
-	// First thing we hide unnecessary forms
-	var step = $.localStorage.getItem('regStep');
-	var valtel = $.localStorage.getItem('tel');
-	var valdep = $.localStorage.getItem('dep');
-	if (step == '1') {
-		$('#RegNameStep').fadeOut();
-		$('#RegCabStep').fadeIn();
-		$('#RegCbStep').fadeOut();
-		$('#telcab').val(valtel);
-		$('#telcb').val(valtel);
-		$('#depcab').val(valdep);
-		$('#depcb').val(valdep);
-	}
-	else if (step == '2') {
-		$('#RegNameStep').fadeOut();
-		$('#RegCabStep').fadeOut();
-		$('#RegCbStep').fadeIn();
-		$('#telcb').val(valtel);
-		$('#depcb').val(valdep);
-	}
-	else if (step == 'DONE') {
-		$('#RegNameStep').fadeOut();
-		$('#RegCabStep').fadeOut();
-		$('#RegCbStep').fadeOut();
-		$('#done').append('<p><b>Vous &ecirc;tes d&eacute;j&agrave; enregistr&eacute;, vous pouvez vous connecter ci-dessous.</b></p>');
-	}
-	else {
-		//$('#RegNameStep').fadeIn();
-		$('#RegCabStep').fadeOut();
-		$('#RegCbStep').fadeOut();
-	}
-	
 	$.validator.addMethod(
 		"regex",
 		function(value, element, regexp) {
@@ -440,8 +459,8 @@ $(document).ready(function(){
 				if (data.subscribed)
 				{
 					$.localStorage.setItem('regStep', '2');
-					$('#telcb').val(data.tel);
-					$('#depcb').val(data.dep);
+					//$('#telcb').val(data.tel);
+					//$('#depcb').val(data.dep);
 					$('#RegCabStep').fadeOut();
 					$('#RegCbStep').fadeIn();
 					display = '<p style="color:green;"><b>Merci, vous &ecirc;tes pr&ecirc;t &agrave; passer &agrave; l&rsquo;&eacute;tape finale.</b></p>';
