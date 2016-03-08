@@ -1153,10 +1153,12 @@ function getPhoneGapPath() {
 function playAudio(src) {
 	if (my_media == null) {
 		// Create Media object from src
-		var path = window.location.pathname;
-		path = path.substring(0, path.lastIndexOf('/') + 1);
-		var source = path + src;
-		alert(source);
+		//var path = window.location.pathname;
+		//path = path.substring(0, path.lastIndexOf('/') + 1);
+		//var source = path + src;
+		var source '';
+		if(device.platform.toLowerCase() === "android") source = "/android_asset/www/" + src;
+		else source = src;
 		my_media = new Media(source, playOnSuccess, playOnError);
 	}
 	// Play audio
@@ -1171,11 +1173,10 @@ function stopAudio() {
 // onSuccess Callback
 function playOnSuccess() {
 	//console.log("playAudio():Audio Success");
-	alert('success');
 }
 // onError Callback 
 function playOnError(error) {
-	navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
 }
 function modPay() {
 	var cardNumber = $('#cbnum').val();
