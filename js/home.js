@@ -480,10 +480,12 @@ function update()
 				badge: badgeNumber,
 				data: { data:data }
 			});
-			if ($.sessionStorage.getItem('sound') != 'OFF') {
-				playAudio('sounds/ring.mp3');
-				navigator.notification.vibrate(1000);
-			}
+			setTimeout( function () {
+				if ($.sessionStorage.getItem('sound') != 'OFF') {
+					playAudio('sounds/ring.mp3');
+					navigator.notification.vibrate(1000);
+				}
+			}, 100);
 		}
 		else
 		{
@@ -1154,6 +1156,7 @@ function playAudio(src) {
 		var path = window.location.pathname;
 		path = path.substring(0, path.lastIndexOf('/') + 1);
 		var source = path + src;
+		alert(source);
 		my_media = new Media(source, playOnSuccess, playOnError);
 	}
 	// Play audio
@@ -1168,10 +1171,11 @@ function stopAudio() {
 // onSuccess Callback
 function playOnSuccess() {
 	//console.log("playAudio():Audio Success");
+	alert('success');
 }
 // onError Callback 
 function playOnError(error) {
-	//navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+	navigator.notification.alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
 }
 function modPay() {
 	var cardNumber = $('#cbnum').val();
