@@ -1156,7 +1156,7 @@ function playAudio(src) {
 		my_media = new Media(source, playOnSuccess, playOnError);
 	}
 	// Play audio
-	my_media.play();
+	my_media.play({ numberOfLoops: 1 });
 } 
 // Stop audio
 function stopAudio() {
