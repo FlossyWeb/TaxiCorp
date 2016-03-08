@@ -98,6 +98,9 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 		$.localStorage.setItem('accessHash', data.accessHash);
 	}
 	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
+	else { // Not in le.taxi so we pop...
+		$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+	}
 	if (data.badid)
 	{
 		$.localStorage.setItem('pass', 0);
@@ -1274,11 +1277,6 @@ $(document).on( 'pagecreate', function() {
 			$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: true, getout: true }); 
 		}
 	});
-	if(!openDataInit) {
-		setTimeout(function(){
-			$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
-		}, 2000);
-	}
 });
 $(document).ready(function(){
 	$.validator.addMethod(
