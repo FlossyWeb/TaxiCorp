@@ -73,7 +73,7 @@
         <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
         <style type="text/css">
 			label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
-			div.error span { color: red;}
+			div.error span, em { color: red;}
         </style>
         <script type="text/javascript" src="js/jquery.validate.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
@@ -104,7 +104,8 @@
 							<input type="tel" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
 							<input type="email" name="email" id="email" placeholder="Adresse email" maxlength="60" size="20" class="required email"><em></em>
 							<!-- <input type="email" name="confirmail" placeholder="Confirmez email SVP" maxlength="60" size="20" class="required email"><em></em> -->
-							<input type="tel" name="station" placeholder="Code Postal Commune Rattachement" maxlength="5" size="20" class="required"><em></em>
+							<input type="tel" name="station" placeholder="Code Postal Commune Rattachement" maxlength="5" size="20" class="required">
+							<em><b>Attention il s'agit du Code Postal de la Commune de stationnement de votre ADS, pas de votre habitation.</b></em>
 							<input type="submit" name="submit1" id="subNameStep" value="Continuer">
 						</form>
 						<form method="POST" action="/" data-transition="slidefade" data-ajax="false" id="RegCabStep">
