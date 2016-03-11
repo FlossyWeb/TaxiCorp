@@ -652,6 +652,8 @@ function delayCall(query_string)
 {
 	Sound_Off();
 	$.sessionStorage.setItem('query_string', query_string);
+	var delayAddr = $.urlParam('rdv', 'www.my.url?'+query_string); // PageToGo
+	$("#delayAddr").val("<p><b>Lieu de prise en charge: "+delayAddr+"</b></p>");
 	$.mobile.pageContainer.pagecontainer("change", "#delayPop", { transition: "slide"} );
 	cordova.plugins.notification.local.clear(1, function() {
 		//alert("done");
