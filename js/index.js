@@ -591,17 +591,17 @@ $(document).ready(function(){
 					}
 					else if (data.sniffed == 'KO')
 					{
-						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.<br>'.data.showError.'</b></p>';
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.<br>'+data.showError+'</b></p>';
 					}
 					/*
 					else if (!data.signed)
 					{
-						display += '<p style="color:red;"><b>'.data.showError.'<br>Si cette erreur se r&eacute;p&egrave;te et que les informations transmises sont justes, veuillez R&eacute;initialiser SVP.</b></p>';
+						display += '<p style="color:red;"><b>'+data.showError+'<br>Si cette erreur se r&eacute;p&egrave;te et que les informations transmises sont justes, veuillez R&eacute;initialiser SVP.</b></p>';
 						display += '<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">R&eacute;initialiser</button>';
 					}
 					*/
 					else {
-						display += '<p style="color:red;"><b>'.data.showError.'<br>Si cette erreur se r&eacute;p&egrave;te veuillez R&eacute;initialiser SVP.</b></p>';
+						display += '<p style="color:red;"><b>'+data.showError+'<br>Si cette erreur se r&eacute;p&egrave;te veuillez R&eacute;initialiser SVP.</b></p>';
 						display += '<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">R&eacute;initialiser</button>';
 					}
 				}
