@@ -25,8 +25,8 @@
 	<gap:plugin name="cordova-plugin-camera" source="npm" />
 	<gap:plugin name="cordova-plugin-contacts" source="npm" />
 	<gap:plugin name="cordova-plugin-file" source="npm" />
-	<gap:plugin name="cordova-plugin-media" source="npm" />
-	<!-- <plugin spec="https://github.com/gaelenh/cordova-plugin-media.git#ios-no-audio-playback" /> -->
+	<!-- <gap:plugin name="cordova-plugin-media" source="npm" /> -->
+	<plugin spec="https://github.com/apache/cordova-plugin-media" />
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-dialogs" source="npm" />
 	<gap:plugin name="cordova-plugin-splashscreen" source="npm" />
