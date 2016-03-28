@@ -582,18 +582,27 @@ $(document).ready(function(){
 					}, "json");
 				}
 				else {
-					display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
+					//display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
+					display = '<p style="color:red;"><b>Probl&egrave;me rencontr&eacute;, soit vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription, soit il y a un souci technique. Nous vous prions de prendre connaissance des informations suivantes:</b></p>';
 					if (data.telexist)
 					{
-						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
+						display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni n&rsquo;est associ&eacute; &agrave; aucun compte, Veuillez R&eacute;initialiser SVP.</b></p>';
+						display += '<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">R&eacute;initialiser</button>';
 					}
 					else if (data.sniffed == 'KO')
 					{
-						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
+						display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.<br>'.data.showError.'</b></p>';
 					}
+					/*
 					else if (!data.signed)
 					{
-						display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
+						display += '<p style="color:red;"><b>'.data.showError.'<br>Si cette erreur se r&eacute;p&egrave;te et que les informations transmises sont justes, veuillez R&eacute;initialiser SVP.</b></p>';
+						display += '<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">R&eacute;initialiser</button>';
+					}
+					*/
+					else {
+						display += '<p style="color:red;"><b>'.data.showError.'<br>Si cette erreur se r&eacute;p&egrave;te veuillez R&eacute;initialiser SVP.</b></p>';
+						display += '<button onClick="resetApp()" class="ui-btn ui-btn-icon-left ui-icon-alert ui-shadow-icon ui-corner-all">R&eacute;initialiser</button>';
 					}
 				}
 				$("#returns").empty().append(display);

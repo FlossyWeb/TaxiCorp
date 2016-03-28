@@ -46,6 +46,7 @@ var badgeNumber2 = 0;
 
 // Detect wether it is an App or WebApp
 var app;
+var appVersion = "1.6.2";
 		
 // getLocation & secureCall
 var lat = 0;
@@ -75,7 +76,7 @@ if($.localStorage.getItem('pass')!='true')
 {
 	document.location.href='index.html';
 }
-$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep}, function(data) {
+$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep, version: appVersion}, function(data) {
 	if(data.done) {
 		//"insee"=>$insee, "ads"=>$ads, "cpro"=>$cpro, "imat"=>$imat, "constructor"=>$constructor, "model"=>$model, "type_"=>$type_, "birthdate"=>$birthdate
 		insee = data.insee;
@@ -433,7 +434,7 @@ function get_coords(position)
 		udptransmit.sendMessage(payload);
 	}
 	if((lat!=previousLat) && (lng!=previousLng)) {
-		$.post("https://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { taxi: taxi, tel: tel, email: email, pass: pass, dep: dep }, function(data) {
+		$.post("http://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { tel: tel, pass: pass, dep: dep }, function(data) {
 			//alert('Sent:'+lat+' , '+lng);
 		});
 	}
@@ -653,7 +654,7 @@ function delayCall(query_string)
 	Sound_Off();
 	$.sessionStorage.setItem('query_string', query_string);
 	var delayAddr = $.urlParam('rdv', 'www.my.url?'+query_string); // PageToGo
-	$("#delayAddr").val("<p><b>Lieu de prise en charge: "+delayAddr+"</b></p>");
+	$("#delayAddr").empty().append("<p><b>Lieu de prise en charge: "+delayAddr+"</b></p>");
 	$.mobile.pageContainer.pagecontainer("change", "#delayPop", { transition: "slide"} );
 	cordova.plugins.notification.local.clear(1, function() {
 		//alert("done");
@@ -1084,7 +1085,7 @@ function Share()
 function ShareArt()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app artisan Mon Appli Taxi Corp en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
+	var message = "Téléchargez l'app Mon Appli Taxi Chauffeur en suivant ce lien : http://www.taximedia.fr/stores.php?app=dcvp";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
@@ -1101,7 +1102,7 @@ function ShareArt()
 function SharePro()
 {
 	var number = $('#telShare').val();
-	var message = "Téléchargez l'app Mon Appli Taxi 34 Pro sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
+	var message = "Téléchargez l'app Mon Appli Taxi Business sur les sores en suivant ce lien : http://www.taximedia.fr/stores.php?app=pro  ou rendez-vous sur le WebService en suivant ce lien :  http://www.taximedia.fr/pro/";
 	var intent = ""; //leave empty for sending sms using default intent
 	var success = function () {
 		//navigator.notification.alert('Message sent successfully');
