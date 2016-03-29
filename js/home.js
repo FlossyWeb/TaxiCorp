@@ -1251,6 +1251,10 @@ $('#directions_map').live("swiperight", function() {
 });		
 $(document).on( 'pagecreate', function() {
 	$( "body>[data-role='panel']" ).panel().enhanceWithin();
+	$('.expends').click(function () {
+		$(this).next('div').slideToggle('slow');
+		//$.mobile.silentScroll($(this).next('div').offset().top);
+	});
 	if(!app) {
 		getLocation();
 		//setTimeout('update()', 2000);
