@@ -65,6 +65,7 @@ var constructor = $.localStorage.getItem('constructor');
 var model = $.localStorage.getItem('model');
 var type_ = $.localStorage.getItem('type_');
 var birthdate = $.localStorage.getItem('birthdate');
+var tpmr = $.localStorage.getItem('tpmr');
 var openStatus;
 var openDataInit=false;
 var openDataGo=false;
@@ -156,6 +157,7 @@ function reloadVars() {
 	model = $.localStorage.getItem('model');
 	type_ = $.localStorage.getItem('type_');
 	birthdate = $.localStorage.getItem('birthdate');
+	tpmr = $.localStorage.getItem('tpmr');
 }
 		
 ////////////////////////////////////////////////////////////
@@ -296,7 +298,7 @@ $('#manage').live('pagecreate', function() {
 	var dec_prenom = $('#prenom').html(prenom).text();
 	var dec_station = $('#station').html(station).text();
 	$('#login').val(tel);
-	$('#civil').val(civil);
+	$('#civil').val(civil).selectmenu( "refresh" );
 	$('#nom').val(dec_nom);
 	$('#prenom').val(dec_prenom);
 	$('#taxi').val(taxi);
@@ -306,12 +308,12 @@ $('#manage').live('pagecreate', function() {
 	$('#cpro').val(cpro);
 	$('#station').val(dec_station);
 	$('#log').val(tel);
-	if(type!=null) $('#type').val(type);
+	if(type!=null) $('#type').val(type).selectmenu( "refresh" );
 	if(cb!=null) $('#cb').val(cb).flipswitch( "refresh" );
 	if(medic!=null) $('#medic').val(medic).flipswitch( "refresh" );
 	if(animal!=null) $('#animal').val(animal).flipswitch( "refresh" );
 	if(passengers!=null) $('#passengers').val(passengers).slider("refresh");;
-	if(color!=null) $('#color').val(color);
+	if(color!=null) $('#color').val(color).selectmenu( "refresh" );
 	if(lang!=null) { //array("en", "ge", "sp", "it", "ru", "cn", "ab");
 		var langTab= lang.split(", ");
 		for (i = 0; i < langTab.length; i++) {
@@ -345,11 +347,12 @@ $('#manage').live('pagecreate', function() {
 		$("#inseeBox").empty().append('<label for="insee">Commune de stationnement: </label>'+data).trigger('create');
 		//$("#inseeBox").trigger('create');
 	});
-	$('#insee').val(insee);
+	$('#insee').val(insee).selectmenu( "refresh" );
 	$('#imat').val(imat);
 	$('#constructor').val(constructor);
 	$('#model').val(model);
 	$('#birthdate').val(birthdate);
+	$('#tpmr').val(tpmr).selectmenu( "refresh" );
 	$('#whoLeTaxi').val(tel);
 	// Billing infos
 	$.post("https://www.mytaxiserver.com/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
@@ -647,6 +650,13 @@ function justify(when, rdv, comments, destadd, cell)//justify(\''.$when.'\', \''
 		navigator.notification.alert(data, alertDismissed, 'Mon Appli Taxi', 'OK');
 		//window.plugins.childBrowser.showWebPage('http://www.taximedia.fr', { showLocationBar: true });
 	}).always(function() { $.mobile.loading( "hide" ); });
+}
+function reporting_customer(rdv_rc, idcourse_rc, hail_id_rc, operator_rc, cell_rc)
+{
+	var comRate = $("#leComRate").val();
+	$.post("https://www.mytaxiserver.com/appclient/open_reporting.php", { rdv: rdv_rc, idcourse: idcourse_rc, hail_id: hail_id_rc, operator: operator_rc, cell: cell_rc, dep: dep, tel: tel, mngid: mngid, comments: comRate}, function(data){ 
+		navigator.notification.alert('Votre remarque &eacute;t&eacute; prise en compte, Merci.', alertDismissed, 'Mon Appli Taxi', 'OK');
+	});
 }
 // diaryCall for direct job that open #delay
 function delayCall(query_string)
@@ -1492,6 +1502,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('model', data.model);
 				$.localStorage.setItem('birthdate', data.birthdate);
 				$.localStorage.setItem('ads', taxi);
+				$.localStorage.setItem('tpmr', tpmr);
 			}, "json").done(function(data) { 
 				reloadVars();
 				$('#insee').val(data.insee);
@@ -1499,6 +1510,7 @@ $(document).ready(function(){
 				$('#constructor').val(data.constructor);
 				$('#model').val(data.model);
 				$('#birthdate').val(data.birthdate);
+				$('#tpmr').val(data.tpmr);
 				var display = '';
 				var alertMe = '';
 				if (data.ok)

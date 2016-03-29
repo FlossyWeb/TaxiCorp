@@ -28,13 +28,23 @@ function active()
 		$.localStorage.setItem('station', data.station);
 		$.localStorage.setItem('dep', data.dep);
 		$.localStorage.setItem('group', data.group);
+		$.localStorage.setItem('mngid', data.mngid);
+		$.localStorage.setItem('type', data.type);
+		$.localStorage.setItem('cb', data.cb);
+		$.localStorage.setItem('medic', data.medic);
+		$.localStorage.setItem('animal', data.animal);
+		$.localStorage.setItem('lang', data.lang);
+		$.localStorage.setItem('passengers', data.passengers);
+		$.localStorage.setItem('color', data.color);
 	}, "json");
 	posting.done(function( data ) {
 		if($.localStorage.getItem('pass')=='true' && data.active)
 		{
 			//navigator.splashscreen.hide();
 			$.mobile.loading( "show" );
-			document.location.href='home.html';
+			setTimeout(function(){
+				document.location.href='home.html';
+			}, 1000);
 		}
 		else if (!data.active) {
 			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;</b></p><a href="mailto:commercial@taximedia.fr"style="width:32%;display:inline-block;"><img src="visuels/Contact_flat.png" width="90%"/></a>';

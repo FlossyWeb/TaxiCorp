@@ -660,14 +660,11 @@
                                 <input type="text" id="imat" name="imat" data-clear-btn="true" placeholder="immatriculation" maxlength="20" size="20" value="" class="required">
                                 <input type="text" id="constructor" name="constructor" data-clear-btn="true" placeholder="Constructeur" maxlength="60" size="20" value="">
                                 <input type="text" name="model" id="model" placeholder="Mod&egrave;le" maxlength="60" size="20">
-								<!--
-                                <select name="type_" id="type_">
-                                    <option selected value="sedan">Type de vehicule</option>
-                                    <option value="sedan">Berline</option>
-                                    <option value="station_wagon">Break 5 places</option>
-                                    <option value="mpv">Monospace</option>
-                                </select><em></em>
-								-->
+								<select id="tpmr" name="tpmr"> 
+									<option value="" selected>TPMR</option>
+									<option value="1">OUI</option>
+									<option value="0">NON</option>
+								</select>
 								<label for="birthdate">Date de Naissance: </label>
 								<input type="date" name="birthdate" id="birthdate" placeholder="JJ/MM/AAAA" value=""/>
                                 <input type="hidden" name="who" id="whoLeTaxi" value=""/>
