@@ -309,6 +309,7 @@ $('#manage').live('pagecreate', function() {
 	$('#station').val(dec_station);
 	$('#log').val(tel);
 	if(type!=null) $('#type').val(type).selectmenu( "refresh" );
+	alert('type = '+type);
 	if(cb!=null) $('#cb').val(cb).flipswitch( "refresh" );
 	if(medic!=null) $('#medic').val(medic).flipswitch( "refresh" );
 	if(animal!=null) $('#animal').val(animal).flipswitch( "refresh" );
@@ -346,8 +347,8 @@ $('#manage').live('pagecreate', function() {
 	$.post("https://www.mytaxiserver.com/appserver/open_get_insee.php", { zip: station, pass: pass, accessHash: accessHash }, function(data){
 		$("#inseeBox").empty().append('<label for="insee">Commune de stationnement: </label>'+data).trigger('create');
 		//$("#inseeBox").trigger('create');
+		$('#insee').val(insee).selectmenu( "refresh" );
 	});
-	$('#insee').val(insee).selectmenu( "refresh" );
 	$('#imat').val(imat);
 	$('#constructor').val(constructor);
 	$('#model').val(model);
@@ -397,15 +398,15 @@ function showError(error)
 	{
 		case error.PERMISSION_DENIED:
 		  x.innerHTML="<strong>Vous avez refus&eacute; l&rsquo;acc&egrave;s &agrave; la G&eacute;olocalisation.</strong>"
-		  geoAlert="Vous avez refusé l'accès à la G&eacute;olocalisation, vous pouvez modifier cela dans les réglages.";
+		  geoAlert="Vous avez refusé l'accès à la Géolocalisation, vous pouvez modifier cela dans les réglages.";
 		  break;
 		case error.POSITION_UNAVAILABLE:
 		  x.innerHTML="<strong>G&eacute;olocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.</strong>"
-		  geoAlert="Géolocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.";
+		  geoAlert="Géolocalisation indisponible, veuillez regarder dans l'aide ou activer le service dans les reglages de votre appareil.";
 		  break;
 		case error.TIMEOUT:
 		  x.innerHTML="<strong>La demande de G&eacute;olocalisation a expir&eacute;(user location request timed out).</strong>"
-		  geoAlert="La demande de Géolocalisation a expir&eacute;(user location request timed out).";
+		  geoAlert="La demande de Géolocalisation a expiré (user location request timed out).";
 		  break;
 		case error.UNKNOWN_ERROR:
 		  x.innerHTML="<strong>Erreur inconnue de G&eacute;olocalisation (unknown error occurred).</strong>"
@@ -655,8 +656,12 @@ function reporting_customer(rdv_rc, idcourse_rc, hail_id_rc, operator_rc, cell_r
 {
 	var comRate = $("#leComRate").val();
 	$.post("https://www.mytaxiserver.com/appclient/open_reporting.php", { rdv: rdv_rc, idcourse: idcourse_rc, hail_id: hail_id_rc, operator: operator_rc, cell: cell_rc, dep: dep, tel: tel, mngid: mngid, comments: comRate}, function(data){ 
-		navigator.notification.alert('Votre remarque &eacute;t&eacute; prise en compte, Merci.', alertDismissed, 'Mon Appli Taxi', 'OK');
+		if(app) navigator.notification.alert('Votre remarque &eacute;t&eacute; prise en compte, Merci.', alertDismissed, 'Mon Appli Taxi', 'OK');
+		else alert('Votre remarque &eacute;t&eacute; prise en compte, Merci.');
 	});
+}
+function showRepCusto() {
+	$('#reporting_customer_cont').slideToggle('slow');
 }
 // diaryCall for direct job that open #delay
 function delayCall(query_string)
@@ -1205,7 +1210,7 @@ function modPay() {
 			display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
 		}*/
 		else {
-			display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.</b></p>';
+			display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.<br>'+data.showError+'</b></p>';
 		}
 		$("#returnsVisa").empty().append(display);
 		$("#returnsBox").popup( "open", { positionTo: "window" } );
@@ -1403,7 +1408,7 @@ $(document).ready(function(){
 			}, "json").done(function(data) { 
 				reloadVars();
 				$('#login').val(data.tel);
-				$('#civil').val(data.civil);
+				$('#civil').val(data.civil).selectmenu( "refresh" );
 				$('#nom').val(data.nom);
 				$('#prenom').val(data.prenom);
 				$('#taxi').val(data.taxi);
@@ -1412,7 +1417,7 @@ $(document).ready(function(){
 				$('#email').val(data.email);
 				$('#confirmail').val(data.email);
 				$('#station').val(data.station);
-				$('#type').val(data.type);
+				$('#type').val(data.type).selectmenu( "refresh" );
 				$('#cb').val(data.cb).flipswitch( "refresh" );
 				$('#medic').val(data.medic).flipswitch( "refresh" );
 				$('#animal').val(data.animal).flipswitch( "refresh" );
