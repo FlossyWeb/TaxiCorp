@@ -74,7 +74,7 @@
               <!-- <li><a href="#directions_map" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-location"><b>Carte GPS</b></a></li> -->
               <li><a href="#" onClick="help()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-search"><b>Aide utilisateur</b></a></li>
               <!-- <li><a href="#" onClick="taximedia()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-eye"><b>TaxiMedia.fr</b></a></li> -->
-              <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-info"><b>Infos Mon Appli Taxi</b></a></li>
+              <!-- <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-info"><b>Infos Mon Appli Taxi</b></a></li> -->
               <li><a href="montaxipro://?from=driver" onClick="" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-action"><b>Envoyer une course</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
               <li><a href="#" onClick="goToSection('#manage', '#shareCollaps')" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager mes applis Taxi</b></a></li>
@@ -773,9 +773,14 @@
                                 </td></tr>
                                 </tbody>
                             </table>
+							<a href="#" onclick="window.plugins.socialsharing.share('Téléchargez Mon Appli Taxi sur taximedia.fr', null, null, 'http://www.taximedia.fr/stores.php?app=taxioff')" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Particuliers</b></a>
+							<a href="#" onclick="window.plugins.socialsharing.share('Téléchargez Mon Appli Taxi Business sur taximedia.fr', null, null, 'http://www.taximedia.fr/stores.php?app=taxipro')" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Client Pro</b></a>
+							<a href="#" onclick="window.plugins.socialsharing.share('Téléchargez Mon Appli Taxi sur taximedia.fr', null, null, 'http://www.taximedia.fr/stores.php?app=dcvp')" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Artisans</b></a>
+							<!--
                             <a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Particuliers</b></a>
                             <a href="#" onClick="SharePro()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Client Pro</b></a>
                             <a href="#" onClick="ShareArt()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail ui-shadow-icon ui-corner-all"><b>Appli Artisans</b></a>
+							-->
                         </div>
                     </div>
                     <button onClick="goScan()" class="ui-btn ui-btn-icon-left ui-icon-camera ui-shadow-icon ui-corner-all">Scanner un QrCode</button>

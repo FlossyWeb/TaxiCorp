@@ -57,6 +57,7 @@
 		<param name="URL_SCHEME" value="montaxidriver" />
 	</gap:plugin>
 	<gap:plugin name="edu.uic.travelmidwest.cordova.udptransmit" />
+	<gap:plugin name="cordova-plugin-x-socialsharing" version="5.0.11" source="npm" />
 
     <icon src="icon.png" />
 	<icon src="icons/ios/icon-57.png" gap:platform="ios" width="57" height="57" />
