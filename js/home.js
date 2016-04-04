@@ -309,7 +309,6 @@ $('#manage').live('pagecreate', function() {
 	$('#station').val(dec_station);
 	$('#log').val(tel);
 	if(type!=null) $('#type').val(type).selectmenu( "refresh" );
-	alert('type = '+type);
 	if(cb!=null) $('#cb').val(cb).flipswitch( "refresh" );
 	if(medic!=null) $('#medic').val(medic).flipswitch( "refresh" );
 	if(animal!=null) $('#animal').val(animal).flipswitch( "refresh" );
