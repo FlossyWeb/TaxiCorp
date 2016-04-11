@@ -937,7 +937,10 @@ if ( app ) {
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			udptransmit.initialize(geoserver, 80);
 		});
-		// Enable background mode
+		// For iOS => backgroundtask
+		backgroundtask.start(bgFunctionToRun);
+		/*
+		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.configure({
 			text:'App toujours en fonction, nous vous informons des courses en cours...'
@@ -949,17 +952,9 @@ if ( app ) {
 		}
 		cordova.plugins.backgroundMode.ondeactivate = function() {
 			// Sadly this event is fired anytime the backgroundMode is deactivated including when the app is just pushed back from back to foreground !! Sad but true ;-)
-			/*
-			cordova.plugins.notification.local.schedule({
-				id: 3,
-				title: "Alerte execution Mon Appli Taxi",
-				text: "Votre application Mon Appli Taxi va cesser de fonctionner en arrière plan.",
-				led: "E7B242",
-				badge: 0
-			});
-			*/
 			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'Mon Appli Taxi', 'Relancer');
 		}
+		*/
 		/*
 		cordova.plugins.notification.local.on("click", function (notification, state) {
 			//alert(notification.id + " was clicked");
@@ -989,6 +984,11 @@ function onResume() {
 }
 function onPause() {
 	Sound_Off();
+}
+function bgFunctionToRun() {
+	update();
+	getLocation();
+	checkCmd();
 }
 function backFromBackGround() {
 	document.location.href='home.html';
