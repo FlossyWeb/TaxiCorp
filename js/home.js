@@ -938,12 +938,11 @@ if ( app ) {
 			udptransmit.initialize(geoserver, 80);
 		});
 		// For iOS => backgroundtask
-		backgroundtask.start(bgFunctionToRun);
-		/*
+		//backgroundtask.start(bgFunctionToRun);
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.configure({
-			text:'App toujours en fonction, nous vous informons des courses en cours...'
+			title:'App toujours en fonction, nous vous informons des courses en cours...'
 		});
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
@@ -954,7 +953,6 @@ if ( app ) {
 			// Sadly this event is fired anytime the backgroundMode is deactivated including when the app is just pushed back from back to foreground !! Sad but true ;-)
 			//navigator.notification.alert("Bon retour sur l'application.", backFromBackGround, 'Mon Appli Taxi', 'Relancer');
 		}
-		*/
 		/*
 		cordova.plugins.notification.local.on("click", function (notification, state) {
 			//alert(notification.id + " was clicked");
