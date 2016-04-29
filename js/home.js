@@ -466,7 +466,7 @@ function UDPTransmissionError(error) {
 function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
-	$.post("https://www.mytaxiserver.com/appserver/open_get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng }, function(data){ 
+	$.post("https://www.mytaxiserver.com/appserver/open_get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true }, function(data){ 
 		if (data != 0)
 		{
 			$("#screen_job").empty().append(data);
@@ -694,6 +694,44 @@ function directCall()
 	// Modifying the link 2 diary
 	//var link2diary = document.getElementById('link2diary');
 	query_string = dataDiary + '&delay=' + delay;
+	$.sessionStorage.setItem('query_string', query_string);
+	dep = $.localStorage.getItem('dep');
+	$.post("https://www.mytaxiserver.com/appserver/open_diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
+		switch (data.location) {
+			 case '#directions_map':
+				//navigator.notification.alert('in direction case');
+				$.sessionStorage.setItem('rdv', data.rdv);
+				$.sessionStorage.setItem('idcourse', data.idcourse);
+				$.sessionStorage.setItem('com', data.com);
+				$.sessionStorage.setItem('cell', data.cell);
+				$.sessionStorage.setItem('cmd', 0);
+				$.mobile.pageContainer.pagecontainer("change", "#directions_map", { transition: "slide"} );
+				/*
+				setTimeout( function () {
+					checkCustomerConfirm(dep, query_string);
+				}, 30000);
+				*/
+				//Dispo_Off();
+				 
+				 break;
+			 case '#toolate':
+				$.mobile.pageContainer.pagecontainer("change", "#toolate", { transition: "slide"} );
+				$.sessionStorage.setItem('idcourse', data.idcourse);
+				 
+				 break;
+			 default: 
+				$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
+				 
+				 break;
+		}					
+	}, "json").always(function() { Sound_On();});
+	cordova.plugins.notification.local.clear(1, function() {
+		// Cleaning direct job notification
+	});
+}
+function openCall(query_string)
+{
+	$.mobile.loading( "show" );
 	$.sessionStorage.setItem('query_string', query_string);
 	dep = $.localStorage.getItem('dep');
 	$.post("https://www.mytaxiserver.com/appserver/open_diary_app_dcvp.php?dep="+dep, query_string, function(data){ 
