@@ -979,8 +979,10 @@ if ( app ) {
 		//backgroundtask.start(bgFunctionToRun);
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
-		cordova.plugins.backgroundMode.configure({
-			title:'App toujours en fonction, nous vous informons des courses en cours...'
+		cordova.plugins.backgroundMode.setDefaults({
+			title:  'App toujours en fonction, nous vous informons des courses en cours...',
+			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
+			text:   'Nous vous informons des courses en cours...'
 		});
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
