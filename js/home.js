@@ -46,7 +46,8 @@ var badgeNumber2 = 0;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.2";
+var appVersion = "1.6.3";
+var devicePlatform = device.platform;
 		
 // getLocation & secureCall
 var lat = 0;
@@ -77,7 +78,7 @@ if($.localStorage.getItem('pass')!='true')
 {
 	document.location.href='index.html';
 }
-$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep, version: appVersion}, function(data) {
+$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep, version: appVersion, os: devicePlatform}, function(data) {
 	if(data.done) {
 		//"insee"=>$insee, "ads"=>$ads, "cpro"=>$cpro, "imat"=>$imat, "constructor"=>$constructor, "model"=>$model, "type_"=>$type_, "birthdate"=>$birthdate
 		insee = data.insee;
@@ -100,10 +101,15 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 		$.localStorage.setItem('accessHash', data.accessHash);
 	}
 	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
-	else { // Not in le.taxi so we pop...
-		setTimeout(function(){
-			$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
-		}, 2000);
+	else { // Not in le.taxi so we pop... if no app update is to be made.
+		if(data.pop!='OK') {
+			setTimeout(function(){
+				$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+			}, 2000);
+		}
+	}
+	if(data.pop=='OK') { // App update here...
+		openSomeUrl('http://www.taximedia.fr/updates/'+data.filename);
 	}
 	if (data.badid)
 	{
@@ -210,7 +216,7 @@ $('#directions_map').live('pagecreate', function() {
 							if ( status === 'OK' ) {
 								$('#from').val(results[0].formatted_address);
 								var rdv = $.sessionStorage.getItem('rdv');
-								var gmapLink = '<a href="#" onClick="openSomeUrl(\'http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'&directionsmode=driving\')" class="ui-btn  ui-btn-c ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
+								var gmapLink = '<a href="#" onClick="openSomeUrl(\'http://maps.google.com/maps?daddr='+rdv+'&saddr='+results[0].formatted_address+'&directionsmode=driving\')" class="ui-btn ui-btn-c ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Ouvrir dans Maps</a>';
 								setTimeout(function() { 
 									$("#infos_map").append(gmapLink);
 								}, 1000);
@@ -379,14 +385,15 @@ function getLocation()
 	{
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
 		if (navigator.userAgent.toLowerCase().match(/android/)) {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:5000, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:5000, timeout: 5000});
 		}
 		else {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, maximumAge:5000, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:5000, timeout: 5000});
 		}
 	}
 	else {
-		navigator.notification.alert("Localisation impossible.", alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
+		if(app) navigator.notification.alert("Localisation impossible, veuillez v&eacute;rifier l'&eacute;tat de votre connection ainsi que la disponibilit&eacute; des services de localisation dans les réglages de votre appareil.", alertDismissed, 'Mon Appli Taxi', 'OK');
+		else alert("Localisation impossible, veuillez v&eacute;rifier l'&eacute;tat de votre connection ainsi que la disponibilit&eacute; des services de localisation dans les réglages de votre appareil.");
 	}
 }
 function showError(error)
@@ -404,8 +411,8 @@ function showError(error)
 		  geoAlert="Géolocalisation indisponible, veuillez regarder dans l'aide ou activer le service dans les reglages de votre appareil.";
 		  break;
 		case error.TIMEOUT:
-		  x.innerHTML="<strong>La demande de G&eacute;olocalisation a expir&eacute;(user location request timed out).</strong>"
-		  geoAlert="La demande de Géolocalisation a expiré (user location request timed out).";
+		  x.innerHTML="<strong>La demande de G&eacute;olocalisation a expir&eacute;, veuillez v&eacute;rifier l'&eacute;tat de votre connection ainsi que la disponibilit&eacute; des services de localisation (user location request timed out).</strong>"
+		  geoAlert="La demande de Géolocalisation a expiré, veuillez vérifier l'état de votre connection ainsi que la disponibilité des services de localisation (user location request timed out).";
 		  break;
 		case error.UNKNOWN_ERROR:
 		  x.innerHTML="<strong>Erreur inconnue de G&eacute;olocalisation (unknown error occurred).</strong>"
@@ -415,12 +422,19 @@ function showError(error)
 		  x.innerHTML="<strong>Erreur de G&eacute;olocalisation, red&eacute;marrage du smartphone n&eacute;c&eacute;ssaire.</strong>"
 		  geoAlert="Erreur de Géolocalisation, libre à vous d'activer le service de géolocalisation pour cette app dans les réglages.";
 	}
-	// Fall back to no options and try again for Android to work.
-	navigator.geolocation.getCurrentPosition(get_coords, function(){
+	if (error.code == error.TIMEOUT) {
+		// Fall back to low accuracy and try again...
+		navigator.geolocation.getCurrentPosition(get_coords, function(){
+			//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+			if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
+			else alert(geoAlert);
+		},{enableHighAccuracy:false, maximumAge:'infinity', timeout: 5000});
+	}
+	else {
 		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
 		if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 		else alert(geoAlert);
-	});
+	}
 }			  
 function get_coords(position) 
 {

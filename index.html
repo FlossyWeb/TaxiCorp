@@ -277,6 +277,62 @@
 							Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
 						</b></p>
 					</div>
+					<div data-role="collapsible" data-collapsed="true" id="modCbCollaps">
+						<h1>Modifier CB</h1>
+						<div id="modCbLogin">
+							<p><b>Vous devez d&rsquo;abord vous connecter:</b></p>
+							<form  action="/" method="post" name="id" id="loginCb" data-ajax="false" data-transition="slidefade">
+								<input type="tel" id="telCb" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
+								<input type="password" id="pwdCb" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
+								<input type="tel" name="dep" id="loginDepCb" value="" placeholder="Departement"/>
+								<input type="submit" id="subLogCb" value=" Connexion "/>
+						   </form>
+						</div>
+						<div id="modCbShow" style="display:none;">
+							<select name="brand2" id="brand2">
+								<option selected value="CB">Type de Carte</option>
+								<option value="CB">CB</option>
+								<option value="VISA">VISA</option>
+								<option value="MASTERCARD">MASTERCARD</option>
+							</select><em></em>
+							<input type="tel" name="cbnum2" id="cbnum2" placeholder="Num&eacute;ros CB (16)" maxlength="16" size="20" class="required"><em></em>
+									<!--
+									<label for="cbexp">Date Expiration : </label>
+									<input type="date" name="cbexp" id="cbexp" placeholder="Date Expiration" size="20" class="required"><em></em>
+									-->
+									<p>Expire fin :</p>
+									<select name="cbexpm2" id="cbexpm2">
+										<option value="" selected>Mois</option>
+										<option value="01">01- Janvier</option>
+										<option value="02">02- F&eacute;vrier</option>
+										<option value="03">03- Mars</option>
+										<option value="04">04- Avril</option>
+										<option value="05">05- Mai</option>
+										<option value="06">06- Juin</option>
+										<option value="07">07- Juillet</option>
+										<option value="08">08- Ao&ucirc;t</option>
+										<option value="09">09- Septembre</option>
+										<option value="10">10- Octobre</option>
+										<option value="11">11- Novembre</option>
+										<option value="12">12- D&eacute;cembre</option>
+									</select><em></em>
+									<select name="cbexpa2" id="cbexpa2">
+										<option value="" selected>Ann&eacute;e</option>
+										<option value="2015">2015</option>
+										<option value="2016">2016</option>
+										<option value="2017">2017</option>
+										<option value="2018">2018</option>
+										<option value="2019">2019</option>
+										<option value="2020">2020</option>
+										<option value="2021">2021</option>
+										<option value="2022">2022</option>
+										<option value="2023">2023</option>
+										<option value="2024">2024</option>
+									</select><em></em>
+							<input type="tel" name="cbval2" id="cbval2" placeholder="Criptogramme Visuel" maxlength="4" size="20" class="required"><em></em>
+							<button onClick="modPay()" id="modPay">Modifier</button>
+						</div>
+					</div>
 					<div data-role="collapsible">
 						<h1>
 							Un probl&egrave;me ?

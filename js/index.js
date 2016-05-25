@@ -8,6 +8,9 @@ var tel = $.localStorage.getItem('tel');
 var civil = $.localStorage.getItem('civil');
 var nom = $.localStorage.getItem('nom');
 var prenom = $.localStorage.getItem('prenom');
+var email = $.localStorage.getItem('email');
+var siret = $.localStorage.getItem('siret');
+var station = $.localStorage.getItem('station');
 var dep = $.localStorage.getItem('dep');
 var mngid = $.localStorage.getItem('mngid');
 var actived;
@@ -15,7 +18,7 @@ var actived;
 function active()
 {
 	var posting = $.post("https://www.mytaxiserver.com/appclient/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {
-		var actived = data.active;
+		actived = data.active;
 		// GET SHIT BACK !!
 		$.localStorage.setItem('civil', data.civil);
 		$.localStorage.setItem('nom', data.nom);
@@ -47,9 +50,10 @@ function active()
 			}, 1000);
 		}
 		else if (!data.active) {
-			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;</b></p><a href="mailto:commercial@taximedia.fr"style="width:32%;display:inline-block;"><img src="visuels/Contact_flat.png" width="90%"/></a>';
+			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;, il s&rsquo;agit souvent d&rsquo;un probl&egrave;me de CB.</b></p><a href="mailto:contact@taximedia.fr" class="ui-btn ui-btn-c ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Nous contacter</a>';
 			$("#returns").empty().append(display);
-			//navigator.notification.alert(actived +' - '+  $.localStorage.getItem('tel'));
+			$( "#answer" ).popup( "open", { positionTo: "window" } );
+			$("#modCbCollaps").collapsible( "expand" );			
 		}
 	});
 }
@@ -159,6 +163,35 @@ function alertDismissed()
 {
 	// Do Nothing...
 }
+function modPay() {
+	var cardNumber = $('#cbnum2').val();
+	var exp = $('#cbexpa2').val()+'-'+$('#cbexpm2').val();
+	var cardNetwork = $('#brand2').val();
+	var cvv = $('#cbval2').val();
+	$('#modPay').prop('disabled', true).addClass('ui-disabled');
+	$.mobile.loading( "show" );
+	$.post('https://www.mytaxiserver.com/payzen/updateIndent.php', {cardNumber: cardNumber, exp: exp, cardNetwork: cardNetwork, cvv: cvv, civil: civil, nom: nom, prenom: prenom, tel: tel, email: email, cardIdent: siret, station: station}, function(data){
+	}, "json").done(function(data) { 
+		var display = '';
+		if (data.sniffed == 'OK')
+		{
+			display = '<p><b>la modification de votre carte bancaire &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+		}
+		/*
+		else if (!data.signed)
+		{
+			display += '<p style="color:red;"><b>Il y a un probl&egrave;me technique avec l&rsquo;enregistrement de la carte bancaire.</b></p>';
+		}*/
+		else {
+			display += '<p style="color:red;"><b>Il y a un probl&egrave;me avec l&rsquo;enregistrement de la carte bancaire, il faut une carte VALIDE de type CB, VISA ou MASTERCARD.<br>'+data.showError+'</b></p>';
+		}
+		$("#returns").empty().append(display);
+		$( "#answer" ).popup( "open", { positionTo: "window" } );
+	}).always(function () {
+		$.mobile.loading( "hide" );
+		$('#modPay').prop('disabled', false).removeClass('ui-disabled');
+	});
+}
 
 // Checks App or Browser
 app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
@@ -257,22 +290,68 @@ $(document).on( 'pagecreate', function() {
 			$.sessionStorage.setItem('banned', data.banned);
 			//navigator.notification.alert(data.nom + ' - ' + data.prenom + ' - ' + data.taxi);
 			//var display = $.localStorage.getItem('nom') + ' - ' + $.localStorage.getItem('prenom') + ' - ' + $.localStorage.getItem('taxi');
-			var display = '';
-			if (data.badid)
-			{
-				display = 'Les identifiant et mot de passe fournis ne sont pas corrects.<p style="color:red;"><b>ATTENTION ! Vous devez respecter le type des lettres qui composent votre mot de passe (majuscules ou minuscules).</b></p>';
-			}
-			if (data.banned)
-			{
-				display = data.civil + ' ' + data.nom + ' ' + data.prenom + ' Votre compte &agrave;  soit &eacute;t&eacute; d&eacute;sactiv&eacute;, soit jamais activ&eacute;.<p style="color:red;"><b>ATTENTION ! Vous devez enregistrer une CB valide, afin de (r&eacute;)activer votre compte.</b></p>';
-			}
-			$("#returns").empty().append(display);
-			$( "#answer" ).popup( "open", { positionTo: "window" } );
 			if(data.pass)
 			{ // IDENTIFIED SO GETS IN...
 				$.mobile.loading( "show" );
 				window.location='home.html';
 				//document.location.href='home.html';
+			}
+			else {
+				var display = '';
+				if (data.badid)
+				{
+					display = 'Les identifiant et mot de passe fournis ne sont pas corrects.<p style="color:red;"><b>ATTENTION ! Vous devez respecter le type des lettres qui composent votre mot de passe (majuscules ou minuscules).</b></p>';
+				}
+				if (data.banned)
+				{
+					display = data.civil + ' ' + data.nom + ' ' + data.prenom + ' Votre compte &agrave;  soit &eacute;t&eacute; d&eacute;sactiv&eacute;, soit jamais activ&eacute;.<p style="color:red;"><b>ATTENTION ! Vous devez enregistrer une CB valide, afin de (r&eacute;)activer votre compte.</b></p>';
+				}
+				$("#returns").empty().append(display);
+				$( "#answer" ).popup( "open", { positionTo: "window" } );
+			}
+		}, "json");
+	});
+		
+	$("#loginCb").submit(function(event) {
+		// stop form from submitting normally 
+		event.preventDefault();
+		// Subs some data 
+		$.post("https://www.mytaxiserver.com/appclient/login_app.php", $("#loginCb").serialize(), function(data) {
+			// GET SHIT BACK !!
+			$.localStorage.setItem('civil', data.civil);
+			$.localStorage.setItem('nom', data.nom);
+			$.localStorage.setItem('prenom', data.prenom);
+			$.localStorage.setItem('taxi', data.taxi);
+			$.localStorage.setItem('cpro', data.cpro);
+			$.localStorage.setItem('tel', data.tel);
+			$.localStorage.setItem('siret', data.siret);
+			$.localStorage.setItem('station', data.station);
+			$.localStorage.setItem('email', data.email);
+			$.localStorage.setItem('dep', data.dep);
+			$.localStorage.setItem('group', data.group);
+			$.localStorage.setItem('pwd', data.pwd);
+			$.localStorage.setItem('mngid', data.mngid);
+			$.localStorage.setItem('pass', data.pass);
+			$.localStorage.setItem('accessHash', data.accessHash);
+			$.sessionStorage.setItem('badid', data.badid);
+			// ModCardVars...
+			civil = data.civil;
+			nom = data.nom;
+			prenom = data.prenom;
+			tel = data.tel;
+			email = data.email;
+			siret = data.siret;
+			station = data.station;
+			var display = '';
+			if (data.badid)
+			{
+				display = 'Les identifiant et mot de passe fournis ne sont pas corrects.<p style="color:red;"><b>ATTENTION ! Vous devez respecter le type des lettres qui composent votre mot de passe (majuscules ou minuscules).</b></p>';
+				$("#returns").empty().append(display);
+				$( "#answer" ).popup( "open", { positionTo: "window" } );
+			}
+			else {
+				$('#modCbLogin').hide();
+				$('#modCbShow').show();
 			}
 		}, "json");
 	});
