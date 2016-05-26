@@ -47,7 +47,7 @@ var badgeNumber2 = 0;
 // Detect wether it is an App or WebApp
 var app;
 var appVersion = "1.6.3";
-var devicePlatform = device.platform;
+var devicePlatform;
 		
 // getLocation & secureCall
 var lat = 0;
@@ -78,7 +78,7 @@ if($.localStorage.getItem('pass')!='true')
 {
 	document.location.href='index.html';
 }
-$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep, version: appVersion, os: devicePlatform}, function(data) {
+$.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, mngid: mngid, log: tel, pass: pwd, dep: dep, version: appVersion}, function(data) {
 	if(data.done) {
 		//"insee"=>$insee, "ads"=>$ads, "cpro"=>$cpro, "imat"=>$imat, "constructor"=>$constructor, "model"=>$model, "type_"=>$type_, "birthdate"=>$birthdate
 		insee = data.insee;
@@ -107,9 +107,6 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 				$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
 			}, 2000);
 		}
-	}
-	if(data.pop=='OK') { // App update here...
-		openSomeUrl('http://www.taximedia.fr/updates/'+data.filename);
 	}
 	if (data.badid)
 	{
@@ -974,7 +971,8 @@ if ( app ) {
 		window.plugins.powerManagement.acquire();
 		//Functions to call only at app first load
 		scanner = cordova.require("cordova/plugin/BarcodeScanner");
-		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
+		devicePlatform = device.platform;
+		$.post("https://www.mytaxiserver.com/appclient/polling.php", {version: appVersion, os: devicePlatform}, function(data) {
 			pollingTime = data.polling;
 			// Initialising UDP Connexion once...
 			udptransmit.initialize(data.udpserver, 80);
@@ -984,6 +982,9 @@ if ( app ) {
 			//udptransmit.initialize("geoloc.api.taxi", 80);
 			//udptransmit.initialize("46.105.34.86", 80);
 			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
+			if(data.pop=='OK') { // App update here for iOS devices...
+				openSomeUrl('http://www.taximedia.fr/updates/'+data.filename);
+			}
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
