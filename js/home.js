@@ -423,9 +423,10 @@ function showError(error)
 		// Fall back to low accuracy and try again...
 		navigator.geolocation.getCurrentPosition(get_coords, function(){
 			//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+			getLocation(); // We got out of the loop so we get back in !
 			if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 			else alert(geoAlert);
-		},{enableHighAccuracy:false, maximumAge:'infinity', timeout: 5000});
+		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 30000});
 	}
 	else {
 		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
