@@ -420,13 +420,13 @@ function showError(error)
 		  geoAlert="Erreur de Géolocalisation, libre à vous d'activer le service de géolocalisation pour cette app dans les réglages.";
 	}
 	if (error.code == error.TIMEOUT) {
-		// Fall back to low accuracy and try again...
+		// Fall back to low accuracy and any cached position available...
 		navigator.geolocation.getCurrentPosition(get_coords, function(){
 			//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
 			getLocation(); // We got out of the loop so we get back in !
 			if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 			else alert(geoAlert);
-		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 30000});
+		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 0});
 	}
 	else {
 		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
