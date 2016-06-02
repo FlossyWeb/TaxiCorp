@@ -482,7 +482,14 @@ function UDPTransmissionError(error) {
 function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
-	$.post("https://www.mytaxiserver.com/appserver/open_get_app_drive.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true }, function(data){ 
+    $.ajax({
+        type: "POST",
+        url: "https://www.mytaxiserver.com/appserver/open_get_app_drive.php",
+        data: { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true },
+        dataType: "html",
+		cache: false,
+        timeout: 5000 // in milliseconds
+    }).done(function(data) {
 		if (data != 0)
 		{
 			$("#screen_job").empty().append(data);
@@ -519,6 +526,7 @@ function update()
 			});
 		}
 	}).always(function(data) {
+		alert('Complete !!');
 		setTimeout('update()', pollingTime);
 	});
 }
