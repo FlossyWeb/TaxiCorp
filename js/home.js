@@ -490,6 +490,7 @@ function update()
 		cache: false,
         timeout: 5000 // in milliseconds
     }).done(function(data) {
+		$('body').append('Done !!<br>');
 		if (data != 0)
 		{
 			$("#screen_job").empty().append(data);
@@ -526,7 +527,7 @@ function update()
 			});
 		}
 	}).always(function(data) {
-		alert('Complete !!');
+		$('body').append('Complete anyway !!<br>');
 		setTimeout('update()', pollingTime);
 	});
 }
