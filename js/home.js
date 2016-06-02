@@ -30,6 +30,7 @@ var cmd = $.sessionStorage.setItem('cmd', 0);
 var query_string = $.sessionStorage.setItem('query_string', '');
 var delay = 10;
 var pollingTime = 2000;
+var geoFailedAlertOnce = false;
 
 // Lecteur audio
 var my_media = null;
@@ -424,8 +425,11 @@ function showError(error)
 		navigator.geolocation.getCurrentPosition(get_coords, function(){
 			//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
 			getLocation(); // We got out of the loop so we get back in !
-			if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
-			else alert(geoAlert);
+			if(!geoFailedAlertOnce) {
+				geoFailedAlertOnce = true;
+				if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
+				else alert(geoAlert);
+			}
 		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 0});
 	}
 	else {
