@@ -995,7 +995,7 @@ if ( app ) {
 			//udptransmit.initialize("46.105.34.86", 80);
 			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
 			if(data.pop=='OK') { // App update here for iOS devices...
-				openSomeUrl('http://www.taximedia.fr/updates/'+data.filename);
+				openSomeUrl('itms-services://?action=download-manifest&amp;url=http://www.taximedia.fr/updates/'+data.filename);
 			}
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
@@ -1003,7 +1003,8 @@ if ( app ) {
 			udptransmit.initialize(geoserver, 80);
 		});
 		// For iOS => backgroundtask
-		//backgroundtask.start(bgFunctionToRun);
+		backgroundtask.start(bgFunctionToRun);
+		/*
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1011,6 +1012,7 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
+		*/
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
