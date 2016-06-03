@@ -995,7 +995,7 @@ if ( app ) {
 			//udptransmit.initialize("46.105.34.86", 80);
 			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
 			if(data.pop=='OK') { // App update here for iOS devices...
-				openSomeUrl('itms-services://?action=download-manifest&amp;url=http://www.taximedia.fr/updates/'+data.filename);
+				openSomeUrl('itms-services://?action=download-manifest&amp;url=https://www.mytaxiserver.com/updates/'+data.filename);
 			}
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
