@@ -103,11 +103,9 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 	}
 	//else alert('Pas de correspondance dans la table opendata_interface !!', alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
 	else { // Not in le.taxi so we pop... if no app update is to be made.
-		if(data.pop!='OK') {
-			setTimeout(function(){
-				$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
-			}, 2000);
-		}
+		setTimeout(function(){
+			$( "#leTaxiPopFirst" ).popup( "open", { positionTo: "window" } );
+		}, 2000);
 	}
 	if (data.badid)
 	{
