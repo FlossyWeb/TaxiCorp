@@ -1045,10 +1045,10 @@ function onResume() {
 	cordova.plugins.notification.local.clearAll(function() {
 		//alert("All notifications cleared");
 	}, this);
-	//Sound_On();
+	Sound_On();
 }
 function onPause() {
-	//Sound_Off();
+	Sound_Off();
 }
 function bgFunctionToRun() {
 	update();
