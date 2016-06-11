@@ -47,7 +47,7 @@ var badgeNumber2 = 0;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.3";
+var appVersion = "1.6.5";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -992,9 +992,9 @@ if ( app ) {
 			//udptransmit.initialize("geoloc.api.taxi", 80);
 			//udptransmit.initialize("46.105.34.86", 80);
 			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
-			if(data.pop=='OK') { // App update here for iOS devices...
-				openSomeUrl('http://www.taximedia.fr/updates/');
-				//openSomeUrl('itms-services://?action=download-manifest&amp;url=https://www.mytaxiserver.com/updates/'+data.filename);
+			if(data.pop=='OK') { // App update here for Android...
+				//openSomeUrl('http://www.taximedia.fr/updates/');
+				openSomeUrl('http://www.taximedia.fr/stores.php?app=dcvp');
 			}
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
@@ -1002,8 +1002,7 @@ if ( app ) {
 			udptransmit.initialize(geoserver, 80);
 		});
 		// For iOS => backgroundtask
-		backgroundtask.start(bgFunctionToRun);
-		/*
+		//backgroundtask.start(bgFunctionToRun);
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1011,7 +1010,6 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
-		*/
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
@@ -1046,10 +1044,10 @@ function onResume() {
 	cordova.plugins.notification.local.clearAll(function() {
 		//alert("All notifications cleared");
 	}, this);
-	Sound_On();
+	//Sound_On();
 }
 function onPause() {
-	Sound_Off();
+	//Sound_Off();
 }
 function bgFunctionToRun() {
 	update();
