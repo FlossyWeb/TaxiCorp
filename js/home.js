@@ -486,7 +486,7 @@ function update()
         data: { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true },
         dataType: "html",
 		cache: false,
-        timeout: 5000 // in milliseconds
+        timeout: 6000 // in milliseconds
     }).done(function(data) {
 		if (data != 0)
 		{
@@ -524,7 +524,8 @@ function update()
 			});
 		}
 	}).always(function(data) {
-		setTimeout('update()', pollingTime);
+		update();
+		//setTimeout('update()', pollingTime);
 	});
 }
 function checkCmd() {
