@@ -30,6 +30,7 @@ var cmd = $.sessionStorage.setItem('cmd', 0);
 var query_string = $.sessionStorage.setItem('query_string', '');
 var delay = 10;
 var pollingTime = 2000;
+var getBackPollingTime = 2000;
 var geoFailedAlertOnce = false;
 
 // Lecteur audio
@@ -44,6 +45,7 @@ var notificationId = 1;
 var badgeNumber = 0;
 var badgeNumber1 = 0;
 var badgeNumber2 = 0;
+var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
@@ -501,16 +503,20 @@ function update()
 					navigator.notification.vibrate(1000);
 				}
 			}, 100);
-			badgeNumber1=1;
-			badgeNumber = badgeNumber1+badgeNumber2;
-			cordova.plugins.notification.local.schedule({
-				id: 1,
-				title: "Notification de course Mon Appli Taxi",
-				text: "Une course immediate est disponible !",
-				led: "E7B242",
-				badge: badgeNumber,
-				data: { data:data }
-			});
+			pollingTime = 2000; // Time to play the sound
+			if(notifyOnce) {
+				notifyOnce = false;
+				badgeNumber1=1;
+				badgeNumber = badgeNumber1+badgeNumber2;
+				cordova.plugins.notification.local.schedule({
+					id: 1,
+					title: "Notification de course Mon Appli Taxi",
+					text: "Une course immediate est disponible !",
+					led: "E7B242",
+					badge: badgeNumber,
+					data: { data:data }
+				});
+			}
 		}
 		else
 		{
@@ -519,13 +525,15 @@ function update()
 			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
 			//document.getElementById("play").pause();
 			//stopAudio();
+			pollingTime = getBackPollingTime;
+			notifyOnce = true;
 			cordova.plugins.notification.local.clear(1, function() {
 				//alert("done");
 			});
 		}
 	}).always(function(data) {
-		update();
-		//setTimeout('update()', pollingTime);
+		//update();
+		setTimeout('update()', pollingTime);
 	});
 }
 function checkCmd() {
@@ -985,6 +993,7 @@ if ( app ) {
 		devicePlatform = device.platform;
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {version: appVersion, os: devicePlatform}, function(data) {
 			pollingTime = data.polling;
+			getBackPollingTime = data.polling;
 			// Initialising UDP Connexion once...
 			udptransmit.initialize(data.udpserver, 80);
 			//udptransmit.initialize("51.254.243.15", 80);
@@ -1043,10 +1052,10 @@ function onResume() {
 	cordova.plugins.notification.local.clearAll(function() {
 		//alert("All notifications cleared");
 	}, this);
-	Sound_On();
+	//Sound_On();
 }
 function onPause() {
-	Sound_Off();
+	//Sound_Off();
 }
 function bgFunctionToRun() {
 	update();
@@ -1331,6 +1340,7 @@ $(document).on( 'pagecreate', function() {
 		//setTimeout('update()', 2000);
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {}, function(data) {
 			pollingTime = data.polling;
+			getBackPollingTime = data.polling;
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
 		});
