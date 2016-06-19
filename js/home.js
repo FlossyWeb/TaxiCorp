@@ -49,7 +49,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.6";
+var appVersion = "1.6.7";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -857,12 +857,19 @@ function callIncident(irdv, ihail, iop, icell, istatus)
 		{
 			var number = icell;
 			var message = "Le taxi "+taxi+" ne pourra venir vous chercher à cause d'un incident.";
-			var intent = ""; //leave empty for sending sms using default intent
+			//var intent = ""; //leave empty for sending sms using default intent
+			var options = {
+				replaceLineBreaks: false, // true to replace \n by a new line, false by default
+				android: {
+					intent: 'INTENT'  // send SMS with the native android SMS messaging
+					//intent: '' // send SMS without open any other app
+				}
+			};
 			var success = function () {
 			};
 			var error = function (e) {
 			};
-			sms.send(number, message, intent, success, error);
+			sms.send(number, message, options, success, error);
 			//$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
 			//return false;
 		}
