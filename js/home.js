@@ -179,7 +179,7 @@ $( '#directions_map' ).live( 'pagebeforeshow',function(event){
 	var infos = '<p>';
 	if (cell != '')
 	{
-		infos += '<a data-ajax="false" href="tel:' + cell + '" class="ui-btn ui-corner-all ui-shadow ui-icon-phone ui-btn-icon-left">Joindre le client</a>';
+		infos += '<a data-ajax="false" href="tel:' + cell + '" class="ui-btn ui-btn-c ui-corner-all ui-shadow ui-icon-phone ui-btn-icon-left">Joindre le client</a>';
 	}
 	if (com != '')
 	{
@@ -868,6 +868,8 @@ function callIncident(irdv, ihail, iop, icell, istatus)
 			var success = function () {
 			};
 			var error = function (e) {
+				if(app) navigator.notification.alert("L'incident a été déclaré toutefois, votre appareil semble ne pas gérer les sms, veuillez contacter le client pour l'avertir SVP.", alertDismissed, 'Mon Appli Taxi', 'OK');
+				else alert("L'incident a été déclaré toutefois, votre appareil semble ne pas gérer les sms, veuillez contacter le client pour l'avertir SVP.");
 			};
 			sms.send(number, message, options, success, error);
 			//$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
@@ -1569,7 +1571,7 @@ $(document).ready(function(){
 		 imat: "Ce champs est obligatoire",
 		 constructor: "Ce champs est obligatoire",
 		 model: "Ce champs est obligatoire",
-		 birthdate: "Le N&deg; de Carte Professionelle est obligatoire",
+		 birthdate: "Ce champs est obligatoire",
 		}
 		/* Put errors below fields
 		,
