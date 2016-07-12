@@ -50,7 +50,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.8";
+var appVersion = "1.6.9";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -58,6 +58,7 @@ var lat = 0;
 var lng = 0;
 var previousLat = 0;
 var previousLng = 0;
+var geoCounter = 0;
 
 //opendata vars
 var api_key = "307464f4-81ba-4d22-9b6c-23376ce4cf9e";
@@ -379,7 +380,6 @@ function dc() {
 }
 function getLocation()
 {
-	//alert('IN getLocation: '+openDataInit);
 	if (navigator.geolocation)
 	{
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
@@ -443,7 +443,7 @@ function get_coords(position)
 {
 	lat = position.coords.latitude;
 	lng = position.coords.longitude;
-	//alert('Located: '+lat+' , '+lng);
+	geoCounter++;
 	var stampDot = new Date().getTime() / 1000; // float timestamp in seconds
 	var stamp = parseInt(stampDot); // timestamp in seconds
 	var geoHash = sha1(stamp+"montaxi"+taxi_id+lat+lng+"phone"+"0"+"2"+api_key); //sha1(concat(timestamp, operator, taxi, lat, lon, device, status, version, api_key))
@@ -453,13 +453,14 @@ function get_coords(position)
 	if (openDataInit && openDataGo && app) {
 		udptransmit.sendMessage(payload);
 	}
-	if((lat!=previousLat) && (lng!=previousLng)) {
+	if((lat!=previousLat) && (lng!=previousLng) && (geoCounter==1)) {
 		$.post("http://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { tel: tel, pass: pass, dep: dep }, function(data) {
 			//alert('Sent:'+lat+' , '+lng);
 		});
 	}
 	previousLat = lat;
 	previousLng = lng;
+	if(geoCounter==6) geoCounter = 0;
 	setTimeout('getLocation()', 5000); // Every thirty seconds you check geolocation...
 	/*
 	//var x=document.getElementById("results");
@@ -483,61 +484,65 @@ function UDPTransmissionError(error) {
 function update()
 {
 	dispo = $.sessionStorage.getItem('dispo');
-    $.ajax({
-        type: "POST",
-        url: "https://www.mytaxiserver.com/appserver/open_get_app_drive_lp.php",
-        data: { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true, gotSome: getSome },
-        dataType: "json",
-		cache: false,
-        timeout: 240000 // in milliseconds
-    }).done(function(data) {
-		getSome = data.gotSome;
-		//$("#screen_job").empty().append(data.gotSome+' - '+data.snippet+'<br>');
-		if (data.gotSome>0)
-		{
-			$("#screen_job").empty().append(data.snippet);
-			$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
-			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
-			//document.getElementById("play").play();
-			//navigator.notification.beep(2);
-			setTimeout( function () {
-				if ($.sessionStorage.getItem('sound') != 'OFF') {
-					playAudio('sounds/ring.mp3');
-					navigator.notification.vibrate(9000);
+	if(dispo == 1) {
+		$.ajax({
+			type: "POST",
+			url: "https://www.mytaxiserver.com/appserver/open_get_app_drive_lp.php",
+			data: { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, lat: lat, lng: lng, nodelay: true, gotSome: getSome, version: appVersion },
+			dataType: "json",
+			cache: false,
+			timeout: 60000 // in milliseconds
+		}).done(function(data) {
+			getSome = data.gotSome;
+			//$("#screen_job").empty().append(data.gotSome+' - '+data.snippet+'<br>');
+			if (data.gotSome>0)
+			{
+				$("#screen_job").empty().append(data.snippet);
+				$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
+				$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Alerte_course_flat.png" width="100%"/></a>');
+				//document.getElementById("play").play();
+				//navigator.notification.beep(2);
+				setTimeout( function () {
+					if ($.sessionStorage.getItem('sound') != 'OFF') {
+						playAudio('sounds/ring.mp3');
+						navigator.notification.vibrate(9000);
+					}
+				}, 100);
+				//pollingTime = 2000;  // Time to play the sound
+				if(notifyOnce) {
+					notifyOnce = false;
+					badgeNumber1=1;
+					badgeNumber = badgeNumber1+badgeNumber2;
+					cordova.plugins.notification.local.schedule({
+						id: 1,
+						title: "Notification de course Mon Appli Taxi",
+						text: "Une course immediate est disponible !",
+						led: "E7B242",
+						badge: badgeNumber,
+						data: { data:data.gotSome }
+					});
 				}
-			}, 100);
-			//pollingTime = 2000;  // Time to play the sound
-			if(notifyOnce) {
-				notifyOnce = false;
-				badgeNumber1=1;
-				badgeNumber = badgeNumber1+badgeNumber2;
-				cordova.plugins.notification.local.schedule({
-					id: 1,
-					title: "Notification de course Mon Appli Taxi",
-					text: "Une course immediate est disponible !",
-					led: "E7B242",
-					badge: badgeNumber,
-					data: { data:data.gotSome }
+			}
+			else
+			{
+				$("#screen_job").empty().append('<br><p><b>En attente de courses...</b></p><br>');
+				$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
+				$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
+				//document.getElementById("play").pause();
+				//stopAudio();
+				//pollingTime = getBackPollingTime;
+				notifyOnce = true;
+				cordova.plugins.notification.local.clear(1, function() {
+					//alert("done");
 				});
 			}
-		}
-		else
-		{
-			$("#screen_job").empty().append('<br><p><b>En attente de courses...</b></p><br>');
-			$("#warn").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
-			$("#warn_home").empty().append('<a href="#jobs_taker"><img src="visuels/Aucune_course_flat.png" width="100%"/></a>');
-			//document.getElementById("play").pause();
-			//stopAudio();
-			//pollingTime = getBackPollingTime;
-			notifyOnce = true;
-			cordova.plugins.notification.local.clear(1, function() {
-				//alert("done");
-			});
-		}
-	}).always(function(data) {
-		update();
-		//setTimeout('update()', pollingTime);
-	});
+		}).always(function(data) {
+			update();
+		});
+	}
+	else {
+		setTimeout('update()', pollingTime);
+	}
 }
 function checkCmd() {
 	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station, ring: pass }, function(data){
@@ -609,19 +614,21 @@ function dispoCheck()
 }
 function Dispo_On()
 {
-	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo });
-	$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
-	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
-	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
-	$.sessionStorage.setItem('dispo', '1');
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }).done(function(data) {
+		$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
+		$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
+		$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
+		$.sessionStorage.setItem('dispo', '1');
+	});
 }
 function Dispo_Off()
 {
-	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }); 
-	$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
-	$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
-	$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
-	$.sessionStorage.setItem('dispo', '0');
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }).done(function(data) {
+		$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$.sessionStorage.setItem('dispo', '0');
+	}); 
 }
 
 function Sound_On()
@@ -1365,7 +1372,7 @@ $(document).on( 'pagecreate', function() {
 		$("#player").empty().append('<audio id="play" loop="loop" preload="auto" style="display:none" ><source src="sounds/ring.mp3" type="audio/mpeg" />Your browser does not support the audio element.</audio>');
 	}
 	//Dispo_On();
-	dispoCheck();
+	//dispoCheck();
 	footer();
 	dep = $.localStorage.getItem('dep');
 	//alert('taxi: '+taxi+', tel: '+tel+', email: '+email+', dispo: '+dispo+', nom: '+nom+', prenom: '+prenom+', pass: '+pass+', dep: '+dep+', mngid: '+mngid+', group: '+group);
