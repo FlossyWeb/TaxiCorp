@@ -50,7 +50,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.9";
+var appVersion = "1.6.10";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -1032,7 +1032,8 @@ if ( app ) {
 			udptransmit.initialize(geoserver, 80);
 		});
 		// For iOS => backgroundtask
-		//backgroundtask.start(bgFunctionToRun);
+		backgroundtask.start(bgFunctionToRun);
+		/*
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1040,6 +1041,7 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
+		*/
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
