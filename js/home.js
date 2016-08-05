@@ -33,6 +33,7 @@ var pollingTime = 2000;
 var getBackPollingTime = 2000;
 var geoFailedAlertOnce = false;
 var getSome = false;
+var gotSome = false;
 
 // Lecteur audio
 var my_media = null;
@@ -522,6 +523,7 @@ function update()
 						data: { data:data.gotSome }
 					});
 				}
+				gotSome = true;
 			}
 			else
 			{
@@ -532,9 +534,23 @@ function update()
 				//stopAudio();
 				//pollingTime = getBackPollingTime;
 				notifyOnce = true;
-				cordova.plugins.notification.local.clear(1, function() {
-					//alert("done");
-				});
+				if (gotSome) {
+					badgeNumber1=1;
+					badgeNumber = badgeNumber1+badgeNumber2;
+					cordova.plugins.notification.local.schedule({
+						id: 1,
+						title: "Vous avez manqué une course Mon Appli Taxi",
+						text: "Une course immediate était disponible !",
+						led: "E7B242",
+						badge: badgeNumber,
+						data: { data:data.gotSome }
+					});
+				}
+				else {
+					cordova.plugins.notification.local.clear(1, function() {
+						//alert("done");
+					});
+				}
 			}
 		}).always(function(data) {
 			update();
@@ -657,13 +673,13 @@ function addCalendar(date, rdv, com, idcourse, cell)
 	var diff = 60; // difference in minutes
 	var endDate = new Date(startDate.getTime() + diff*60000);
 	var title = "Course en commande";
-	var location = rdv;
+	var eventLocation = rdv;
 	var notes = 'Infos RDV : ' + com + ' - Identifiant de la course : ' + idcourse + ' - Tel client : ' + cell;
 	//var success = function(message) { navigator.notification.alert("AJOUT EVENEMENT AU CALENDRIER: " + JSON.stringify(message)); };
 	var success = function(message) { navigator.notification.alert("EVENEMENT AJOUTE AU CALENDRIER", alertDismissed, 'Mon Appli Taxi', 'OK'); };
 	var error = function(message) { navigator.notification.alert("Erreur: " + message, alertDismissed, 'Mon Appli Taxi Erreur', 'OK'); };
 	// create
-	window.plugins.calendar.createEvent(title,location,notes,startDate,endDate,success,error);
+	window.plugins.calendar.createEvent(title,eventLocation,notes,startDate,endDate,success,error);
 }
 function histoMap(rdv, idcourse, com, cell)
 {
@@ -729,6 +745,7 @@ function cancelCall(query_string)
 function directCall()
 {
 	$.mobile.loading( "show" );
+	gotSome = false;
 	// Getting query_string using sessionStorage
 	var dataDiary = $.sessionStorage.getItem('query_string');
 	// Modifying the link 2 diary
@@ -1032,8 +1049,7 @@ if ( app ) {
 			udptransmit.initialize(geoserver, 80);
 		});
 		// For iOS => backgroundtask
-		backgroundtask.start(bgFunctionToRun);
-		/*
+		//backgroundtask.start(bgFunctionToRun);
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1041,7 +1057,6 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
-		*/
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
@@ -1067,14 +1082,16 @@ if ( app ) {
 	}
 }
 function onResume() {
-	$.post("https://www.mytaxiserver.com/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
-	if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
-		$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
-	}
-	cordova.plugins.notification.local.clearAll(function() {
-		//alert("All notifications cleared");
-	}, this);
-	//Sound_On();
+	setTimeout(function() {
+		$.post("https://www.mytaxiserver.com/client/active_app.php", { tel: tel, mngid: mngid, dep: dep}, function(data) {});
+		if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
+			$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
+		}
+		cordova.plugins.notification.local.clearAll(function() {
+			//alert("All notifications cleared");
+		}, this);
+		//Sound_On();
+	}, 500);// iOS Quirks
 }
 function onPause() {
 	//Sound_Off();
@@ -1146,6 +1163,7 @@ function goScan ()
 		}
 	);
 }
+/*
 function contactPick()
 {
 	var successCallbackPick = function(result){
@@ -1162,6 +1180,7 @@ function contactPick()
 	}
 	window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 }
+*/
 // UDP init Success/Error Handlers...
 function UDPTransmitterInitializationSuccess(success) {
 	navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'Mon Appli Taxi', 'OK');
