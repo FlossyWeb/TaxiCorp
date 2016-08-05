@@ -533,7 +533,6 @@ function update()
 				//document.getElementById("play").pause();
 				//stopAudio();
 				//pollingTime = getBackPollingTime;
-				notifyOnce = true;
 				if (gotSome) {
 					badgeNumber1=1;
 					badgeNumber = badgeNumber1+badgeNumber2;
@@ -545,6 +544,7 @@ function update()
 						badge: badgeNumber,
 						data: { data:data.gotSome }
 					});
+					gotSome = false;
 				}
 				else {
 					cordova.plugins.notification.local.clear(1, function() {
@@ -789,6 +789,7 @@ function directCall()
 function openCall(query_string)
 {
 	$.mobile.loading( "show" );
+	gotSome = false;
 	$.sessionStorage.setItem('query_string', query_string);
 	dep = $.localStorage.getItem('dep');
 	stopAudio();
