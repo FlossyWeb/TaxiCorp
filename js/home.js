@@ -718,6 +718,9 @@ function reporting_customer(rdv_rc, idcourse_rc, hail_id_rc, operator_rc, cell_r
 function showRepCusto() {
 	$('#reporting_customer_cont').slideToggle('slow');
 }
+function showIncident() {
+	$('#incident_cont').slideToggle('slow');
+}
 // diaryCall for direct job that open #delay
 function delayCall(query_string)
 {
@@ -880,8 +883,9 @@ function checkCustomerConfirm(d, q)
 	});
 }
 function callIncident(irdv, ihail, iop, icell, istatus)
-{ // callIncident(\''.$rdv.'\', \''.$hail_id.'\', \''.$operator.'\', \''.$cell.'\', \''.$status.'\')
-	$.post("https://www.mytaxiserver.com/appserver/open_incident.php" , { rdvpoint: irdv, hail_id: ihail, operator: iop, cell: icell, status: istatus, db: 'true', dep: dep}, function(data){ 
+{
+	var incident_taxi_reason = $('#incident_taxi_reason').val();
+	$.post("https://www.mytaxiserver.com/appserver/open_incident_reason.php" , { rdvpoint: irdv, hail_id: ihail, operator: iop, cell: icell, status: istatus, incident_taxi_reason: incident_taxi_reason, db: 'true', dep: dep}, function(data){ 
 		if (data.ok)
 		{
 			var number = icell;
