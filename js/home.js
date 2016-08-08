@@ -451,13 +451,13 @@ function get_coords(position)
 	var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
 	//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
 	//alert(JSON.stringify(payload));
-	if (openDataInit && openDataGo && app) {
-		udptransmit.sendMessage(payload);
-	}
 	if((lat!=previousLat) && (lng!=previousLng) && (geoCounter==1)) {
 		$.post("http://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { tel: tel, pass: pass, dep: dep }, function(data) {
 			//alert('Sent:'+lat+' , '+lng);
 		});
+	}
+	if (openDataInit && openDataGo && app) {
+		udptransmit.sendMessage(payload);
 	}
 	previousLat = lat;
 	previousLng = lng;
@@ -517,7 +517,7 @@ function update()
 					cordova.plugins.notification.local.schedule({
 						id: 1,
 						title: "Notification de course Mon Appli Taxi",
-						text: "Une course immediate est disponible !",
+						text: "Une course immédiate est disponible !",
 						led: "E7B242",
 						badge: badgeNumber,
 						data: { data:data.gotSome }
@@ -539,7 +539,7 @@ function update()
 					cordova.plugins.notification.local.schedule({
 						id: 1,
 						title: "Vous avez manqué une course Mon Appli Taxi",
-						text: "Une course immediate était disponible !",
+						text: "Une course immédiate était disponible !",
 						led: "E7B242",
 						badge: badgeNumber,
 						data: { data:data.gotSome }
