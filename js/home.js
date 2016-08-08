@@ -380,7 +380,6 @@ function getLocation()
 {
 	if (navigator.geolocation)
 	{
-		navigator.notification.alert("In navigator.geolocation", alertDismissed, 'Mon Appli Taxi', 'OK');
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
 		if (navigator.userAgent.toLowerCase().match(/android/)) {
 			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:0, timeout: 5000});
@@ -443,7 +442,6 @@ function get_coords(position)
 {
 	lat = position.coords.latitude;
 	lng = position.coords.longitude;
-	navigator.notification.alert("In get_coords ("+lat+" , "+lng+")", alertDismissed, 'Mon Appli Taxi', 'OK');
 	geoCounter++;
 	var stampDot = new Date().getTime() / 1000; // float timestamp in seconds
 	var stamp = parseInt(stampDot); // timestamp in seconds
