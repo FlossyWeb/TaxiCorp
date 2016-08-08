@@ -39,9 +39,6 @@ var gotSome = false;
 var my_media = null;
 var sound = $.sessionStorage.setItem('sound', 'ON');
 
-// Scanner
-var scanner;
-
 // localNotifications
 var notificationId = 1;
 var badgeNumber = 0;
@@ -383,9 +380,10 @@ function getLocation()
 {
 	if (navigator.geolocation)
 	{
+		navigator.notification.alert("In navigator.geolocation", alertDismissed, 'Mon Appli Taxi', 'OK');
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
 		if (navigator.userAgent.toLowerCase().match(/android/)) {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:5000, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:0, timeout: 5000});
 		}
 		else {
 			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:5000, timeout: 5000});
@@ -435,6 +433,7 @@ function showError(error)
 		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 0});
 	}
 	else {
+		getLocation(); // We got out of the loop so we get back in !
 		//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
 		if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 		else alert(geoAlert);
@@ -444,6 +443,7 @@ function get_coords(position)
 {
 	lat = position.coords.latitude;
 	lng = position.coords.longitude;
+	navigator.notification.alert("In get_coords ("+lat+" , "+lng+")", alertDismissed, 'Mon Appli Taxi', 'OK');
 	geoCounter++;
 	var stampDot = new Date().getTime() / 1000; // float timestamp in seconds
 	var stamp = parseInt(stampDot); // timestamp in seconds
@@ -451,13 +451,13 @@ function get_coords(position)
 	var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
 	//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
 	//alert(JSON.stringify(payload));
+	if (openDataInit && openDataGo && app) {
+		udptransmit.sendMessage(payload);
+	}
 	if((lat!=previousLat) && (lng!=previousLng) && (geoCounter==1)) {
 		$.post("http://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { tel: tel, pass: pass, dep: dep }, function(data) {
 			//alert('Sent:'+lat+' , '+lng);
 		});
-	}
-	if (openDataInit && openDataGo && app) {
-		udptransmit.sendMessage(payload);
 	}
 	previousLat = lat;
 	previousLng = lng;
@@ -1029,9 +1029,8 @@ if ( app ) {
 		StatusBar.overlaysWebView(false);
 		StatusBar.backgroundColorByHexString("#E7B242");
 		// prevent device from sleeping
-		window.plugins.powerManagement.acquire();
+		window.powermanagement.acquire();
 		//Functions to call only at app first load
-		scanner = cordova.require("cordova/plugin/BarcodeScanner");
 		devicePlatform = device.platform;
 		$.post("https://www.mytaxiserver.com/appclient/polling.php", {version: appVersion, os: devicePlatform}, function(data) {
 			pollingTime = data.polling;
@@ -1161,7 +1160,7 @@ var scanSuccess = function (result) {
 }
 function goScan ()
 {
-	scanner.scan(
+	cordova.plugins.barcodeScanner.scan(
 		scanSuccess, 
 		function (error) {
 			navigator.notification.alert("Scan Erreur: " + error, alertDismissed, 'Mon Appli Taxi Erreur', 'OK');
