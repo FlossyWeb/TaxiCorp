@@ -48,7 +48,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.12";
+var appVersion = "1.6.13";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -117,11 +117,13 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 }, "json").done(function(data) { 
 	if(data.done) {
 		$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: ads, cpro: cpro, imat: imat}, function(data) {
+			if(data.taxi_id!='') {
+				openDataInit=true;
+				openDataGo=true;
+			}
 			taxi_id = data.taxi_id;
 			$.localStorage.setItem('taxi_id', data.taxi_id);
 			openStatus = data.status;
-			openDataInit=true;
-			openDataGo=true;
 			$("#openSwitch").val(1).flipswitch( "refresh" );
 			//dispoCheck();
 			//Dispo_On();
@@ -382,10 +384,10 @@ function getLocation()
 	{
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
 		if (navigator.userAgent.toLowerCase().match(/android/)) {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:false, maximumAge:0, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 5000});
 		}
 		else {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:5000, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 5000});
 		}
 	}
 	else {
@@ -429,7 +431,7 @@ function showError(error)
 				if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 				else alert(geoAlert);
 			}
-		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 0});
+		},{enableHighAccuracy:false, maximumAge:10000, timeout: 30000});
 	}
 	else {
 		getLocation(); // We got out of the loop so we get back in !
