@@ -46,7 +46,7 @@
 	<plugin name="phonegap-plugin-barcodescanner" source="npm" />
 	<plugin name="cordova-plugin-powermanagement" source="npm" />
 	<plugin name="cordova-sms-plugin" source="npm" spec="0.1.10" />
-	<plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.2.0" source="npm" />
+	<plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.2.0" source="npm">
 		<variable name="ALWAYS_USAGE_DESCRIPTION" value="CELA PERMETTRA AUX USAGERS DE CONNAITRE VOTRE POSITION." />
 	</plugin>
 	<!-- 
