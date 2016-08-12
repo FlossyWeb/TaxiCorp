@@ -1109,9 +1109,13 @@ if ( app ) {
 		backgroundGeolocation.configure(geoCallbackFn, geoFailureFn, {
 			desiredAccuracy: 10,
 			stationaryRadius: 20,
-			distanceFilter: 30,
-			//startForeground: true,
-			interval: 6000
+			distanceFilter: 10,
+			startForeground: true,
+			// Android only section 
+			locationProvider: backgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
+			fastestInterval: 3600,
+			stopOnStillActivity: false, // triggers callback weither device has moved or not according to the interval setting.
+			interval: 5000
 		});
 	 
 		// Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app. 
