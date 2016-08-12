@@ -49,8 +49,8 @@
 	<plugin name="cordova-plugin-mauron85-background-geolocation" spec="2.2.0-alpha.6" source="npm">
 		<variable name="ALWAYS_USAGE_DESCRIPTION" value="CELA PERMETTRA AUX USAGERS DE CONNAITRE VOTRE POSITION." />
 	</plugin>
-	<!-- 
 	<plugin name="cordova-plugin-background-mode" source="npm" spec="0.6.5" />
+	<!-- 
 	<plugin name="nl.x-services.plugins.calendar" />
 	<plugin name="com.phonegap.plugins.barcodescanner" />
 	<plugin name="com.simplec.plugins.powermanagement" spec="0.4.0" />

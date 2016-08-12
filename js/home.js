@@ -1054,7 +1054,6 @@ if ( app ) {
 		});
 		// For iOS => backgroundtask
 		//backgroundtask.start(bgFunctionToRun);
-		/*
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1062,7 +1061,6 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
-		*/
 		var geoCallbackFn = function(location) {
 			//alert('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
 	 
@@ -1112,6 +1110,9 @@ if ( app ) {
 			distanceFilter: 10,
 			startForeground: true,
 			// Android only section 
+			notificationTitle: 'Mon Appli Taxi Chauffeur',
+			notificationText: 'Géolocalisation en arrière plan',
+			notificationIconColor: '#FEDD1E',
 			locationProvider: backgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
 			fastestInterval: 3600,
 			stopOnStillActivity: false, // triggers callback weither device has moved or not according to the interval setting.
