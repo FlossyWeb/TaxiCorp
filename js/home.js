@@ -384,10 +384,10 @@ function getLocation()
 	{
 		//var watchId = navigator.geolocation.watchPosition(get_coords, showError, { maximumAge: 30000, timeout: 5000, enableHighAccuracy: true });
 		if (navigator.userAgent.toLowerCase().match(/android/)) {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 30000});
 		}
 		else {
-			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 5000});
+			navigator.geolocation.getCurrentPosition(get_coords, showError,{enableHighAccuracy:true, maximumAge:0, timeout: 10000});
 		}
 	}
 	else {
@@ -431,7 +431,7 @@ function showError(error)
 				if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 				else alert(geoAlert);
 			}
-		},{enableHighAccuracy:false, maximumAge:Infinity, timeout: 0});
+		},{enableHighAccuracy:false, maximumAge:10000, timeout: 90000});
 	}
 	else {
 		getLocation(); // We got out of the loop so we get back in !
