@@ -1054,6 +1054,7 @@ if ( app ) {
 		});
 		// For iOS => backgroundtask
 		//backgroundtask.start(bgFunctionToRun);
+		/*
 		// For Android => Enable background mode
 		cordova.plugins.backgroundMode.enable();
 		cordova.plugins.backgroundMode.setDefaults({
@@ -1061,6 +1062,60 @@ if ( app ) {
 			ticker: 'App toujours en fonction, nous vous informons des courses en cours...',
 			text:   'Nous vous informons des courses en cours...'
 		});
+		*/
+		var geoCallbackFn = function(location) {
+			//alert('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
+	 
+			// Do your HTTP request here to POST location to your server. 
+			// jQuery.post(url, JSON.stringify(location)); 
+			lat = location.latitude;
+			lng = location.longitude;
+			geoCounter++;
+			var stampDot = new Date().getTime() / 1000; // float timestamp in seconds
+			var stamp = parseInt(stampDot); // timestamp in seconds
+			var geoHash = sha1(stamp+"montaxi"+taxi_id+lat+lng+"phone"+"0"+"2"+api_key); //sha1(concat(timestamp, operator, taxi, lat, lon, device, status, version, api_key))
+			var payload = '{"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"}';
+			//var payload = 'JSON.stringify({"timestamp":"'+stamp+'","operator":"montaxi","taxi":"'+taxi_id+'","lat":"'+lat+'","lon":"'+lng+'","device":"phone","status":"0","version":"2","hash":"'+geoHash+'"})';
+			//alert(JSON.stringify(payload));
+			if (openDataInit && openDataGo && app) {
+				udptransmit.sendMessage(payload);
+			}
+			if((lat!=previousLat) && (lng!=previousLng) && (geoCounter==1)) {
+				$.post("http://www.mytaxiserver.com/appclient/insert_app_cab_geoloc.php?lat="+lat+"&lng="+lng, { tel: tel, pass: pass, dep: dep }, function(data) {
+					//alert('Sent:'+lat+' , '+lng);
+				});
+			}
+			previousLat = lat;
+			previousLng = lng;
+			if(geoCounter==6) geoCounter = 0;
+	 
+			/*
+			IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+			and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
+			IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+			*/
+			backgroundGeolocation.finish();
+		};
+	 
+		var geoFailureFn = function(error) {
+			//if(app) navigator.notification.alert('BackgroundGeolocation error', alertDismissed, 'Mon Appli Taxi', 'OK');
+			//else alert('BackgroundGeolocation error');
+			navigator.notification.confirm('Erreur de Géolocalisation, voulez-vous aller dans les réglages afin d\'activer le service de géolocalisation pour cette app ?', 'Mon Appli Taxi', function() {
+				backgroundGeolocation.showAppSettings();
+			});
+		};
+	 
+		// BackgroundGeolocation is highly configurable. See platform specific configuration options 
+		backgroundGeolocation.configure(geoCallbackFn, geoFailureFn, {
+			desiredAccuracy: 10,
+			stationaryRadius: 20,
+			distanceFilter: 30,
+			//startForeground: true,
+			interval: 6000
+		});
+	 
+		// Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app. 
+		backgroundGeolocation.start();
 		// Called when background mode has been activated or deactivated
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
@@ -1077,7 +1132,7 @@ if ( app ) {
 		if (typeof window.udptransmit == 'undefined') {
 			alert("udpTransmit is undefined !!");
 		}
-		getLocation(); // Launching getLocation anyway !!
+		//getLocation(); // Launching getLocation anyway !!
 		//setTimeout('update()', 2000);
 		checkCmd();
 		cordova.plugins.notification.local.clearAll(function() {
