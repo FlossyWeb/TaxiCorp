@@ -48,7 +48,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.13";
+var appVersion = "1.6.14";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -129,7 +129,7 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 			//Dispo_On();
 		}, "json");
 	}
-	reloadVars();
+	setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
 });
 function reloadVars() {
 	taxi = $.localStorage.getItem('taxi');
@@ -431,7 +431,7 @@ function showError(error)
 				if(app) navigator.notification.alert(geoAlert, alertDismissed, 'Mon Appli Taxi', 'OK');
 				else alert(geoAlert);
 			}
-		},{enableHighAccuracy:false, maximumAge:10000, timeout: 90000});
+		},{enableHighAccuracy:false, maximumAge:10000, timeout: 60000});
 	}
 	else {
 		getLocation(); // We got out of the loop so we get back in !
@@ -1587,7 +1587,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('color', data.color);
 				$.localStorage.setItem('lang', data.lang);
 			}, "json").done(function(data) { 
-				reloadVars();
+				setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
 				$('#login').val(data.tel);
 				$('#civil').val(data.civil).selectmenu( "refresh" );
 				$('#nom').val(data.nom);
@@ -1694,7 +1694,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('ads', taxi);
 				$.localStorage.setItem('tpmr', tpmr);
 			}, "json").done(function(data) { 
-				reloadVars();
+				setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
 				$('#insee').val(data.insee);
 				$('#imat').val(data.imat);
 				$('#constructor').val(data.constructor);
