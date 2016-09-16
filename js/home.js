@@ -48,7 +48,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.14";
+var appVersion = "1.6.15";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -73,6 +73,8 @@ var tpmr = $.localStorage.getItem('tpmr');
 var openStatus;
 var openDataInit=false;
 var openDataGo=false;
+var stillCheckingHail = true;
+var countCheckingHail = 0;
 var geoserver='188.165.50.190';
 
 var mobileDemo = { 'center': '43.615945,3.876743', 'zoom': 10 };
@@ -872,15 +874,61 @@ function checkCustomerConfirm(d, q)
 	$.post("https://www.mytaxiserver.com/appserver/open_status.php?dep=" + d + "&check=0" , q, function(data){ 
 		if (data != 0)
 		{
+			stillCheckingHail = false;
 			if(app) navigator.notification.alert(data, alertDismissed, 'Mon Appli Taxi', 'OK');
 			else alert(data);
 			$.mobile.pageContainer.pagecontainer("change", "#home", { transition: "slide"} );
-			//return false;
+			cordova.plugins.notification.local.schedule({
+				id: 1,
+				title: data,
+				text: data,
+				led: "E7B242",
+				badge: 1,
+				data: { data:data }
+			});
 		}
 		else {
 			Dispo_Off();
 		}
+	}).always(function(data) {
+		setTimeout( function () {
+			checkHail(d, q);
+		}, 30000);
 	});
+}
+function checkHail(d, q)
+{
+	$.post("https://www.mytaxiserver.com/appserver/open_status.php?dep=" + d + "&check=0" , q, function(data){ 
+		if (data != 0)
+		{
+			stillCheckingHail = false;
+			if(app) navigator.notification.alert(data, alertDismissed, 'Mon Appli Taxi', 'OK');
+			else alert(data);
+			cordova.plugins.notification.local.schedule({
+				id: 1,
+				title: data,
+				text: data,
+				led: "E7B242",
+				badge: 1,
+				data: { data:data }
+			});
+		}
+		else {
+			stillCheckingHail = true;
+		}
+	}).always(function(data) {
+		countCheckingHail++;
+		// Will be checking for incident_customer or else every 30 seconds...
+		setTimeout( function () {
+			if(stillCheckingHail && countCheckingHail<60) {
+				checkHail(d, q);
+			}
+		}, 30000);
+	});
+}
+function stopCheckHail()
+{
+	stillCheckingHail = false;
 }
 function callIncident(irdv, ihail, iop, icell, istatus)
 {
