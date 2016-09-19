@@ -663,10 +663,23 @@ function Sound_Off()
 }
 function footer()
 {
-	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep }, function(data) {
+	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep, no_marquee: true }, function(data) {
 		for (i=0; i<9; i++) {
 			$('#footer_cont' + i).empty().append(data);
 		}
+	}).done(function(){
+		$('.marquee').marquee({
+			//speed in milliseconds of the marquee
+			duration: 5000,
+			//gap in pixels between the tickers
+			gap: 50,
+			//time in milliseconds before the marquee will start animating
+			delayBeforeStart: 0,
+			//'left' or 'right'
+			direction: 'left',
+			//true or false - should the marquee be duplicated to show an effect of continues flow
+			duplicated: true
+		});
 	});
 }
 function addCalendar(date, rdv, com, idcourse, cell)
