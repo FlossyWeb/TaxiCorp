@@ -48,7 +48,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.15";
+var appVersion = "1.6.16";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -70,6 +70,7 @@ var model = $.localStorage.getItem('model');
 var type_ = $.localStorage.getItem('type_');
 var birthdate = $.localStorage.getItem('birthdate');
 var tpmr = $.localStorage.getItem('tpmr');
+var amex = $.localStorage.getItem('amex');
 var openStatus;
 var openDataInit=false;
 var openDataGo=false;
@@ -166,6 +167,7 @@ function reloadVars() {
 	type_ = $.localStorage.getItem('type_');
 	birthdate = $.localStorage.getItem('birthdate');
 	tpmr = $.localStorage.getItem('tpmr');
+	amex = $.localStorage.getItem('amex');
 }
 		
 ////////////////////////////////////////////////////////////
@@ -361,6 +363,7 @@ $('#manage').live('pagecreate', function() {
 	$('#model').val(model);
 	$('#birthdate').val(birthdate);
 	$('#tpmr').val(tpmr).selectmenu( "refresh" );
+	$('#amex').val(amex).selectmenu( "refresh" );
 	$('#whoLeTaxi').val(tel);
 	// Billing infos
 	$.post("https://www.mytaxiserver.com/appclient/billing.php", { taxi: taxi, pass: pass, dep: dep, mngid: mngid }, function(data){
@@ -1186,6 +1189,14 @@ if ( app ) {
 		cordova.plugins.backgroundMode.onactivate = function () {
 			//Sound_Off();
 			//cordova.plugins.notification.local.clear(3, function() {});
+			var now = new Date().getTime(),
+				_15_min_from_now = new Date(now + 15*60*1000);// Dans 15 minutes
+			cordova.plugins.notification.local.schedule({
+				title: "Vous devriez revenir sur MonAppliTaxi",
+				text: "Ne manquez pas de course !",
+				at: _15_min_from_now,
+				led: "E7B242"
+			});
 		}
 		cordova.plugins.backgroundMode.ondeactivate = function() {
 			// Sadly this event is fired anytime the backgroundMode is deactivated including when the app is just pushed back from back to foreground !! Sad but true ;-)
@@ -1754,6 +1765,7 @@ $(document).ready(function(){
 				$.localStorage.setItem('birthdate', data.birthdate);
 				$.localStorage.setItem('ads', taxi);
 				$.localStorage.setItem('tpmr', tpmr);
+				$.localStorage.setItem('amex', amex);
 			}, "json").done(function(data) { 
 				setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
 				$('#insee').val(data.insee);
@@ -1762,6 +1774,7 @@ $(document).ready(function(){
 				$('#model').val(data.model);
 				$('#birthdate').val(data.birthdate);
 				$('#tpmr').val(data.tpmr);
+				$('#amex').val(data.amex);
 				var display = '';
 				var alertMe = '';
 				if (data.ok)
