@@ -55,9 +55,10 @@
 	<plugin name="cordova-plugin-background-task" source="npm" />
 	<plugin name="cordova-plugin-contact-number-picker" source="npm" />
 	<plugin name="de.appplant.cordova.plugin.local-notification-ios9-fix" spec="0.8.2" />
+	<plugin name="cordova-plugin-crosswalk-webview" source="npm" version="1.8.0" />  
 	-->
 	<plugin name="de.appplant.cordova.plugin.local-notification" spec="0.8.4" source="npm" />
-	<plugin name="cordova-plugin-crosswalk-webview" source="npm" version="1.8.0" />  
+    <plugin name="cordova-plugin-crosswalk-webview" spec="https://github.com/crosswalk-project/cordova-plugin-crosswalk-webview" source="git" />  
     <preference name="xwalkMultipleApk" value="true" />      
     <plugin name="cordova-build-architecture" spec="https://github.com/MBuchalik/cordova-build-architecture.git#v1.0.1" source="git" />  
     <preference name="android-versionCode" value="1" />  
