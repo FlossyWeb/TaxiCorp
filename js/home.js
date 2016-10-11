@@ -35,6 +35,7 @@ var geoFailedAlertOnce = false;
 var getSome = false;
 var gotSome = false;
 
+var openPdf;	
 // Lecteur audio
 var my_media = null;
 var sound = $.sessionStorage.setItem('sound', 'ON');
@@ -48,7 +49,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.6.16";
+var appVersion = "1.7.01";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -76,7 +77,7 @@ var openDataInit=false;
 var openDataGo=false;
 var stillCheckingHail = true;
 var countCheckingHail = 0;
-var geoserver='188.165.50.190';
+var geoserver='geoloc.api.taxi';
 
 var mobileDemo = { 'center': '43.615945,3.876743', 'zoom': 10 };
 
@@ -116,6 +117,12 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 	{
 		$.localStorage.setItem('pass', 0);
 		document.location.href='index.html';
+	}
+	if (data.visa == 'NOW') {
+		if(data.done) $( "#visaExpPop" ).popup( "open", { positionTo: "window" } );
+		else {
+			navigator.notification.alert("Votre carte bancaire expire ce mois-ci, veuillez la mettre à jour dès que possible\nVous pouvez le faire à tout moment dans \"mon compte\"=>\"Modifier CB\".", alertDismissed, 'Mon Appli Taxi', 'OK');
+		}
 	}
 }, "json").done(function(data) { 
 	if(data.done) {
@@ -374,6 +381,16 @@ $('#manage').live('pagecreate', function() {
 		$("#myRates").empty().append(data);
 	});
 });
+function successOpenPdf() {
+  console.log('Success');
+}
+function errorOpenPdf(code) {
+  if (code === 1) {
+	console.log('No file handler found');
+  } else {
+	console.log('Undefined error');
+  }
+}
 function dc() {
 	$.mobile.loading( "show" );
 	$.localStorage.clear();
@@ -479,13 +496,11 @@ function get_coords(position)
 }
 //
 function UDPTransmissionSuccess(success) {
-	alert('UDPTransmissionSuccess: '+success);
-	//setTimeout('getLocation()', 5000); // Every five seconds you refresh geolocation...
+	//alert('UDPTransmissionSuccess: '+success);
 }
 
 function UDPTransmissionError(error) {
-	alert('UDPTransmissionError: '+error);
-	//setTimeout('getLocation()', 5000); // Every five seconds you refresh geolocation...
+	//alert('UDPTransmissionError: '+error);
 }
 function update()
 {
@@ -1100,13 +1115,10 @@ if ( app ) {
 			pollingTime = data.polling;
 			getBackPollingTime = data.polling;
 			// Initialising UDP Connexion once...
-			udptransmit.initialize(data.udpserver, 80);
-			//udptransmit.initialize("51.254.243.15", 80);
+			//udptransmit.initialize(data.udpserver, 80);
 			//udptransmit.initialize("geoloc.dev.api.taxi", 80);
 			//udptransmit.initialize("geoloc.test.api.taxi", 80);
 			//udptransmit.initialize("geoloc.api.taxi", 80);
-			//udptransmit.initialize("46.105.34.86", 80);
-			//udptransmit.initialize("geoloc.opendatataxi.fr", 80);
 			if(data.pop=='OK') { // App update here for Android...
 				//openSomeUrl('http://www.taximedia.fr/updates/');
 				openSomeUrl('http://www.taximedia.fr/stores.php?app=dcvp');
@@ -1114,8 +1126,10 @@ if ( app ) {
 		}, "json").always(function(data) {
 			setTimeout('update()', 2000);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			udptransmit.initialize(geoserver, 80);
+			//udptransmit.initialize(geoserver, 80);
 		});
+		udptransmit.initialize(geoserver, 80);
+		openPdf = cordova.plugins.disusered.open;
 		// For iOS => backgroundtask
 		//backgroundtask.start(bgFunctionToRun);
 		// For Android => Enable background mode
@@ -1319,8 +1333,7 @@ function contactPick()
 */
 // UDP init Success/Error Handlers...
 function UDPTransmitterInitializationSuccess(success) {
-	navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'Mon Appli Taxi', 'OK');
-	//getLocation();
+	//navigator.notification.alert('UDP INIT SUCCESS: '+success, alertDismissed, 'Mon Appli Taxi', 'OK');
 }
 
 function UDPTransmitterInitializationError(error) {

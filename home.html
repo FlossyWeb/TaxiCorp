@@ -219,6 +219,19 @@
 						<p>Vous pouvez le faire &agrave; tout moment dans "mon compte"=>"infos le.taxi" ou en activant le bouton le.taxi du menu lat&eacute;ral.</p>
                     </div>
                 </div>
+                <div data-role="popup" data-theme="c" id="visaExpPop" data-dismissible="true" data-overlay-theme="b">
+					<a href="#home" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
+                    <div data-theme="c" data-role="header">
+                        <h1>
+                            Paiement
+                        </h1>
+                    </div>
+                    <div class="ui-content" role="main">
+                        <p><b>Votre carte bancaire expire ce mois si.<br>Veuillez, d&egrave;s que possible, la mettre &agrave; jour ci-dessous.</b></p>
+						<button onClick="goToSection('#manage', '#moCbCollaps')" class="ui-btn ui-btn-icon-left ui-icon-check ui-shadow-icon ui-corner-all">Modifier CB</button>
+						<p>Vous pouvez le faire &agrave; tout moment dans "mon compte"=>"Modifier CB".</p>
+                    </div>
+                </div>
                 <a href="#homepanel" id="homepanel_poper"></a>
             </div>
             <div data-theme="c" data-role="footer" id="footer_cont0" data-position="fixed">
@@ -766,8 +779,7 @@
                             <h1>
                                 CGV 
                             </h1>
-                            <a href="#" onClick="cgv()" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-info"><b>Consulter les CGV</b></a>
-                            <a href="http://taximedia.fr/client/docs/CGV.pdf" target="_blank" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-icon-left ui-icon-action"><b>T&eacute;l&eacute;charger les CGV</b></a>
+                            <a href="#" onClick="openPdf('http://taximedia.fr/client/docs/CGV.pdf', successOpenPdf, errorOpenPdf)" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-info"><b>Consulter les CGV</b></a>
                         </div>
                         <div data-role="collapsible" data-collapsed="true" id="shareCollaps">
                             <h1>
