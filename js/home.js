@@ -1208,11 +1208,11 @@ if ( app ) {
 			//Sound_Off();
 			//cordova.plugins.notification.local.clear(3, function() {});
 			var now = new Date().getTime(),
-				_15_min_from_now = new Date(now + 15*60*1000);// Dans 15 minutes
+				_30_min_from_now = new Date(now + 30*60*1000);// Dans 30 minutes
 			cordova.plugins.notification.local.schedule({
 				title: "Vous devriez revenir sur MonAppliTaxi",
 				text: "Ne manquez pas de course !",
-				at: _15_min_from_now,
+				at: _30_min_from_now,
 				led: "E7B242"
 			});
 		}
