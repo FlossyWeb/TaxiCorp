@@ -53,7 +53,9 @@ function active()
 		else if (!data.active) {
 			var display = '<p style="color:red;"><b>Il semblerait que votre compte ait &eacute;t&eacute; d&eacute;sactiv&eacute;.<br>Il s&rsquo;agit souvent d&rsquo;une CB expir&eacute;e, que vous pouvez mettre &agrave; jour sur cette page.<br>Cela peut aussi &ecirc;tre la cause d&rsquo;un impay&eacute;, dans ce cas veuillez</b></p><a href="mailto:contact@taximedia.fr" class="ui-btn ui-btn-c ui-corner-all ui-shadow ui-icon-navigation ui-btn-icon-left">Nous contacter</a>';
 			$("#returns").empty().append(display);
-			$( "#answer" ).popup( "open", { positionTo: "window" } );
+			setTimeout(function(){
+				$( "#answer" ).popup( "open", { positionTo: "window" } );
+			}, 1000);
 			$("#modCbCollaps").collapsible( "expand" );			
 		}
 	});
