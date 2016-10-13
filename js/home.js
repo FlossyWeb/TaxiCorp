@@ -49,7 +49,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.7.01";
+var appVersion = "1.7.02";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -670,6 +670,13 @@ function Dispo_Off()
 		$.sessionStorage.setItem('dispo', '0');
 	}); 
 }
+function onComing()
+{
+	// Pass Dispo_Off to our system but not in the open so it stays in onComing status
+	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }).done(function(data) {
+		$.sessionStorage.setItem('dispo', '0');
+	}); 
+}
 
 function Sound_On()
 {
@@ -923,9 +930,10 @@ function checkCustomerConfirm(d, q)
 			});
 		}
 		else {
-			Dispo_Off();
+			onComing();
 		}
 	}).always(function(data) {
+		countCheckingHail = 0; // Reset
 		setTimeout( function () {
 			checkHail(d, q);
 		}, 30000);
@@ -964,6 +972,8 @@ function checkHail(d, q)
 function stopCheckHail()
 {
 	stillCheckingHail = false;
+	countCheckingHail=60;
+	Dispo_Off();
 }
 function callIncident(irdv, ihail, iop, icell, istatus)
 {
