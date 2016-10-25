@@ -158,8 +158,21 @@ function stopSecureCall()
 }
 function footer()
 {
-	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep }, function(data) {
+	$.post("https://www.mytaxiserver.com/appclient/footer_app.php", { dep: dep, no_marquee: true }, function(data) {
 		$("#footer_cont").empty().append(data);
+	}).done(function(){
+		$('.marquee').marquee({
+			//speed in milliseconds of the marquee
+			duration: 5000,
+			//gap in pixels between the tickers
+			gap: 50,
+			//time in milliseconds before the marquee will start animating
+			delayBeforeStart: 0,
+			//'left' or 'right'
+			direction: 'left',
+			//true or false - should the marquee be duplicated to show an effect of continues flow
+			duplicated: true
+		});
 	});
 }
 function alertDismissed()
@@ -179,6 +192,7 @@ function modPay() {
 		if (data.sniffed == 'OK')
 		{
 			display = '<p><b>la modification de votre carte bancaire &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+			$.localStorage.setItem('siret', data.identId);
 		}
 		/*
 		else if (!data.signed)

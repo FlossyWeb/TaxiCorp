@@ -34,8 +34,9 @@ var getBackPollingTime = 2000;
 var geoFailedAlertOnce = false;
 var getSome = false;
 var gotSome = false;
+var AppRatePrompted = false;
+var openPdf;
 
-var openPdf;	
 // Lecteur audio
 var my_media = null;
 var sound = $.sessionStorage.setItem('sound', 'ON');
@@ -49,7 +50,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.7.02";
+var appVersion = "1.7.10";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -294,15 +295,22 @@ $( '#cmd' ).live( 'pagebeforeshow',function(event){
 			$("#screen_bookings").empty().append(data);
 			$("#screen_bookings").trigger('create');
 		}
-		//navigator.notification.alert(data);
 	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $( '#history' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
 	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
-		$("#hist_cont").empty().append(data);
-		$("#hist_cont").trigger('create');
-		//navigator.notification.alert(data);
+		if (data != 0)
+		{
+			$("#hist_cont").empty().append(data);
+			$("#hist_cont").trigger('create');
+			setTimeout(function() {
+				if(getRandomInt(1, 3) == 3 && !AppRatePrompted) {
+					AppRatePrompted = true;
+					AppRate.promptForRating();
+				}
+			}, 1000);
+		}
 	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $( '#infos' ).live( 'pagebeforeshow',function(event){
@@ -310,7 +318,6 @@ $( '#infos' ).live( 'pagebeforeshow',function(event){
 	$.post("https://www.mytaxiserver.com/appclient/in_app_calls.php", { infos: 'true', pass: pass, dep: dep }, function(data){
 		$("#infos_cont").empty().append(data);
 		$("#infos_cont").trigger('create');
-		//navigator.notification.alert(data);
 	}).always(function() { $.mobile.loading( "hide" ); });
 });
 $('#manage').live('pagecreate', function() {
@@ -384,7 +391,17 @@ $('#manage').live('pagecreate', function() {
 	$.post("https://www.mytaxiserver.com/appclient/myrates.php", { tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
 		$("#myRates").empty().append(data);
 	});
+	$.post("https://www.mytaxiserver.com/appclient/advertising.php", { tel: tel, pass: pass, dep: dep, mngid: mngid }, function(data){
+		$("#myAdvertising").empty().append(data);
+	});
 });
+function getRandomInt(min, max) {
+	/*
+	* Returns a random integer between min (inclusive) and max (inclusive)
+	* Using Math.round() will give you a non-uniform distribution!
+	*/
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 function successOpenPdf() {
   console.log('Success');
 }
@@ -657,7 +674,7 @@ function Dispo_On()
 	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=1", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }).done(function(data) {
 		$("#dispo").empty().append('<a href="#home" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 		$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
-		$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
+		$("#dispo_cmd").empty().append('<a href="#cmd" onClick="Dispo_Off()"><img src="visuels/DispoOn_flat.png" width="100%"/></a>');
 		$.sessionStorage.setItem('dispo', '1');
 	});
 }
@@ -666,7 +683,7 @@ function Dispo_Off()
 	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id, opendata: openDataGo }).done(function(data) {
 		$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 		$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
-		$("#dispo_cmd").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$("#dispo_cmd").empty().append('<a href="#cmd" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 		$.sessionStorage.setItem('dispo', '0');
 	}); 
 }
@@ -674,10 +691,12 @@ function onComing()
 {
 	// Pass Dispo_Off to our system but not in the open so it stays in onComing status
 	$.post("https://www.mytaxiserver.com/appclient/open_dispo_app.php?dispo=0", { taxi: taxi, tel: tel, pass: pass, dep: dep, taxi_id: taxi_id }).done(function(data) {
+		$("#dispo").empty().append('<a href="#home" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$("#dispo_jobs").empty().append('<a href="#jobs_taker" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
+		$("#dispo_cmd").empty().append('<a href="#cmd" onClick="Dispo_On()"><img src="visuels/DispoOff_flat.png" width="100%"/></a>');
 		$.sessionStorage.setItem('dispo', '0');
 	}); 
 }
-
 function Sound_On()
 {
 	$("#sound").empty().append('<button class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-btn-inline" onClick="Sound_Off()"><img src="visuels/sound_on.png" width="24px"></button>');
@@ -1243,6 +1262,24 @@ if ( app ) {
 		cordova.plugins.notification.local.clearAll(function() {
 			//alert("All notifications cleared");
 		}, this);
+		//AppRate.locales.getLocale('fr');
+		AppRate.preferences = {
+			openStoreInApp: false,
+			displayAppName: 'MonAppliTaxi Chauffeur',
+			usesUntilPrompt: 6,
+			promptAgainForEachNewVersion: false,
+			storeAppURL: {
+				ios: '954025129',
+				android: 'market://details?id=fr.taximedia.mytaxidriver'
+			},
+			customLocale: {
+				title: "Notez MonAppliTaxi Chauffeur",
+				message: "Si vous aimez utiliser MonAppliTaxi Chauffeur, n’oubliez pas de voter sur l’App Store. Cela ne prend qu’une minute. Merci d’avance pour votre soutien !",
+				cancelButtonLabel: "Non, merci",
+				laterButtonLabel: "Plus tard",
+				rateButtonLabel: "Votez"
+			}
+		};
 	}
 }
 function onResume() {
@@ -1355,7 +1392,7 @@ function UDPTransmitterInitializationError(error) {
 }
 function myTaxiDown()
 {
-	//var url = "http://www.taximedia.fr/stores.php?app=pro";
+	//var url = "http://www.taximedia.fr/stores.php?app=prointalled";
 	//window.open(url,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
 	window.open('montaxipro://?from=driver', '_system');
 }
@@ -1482,6 +1519,7 @@ function modPay() {
 		if (data.sniffed == 'OK')
 		{
 			display = '<p><b>la modification de votre carte bancaire &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+			$.localStorage.setItem('siret', data.identId);
 		}
 		/*
 		else if (!data.signed)
@@ -1782,53 +1820,64 @@ $(document).ready(function(){
 			// Adding the accessHash var to posting data (so that it does not show in code using an hidden input)
 			var dataLeTaxi = $('#letaxiForm').serializeArray();
 			dataLeTaxi.push({name: 'accessHash', value: accessHash});
-			// Subs some data
-			$.post("https://www.mytaxiserver.com/appserver/open_register.php", dataLeTaxi, function(data) {
-				// GET SHIT BACK !!
-				$.localStorage.setItem('insee', data.insee);
-				$.localStorage.setItem('imat', data.imat);
-				$.localStorage.setItem('constructor', data.constructor);
-				$.localStorage.setItem('model', data.model);
-				$.localStorage.setItem('birthdate', data.birthdate);
-				$.localStorage.setItem('ads', taxi);
-				$.localStorage.setItem('tpmr', tpmr);
-				$.localStorage.setItem('amex', amex);
-			}, "json").done(function(data) { 
-				setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
-				$('#insee').val(data.insee);
-				$('#imat').val(data.imat);
-				$('#constructor').val(data.constructor);
-				$('#model').val(data.model);
-				$('#birthdate').val(data.birthdate);
-				$('#tpmr').val(data.tpmr);
-				$('#amex').val(data.amex);
-				var display = '';
-				var alertMe = '';
-				if (data.ok)
-				{
-					display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
-					alertMe = 'la modification de vos informations personnelles à bien été prise en compte, merci.';
-					// In case Licence plate or any key has changed we have to re-enroll because taxi_id may have changed then !
-					$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: taxi, cpro: cpro, imat: imat}, function(data) {
-						taxi_id = data.taxi_id;
-						$.localStorage.setItem('taxi_id', data.taxi_id);
-						openStatus = data.status;
-						openDataInit=true;
-						$("#openSwitch").val(1).flipswitch( "refresh" );
-						//dispoCheck();
-						//Dispo_On();
-					}, "json");
-				}
-				else {
-					display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, aucune modification faite en base de donn&eacute;e.</b></p>';
-					alertMe = "la modification de vos informations personnelles n'a pas été prise en compte, aucune modification faite en base de donnée.";
-				}
+			var imatCheck = $('#imat').val();
+			if(imatCheck.length>6) {
+				// Subs some data
+				$.post("https://www.mytaxiserver.com/appserver/open_register.php", dataLeTaxi, function(data) {
+					// GET SHIT BACK !!
+					$.localStorage.setItem('insee', data.insee);
+					$.localStorage.setItem('imat', data.imat);
+					$.localStorage.setItem('constructor', data.constructor);
+					$.localStorage.setItem('model', data.model);
+					$.localStorage.setItem('birthdate', data.birthdate);
+					$.localStorage.setItem('ads', taxi);
+					$.localStorage.setItem('tpmr', tpmr);
+					$.localStorage.setItem('amex', amex);
+				}, "json").done(function(data) { 
+					setTimeout('reloadVars()', 2000); // Wait a little bit to reloadVars as it's all async...
+					$('#insee').val(data.insee);
+					$('#imat').val(data.imat);
+					$('#constructor').val(data.constructor);
+					$('#model').val(data.model);
+					$('#birthdate').val(data.birthdate);
+					$('#tpmr').val(data.tpmr);
+					$('#amex').val(data.amex);
+					var display = '';
+					var alertMe = '';
+					if (data.ok)
+					{
+						display = '<p><b>la modification de vos informations personnelles &agrave; bien &eacute;t&eacute; prise en compte, merci.</b></p>';
+						alertMe = 'la modification de vos informations personnelles à bien été prise en compte, merci.';
+						// In case Licence plate or any key has changed we have to re-enroll because taxi_id may have changed then !
+						$.post("https://www.mytaxiserver.com/appclient/open_enroll_app.php", { tel: tel, insee: insee, dep: dep, mngid: mngid, ads: taxi, cpro: cpro, imat: imat}, function(data) {
+							taxi_id = data.taxi_id;
+							$.localStorage.setItem('taxi_id', data.taxi_id);
+							openStatus = data.status;
+							openDataInit=true;
+							$("#openSwitch").val(1).flipswitch( "refresh" );
+							//dispoCheck();
+							//Dispo_On();
+						}, "json");
+					}
+					else {
+						display = '<p style="color:red;"><b>la modification de vos informations personnelles n&rsquo;&agrave; pas &eacute;t&eacute; prise en compte, aucune modification faite en base de donn&eacute;e.</b></p>';
+						alertMe = "la modification de vos informations personnelles n'a pas été prise en compte, aucune modification faite en base de donnée.";
+					}
+					$.mobile.loading( "hide" );
+					$('#leTaxiCollaps').collapsible( "collapse" );
+					$('#leTaxiCollaps input[type=submit]').button('enable');
+					$("#returns").empty().append(display);
+					navigator.notification.alert(alertMe, alertDismissed, 'Mon Appli Taxi', 'OK');
+				});
+			}
+			else {
+				// Imat is not quite like it !
 				$.mobile.loading( "hide" );
 				$('#leTaxiCollaps').collapsible( "collapse" );
 				$('#leTaxiCollaps input[type=submit]').button('enable');
-				$("#returns").empty().append(display);
-				navigator.notification.alert(alertMe, alertDismissed, 'Mon Appli Taxi', 'OK');
-			});
+				$("#returns").empty().append("L&rsquo;immatriculation fournie ne semble pas valide (AB123YZ ou AB-123-YZ), veuillez corriger SVP.");
+				navigator.notification.alert("L'immatriculation fournie ne semble pas valide (AB123YZ ou AB-123-YZ), veuillez corriger SVP.", alertDismissed, 'Mon Appli Taxi', 'OK');
+			}
 		}
 	});
 	$("#change").submit(function(event) {
