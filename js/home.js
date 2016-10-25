@@ -1270,7 +1270,7 @@ if ( app ) {
 			promptAgainForEachNewVersion: false,
 			storeAppURL: {
 				ios: '954025129',
-				android: 'market://details?id=fr.taximedia.mytaxidriver'
+				android: 'market://details?id=com.taxibleuservices.mytaxicorp'
 			},
 			customLocale: {
 				title: "Notez MonAppliTaxi Chauffeur",
