@@ -96,9 +96,7 @@ $.post("https://www.mytaxiserver.com/appclient/open_login_app.php", { tel: tel, 
 		constructor = data.constructor;
 		model = data.model;
 		type_ = data.type_;
-		var dBirthdate = data.birthdate;
-		var tenmpBirthdate = dBirthdate.split("-");
-		birthdate = tenmpBirthdate[2]+'/'+tenmpBirthdate[1]+'/'+tenmpBirthdate[0];
+		birthdate = data.birthdate;
 		accessHash = data.accessHash;
 		$.localStorage.setItem('insee', data.insee);
 		$.localStorage.setItem('ads', data.ads);
