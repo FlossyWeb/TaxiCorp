@@ -50,7 +50,7 @@ var notifyOnce = true;
 
 // Detect wether it is an App or WebApp
 var app;
-var appVersion = "1.7.11";
+var appVersion = "1.7.12";
 var devicePlatform;
 		
 // getLocation & secureCall
@@ -289,7 +289,7 @@ $( '#planning' ).live( 'pagebeforeshow',function(event){
 });
 $( '#cmd' ).live( 'pagebeforeshow',function(event){
 	$.mobile.loading( "show" );
-	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group }, function(data){
+	$.post("https://www.mytaxiserver.com/appserver/get_app_bookings.php", { taxi: taxi, tel: tel, email: email, dispo: dispo, pass: pass, dep: dep, mngid: mngid, group: group, zip: station }, function(data){
 		if (data != 0)
 		{
 			$("#screen_bookings").empty().append(data);
@@ -732,7 +732,8 @@ function footer()
 }
 function addCalendar(date, rdv, com, idcourse, cell)
 {
-	var startDate = new Date(date.replace(/-/g, '/'));
+	var a = date.split(",");
+	var startDate = new Date(a[0],a[1]-1,a[2],a[3],a[4],a[5]);
 	var diff = 60; // difference in minutes
 	var endDate = new Date(startDate.getTime() + diff*60000);
 	var title = "Course en commande";
