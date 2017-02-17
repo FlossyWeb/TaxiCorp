@@ -14,7 +14,7 @@ var station = $.localStorage.getItem('station');
 var dep = $.localStorage.getItem('dep');
 var mngid = $.localStorage.getItem('mngid');
 var actived;
-var openPdf;	
+var openPdf;
 
 function active()
 {
